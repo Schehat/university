@@ -1,0 +1,19 @@
+import java.io.*;
+import java.util.Scanner;
+public class Auff {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        PrintStream output = null; 
+        String name = null;
+        do {
+        try {
+            System.out.print("Geben Sie einen Dateinamen an: ");
+            name = scanner.next() + ".txt";
+            output = new PrintStream(new FileOutputStream(new File(name)));
+        } catch (FileNotFoundException e) {
+            System.out.println("Datei nicht gefunden");
+        }  
+        } while (output == null);
+        System.out.println("geschafft");
+    }
+}

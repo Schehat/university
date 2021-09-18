@@ -1,0 +1,4 @@
+int make = 15; // 000001111
+int schuhgröße = merkmale & mask;
+schuhgröße += 36;
+
