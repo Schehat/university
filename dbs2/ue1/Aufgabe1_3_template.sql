@@ -19,11 +19,13 @@ GROUP BY person.id, person.name;
 -- DBS2.A1.3.c::
 -- Finden Sie die ID und Namen aller Personen, die entweder Darsteller oder Regisseur, aber nicht beides sind.
 SELECT person.id, person.name
-FROM moviedb.person 
-LEFT JOIN moviedb.directs d ON person.id = d.director
-LEFT JOIN moviedb.plays plays ON person.id = plays.player
-WHERE plays.player IS NULL OR d.director IS NULL
-GROUP BY person.id, person.name;
+FROM moviedb.person person
+WHERE person.id IN (
+    SELECT NVL(d.director, plays.player)
+    FROM moviedb.directs d
+    FULL JOIN moviedb.plays plays ON d.director = plays.player
+    WHERE d.director IS NULL OR plays.player IS NULL
+);
 
 -- DBS2.A1.3.d::
 -- Ermitteln Sie alle Genres (GENRENAME), die in Kinofilmen aus dem Jahr 1989 eingesetzt wurden
