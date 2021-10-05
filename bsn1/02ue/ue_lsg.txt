@@ -1,0 +1,14 @@
+5) In den Zustand "Blockiert" kann ein Prozess nur dann wechseln, 
+wenn eine Eingabe oder Ausgabe (I/O) erwartet weird. 
+Dazu muss der Prozess zuerst in den Zustand "Rechnend"
+
+6)  1: Dispather wird sehr häufig aufgerufen & muss deshalb sehr schnell sein
+    2: Dispatcher muss Zustand der CPU sichern indem er auf den Inhalt der Register
+       zugreift. In höheren Programmiersprachen ist das nicht möglich  
+
+7)
+a) ps -elf | wc => -2 wegen ps & wc auch laufende Prozesse
+b) -
+c) ps -l
+d) find ˜ -print > output.txt
+e) time find ˜ -print > output.txt
