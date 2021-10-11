@@ -27,7 +27,7 @@ public class StartScene {
     public static void setLayout(Stage stage) {
         StartScene.stage = stage;
         
-        Image iBackground = new Image("background.jpg");
+        Image iBackground = new Image("background.gif");
         ImageView ivBackground = new ImageView(iBackground);
         ivBackground.setX(0.0);
         ivBackground.setY(0.0);

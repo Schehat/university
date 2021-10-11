@@ -16,6 +16,7 @@ public class Main extends Application {
 	public void start(Stage stage) {
 		try {
 		    stage = setStage(stage);
+		    stage.setResizable(false);
 		    StartScene.setLayout(stage);
 		    StartScene.setEvents();
 					    

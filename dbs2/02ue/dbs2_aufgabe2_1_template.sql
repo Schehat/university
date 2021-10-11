@@ -10,7 +10,8 @@ WITH SQ AS (
     JOIN moviedb.movie m ON d.movie = m.id
     WHERE m.type = 'C'
     GROUP BY d.director
-) SELECT p.name, z.ar
+) 
+SELECT p.name, z.ar
 FROM SQ z 
 JOIN moviedb.person p ON z.director = p.id
 WHERE z.ar >= ALL(
@@ -51,15 +52,16 @@ OR SQ.rating <= ALL (
 -- mit 1 Woche rechnen. Wenn mehrere Budgets in mehreren Währungen für einen Film angegeben sind, verwenden Sie
 -- den höchsten Betrag.
 WITH SQ AS (
-    SELECT m.id, m.title, r.weeks, b.budget,
-    CASE WHEN r.weeks = 0 OR r.weeks IS NULL THEN b.budget ELSE b.budget / r.weeks END AS per_week
+    SELECT m.id, m.title, MAX(b.budget) as max_budget,
+    CASE WHEN MAX(r.weeks) = 0 OR MAX(r.weeks) IS NULL THEN 1 ELSE MAX(weeks) END AS max_run
     FROM moviedb.movie m
+    LEFT JOIN moviedb.runs r ON m.id = r.movie
     JOIN moviedb.budget b ON m.id = b.movie
-    JOIN moviedb.runs r ON m.id = r.movie
-) 
-SELECT COUNT(*)
+    GROUP BY m.id, m.title
+)
+SELECT title, max_budget / max_run as per_week
 FROM SQ
-WHERE SQ.per_week >= 10000000;
+WHERE max_budget / max_run > 10000000;
 
 -- DBS2.A2.1.d::
 -- Finden Sie ID und Titel aller Kinofilme und die Anzahl der darin auftretenden Charaktere für die Kinofilme,

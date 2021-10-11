@@ -24,14 +24,13 @@ public class Level1 {
     private static ImageView ivPlayer;
     
     public static void setLayout() {
-        Image iBackground = new Image("background.jpg");
+        Image iBackground = new Image("background.gif");
         ImageView ivBackground = new ImageView(iBackground);
         ivBackground.setX(0.0);
         ivBackground.setY(0.0);
         
         Image iPlayer = new Image("player_right.png");
         ivPlayer = new ImageView(iPlayer);
-        System.out.println(iPlayer.impl_getUrl());
         ivPlayer.setX(200);
         ivPlayer.setY(300);
         
