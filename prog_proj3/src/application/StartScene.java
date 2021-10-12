@@ -18,20 +18,18 @@ public class StartScene {
     private static BorderPane root = new BorderPane();
     private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
     private static Button btnRedPill = new Button();
-    private static Button btnBluePill = new Button();     
+    private static Button btnBluePill = new Button();  
     
     /**
      * customize scene layout
      * @param stage
      */
-    public static void setLayout(Stage stage) {
-        StartScene.stage = stage;
-        
-        Image iBackground = new Image("background.gif");
-        ImageView ivBackground = new ImageView(iBackground);
-        ivBackground.setX(0.0);
-        ivBackground.setY(0.0);
-        root.getChildren().addAll(ivBackground);
+    public static void setLayout() {      
+        Image iBg = new Image("background.gif");
+        ImageView iVBg = new ImageView(iBg);
+        iVBg.setX(0.0);
+        iVBg.setY(0.0);
+        root.getChildren().addAll(iVBg);
         
         btnRedPill.setText("TAKE RED PILL");
         btnRedPill.setPrefWidth(300);
@@ -76,6 +74,10 @@ public class StartScene {
         btnBluePill.setOnMouseEntered(e -> btnBluePill.setText("-TAKE BLUE PILL-"));
         btnBluePill.setOnMouseExited(e -> btnBluePill.setText("TAKE BLUE PILL"));
         btnBluePill.setOnAction(e -> stage.close());
+    }
+    
+    public static void setStage(Stage stage) {
+        StartScene.stage = stage; 
     }
     
     /**

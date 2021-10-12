@@ -30,7 +30,7 @@ public class Level1 {
         ivBackground.setY(0.0);
         
         Image iPlayer = new Image("player_right.png");
-        ivPlayer = new ImageView(iPlayer);
+        ImageView ivPlayer = new ImageView(iPlayer);
         ivPlayer.setX(200);
         ivPlayer.setY(300);
         

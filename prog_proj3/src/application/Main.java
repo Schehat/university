@@ -17,7 +17,9 @@ public class Main extends Application {
 		try {
 		    stage = setStage(stage);
 		    stage.setResizable(false);
-		    StartScene.setLayout(stage);
+		    
+		    StartScene.setStage(stage);
+		    StartScene.setLayout();
 		    StartScene.setEvents();
 					    
             stage.setScene(StartScene.getScene());

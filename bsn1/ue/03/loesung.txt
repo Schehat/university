@@ -1,0 +1,33 @@
+3a)
+find . -name "*.java"
+find . -name "*.py"
+find . -name "*.mp3"
+b)
+du -sch ~
+du -hac | sort | tail -n 10
+oder du -hac | sort -r | head -n 10
+c)
+grep -P --color -o "[a-zA-ZäöüÄöÜ-]+ (\d+)$" schausteller.txt | sort
+sort -f -k 4 schausteller.txt
+
+4a)
+Eine Adresse besteht aus der Adresse der Seite & der Adresse innerhalb der Seite. 
+Die 8 KB entsprechen 2^10*8 = 2^13 Bits, damit diee Adresse innerhalb der Seite 13 Bit groß.
+Die Seitenadresse entspricht 19 Bit.
+b)
+Die Seitenadresse ist ein Eintrag in der Seitentabelle, dort steht die physische Adresse der Seite. 
+Zu dieser wird die Adresse innerhalb der Seite addiert & ergibt die physische Adresse.
+c)
+Damit man nur die Seitenadresse & Adresse innerhalb der Seite zusamemenfügen muss, um die
+physische Adresse zu erhalten
+d)
+Swapping lagert komplette Prozesse aus, während paging nur Segmenten oder Seiten auslagert
+
+5a) 9
+5b) 10
+
+6a) log2(1024) = 10 => 2^10, also 10 Bits
+b) 
+1. 0110001101001 => 000001101001
+2. 1001001111000 => 101001111000
+3. 1010111001111 => ausgelagert
