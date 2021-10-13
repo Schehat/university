@@ -10,8 +10,12 @@ import javafx.scene.image.Image;
  * client program to execute the game
  */
 public class Main extends Application {
-    private static int WIDTH = 800;
-    private static int HEIGHT = 600;
+    private static double WIDTH = 800.0;
+    private static double HEIGHT = 600.0;
+    
+    /**
+     *  stage control & setup of StartScene
+     */
 	@Override
 	public void start(Stage stage) {
 		try {
@@ -36,15 +40,19 @@ public class Main extends Application {
 	 */
 	public static Stage setStage(Stage stage) {
         stage.setTitle("Contruct"); 
-        Image icon = new Image("icon.png");
+        Image icon = new Image("neo.png");
         stage.getIcons().add(icon);
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
         return stage;
 	}
 	
-	public static int[] getSize() {
-	    return new int[] {WIDTH, HEIGHT};
+	/**
+	 * 
+	 * @return height & width of stage
+	 */
+	public static double[] getSize() {
+	    return new double[] {WIDTH, HEIGHT};
 	}
 	
 	/**

@@ -1,12 +1,16 @@
 package application;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 /**
  * 
@@ -17,65 +21,73 @@ public class StartScene {
     private static Stage stage;
     private static BorderPane root = new BorderPane();
     private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
-    private static Button btnRedPill = new Button();
-    private static Button btnBluePill = new Button();  
+    
+    private static Image iBg = new Image("background.gif");
+    private static ImageView iVBg = new ImageView(iBg);
+    private static Image iRedPill = new Image("red_pill.png");
+    private static ImageView iVRedPill = new ImageView(iRedPill);
+    private static Image iBluePill = new Image("blue_pill.png");
+    private static ImageView iVBluePill = new ImageView(iBluePill);
+    private static Image iMorpheus = new Image("morpheus.png");
+    private static ImageView iVMorpheus = new ImageView(iMorpheus);
+    
+    // after mouse hovered over pills 
+    private static double pillGrowth = 20;
     
     /**
-     * customize scene layout
+     * create start scene layout
      * @param stage
      */
     public static void setLayout() {      
-        Image iBg = new Image("background.gif");
-        ImageView iVBg = new ImageView(iBg);
         iVBg.setX(0.0);
         iVBg.setY(0.0);
         root.getChildren().addAll(iVBg);
-        
-        btnRedPill.setText("TAKE RED PILL");
-        btnRedPill.setPrefWidth(300);
-        btnRedPill.setMaxHeight(35);
-        
-        btnRedPill.setStyle("-fx-border-width: 2px; "
-                + "-fx-border-color: #000000; "
-                + "-fx-font-size: 32px; "
-                + "-fx-background-color: #C75A41; "
-                + "-fx-border-radius: 6px;");
-        
-        btnBluePill.setText("TAKE BLUE PILL");
-        btnBluePill.setPrefWidth(300);
-        btnBluePill.setMaxHeight(35);
-        
-        btnBluePill.setStyle("-fx-border-width: 2px; "
-                + "-fx-border-color: #000000; "
-                + "-fx-font-size: 32px; "
-                + "-fx-background-color: #415FC7; "
-                + "-fx-border-radius: 6px;");
 
-        HBox hboxBtns = new HBox(); 
-        hboxBtns.getChildren().addAll(btnRedPill, btnBluePill);
-        root.setCenter(hboxBtns);
-        hboxBtns.setSpacing(20);
-        hboxBtns.setAlignment(Pos.CENTER);
+        // when changing sizes after events ratio of width & height will be the same
+        iVRedPill.setPreserveRatio(true);
+        iVBluePill.setPreserveRatio(true);
+        
+        HBox hboxCenter = new HBox();
+        Label lblStart = new Label("CHOOSE WISELY");
+        lblStart.setFont(new Font("Arial", 32));
+        lblStart.setTextFill(Color.WHITE);
+        hboxCenter.getChildren().addAll(iVRedPill, lblStart, iVBluePill);
+        hboxCenter.setSpacing(10);
+        hboxCenter.setAlignment(Pos.CENTER);
+        
+        HBox hboxTop = new HBox(); 
+        hboxTop.getChildren().addAll(iVMorpheus);
+        hboxTop.setPadding(new Insets(20));
+        hboxTop.setAlignment(Pos.CENTER);
+        
+        VBox vboxCenter = new VBox();
+        hboxTop.setPadding(new Insets(20));
+        vboxCenter.getChildren().addAll(hboxTop, hboxCenter);
+        root.setCenter(vboxCenter);
     }
     
     /**
      * set up all events in the start scene
      */
     public static void setEvents() {
-        btnRedPill.setOnMouseEntered(e -> btnRedPill.setText("-TAKE RED PILL-"));
-        btnRedPill.setOnMouseExited(e -> btnRedPill.setText("TAKE RED PILL"));
-        btnRedPill.setOnAction(e -> {
-            Level1.setStage(stage);
-            Level1.setLayout();
-            Level1.setEvents();
-            stage.setScene(Level1.getScene());
+        iVRedPill.setOnMouseEntered(e -> iVRedPill.setFitHeight( iRedPill.getHeight() + pillGrowth));
+        iVRedPill.setOnMouseExited(e -> iVRedPill.setFitHeight(iRedPill.getHeight() - pillGrowth));
+        iVRedPill.setOnMouseClicked(e -> {
+            Level.setStage(stage);
+            Level.setLayout();
+            Level.setEvents();
+            stage.setScene(Level.getScene());
         });
         
-        btnBluePill.setOnMouseEntered(e -> btnBluePill.setText("-TAKE BLUE PILL-"));
-        btnBluePill.setOnMouseExited(e -> btnBluePill.setText("TAKE BLUE PILL"));
-        btnBluePill.setOnAction(e -> stage.close());
+        iVBluePill.setOnMouseEntered(e -> iVBluePill.setFitHeight( iBluePill.getHeight() + pillGrowth));
+        iVBluePill.setOnMouseExited(e -> iVBluePill.setFitHeight( iBluePill.getHeight() - pillGrowth));
+        iVBluePill.setOnMouseClicked(e -> stage.close());
     }
     
+    /**
+     * to customize scene need current stage
+     * @param stage
+     */
     public static void setStage(Stage stage) {
         StartScene.stage = stage; 
     }
@@ -86,6 +98,14 @@ public class StartScene {
      */
     public static Scene getScene() {
         return StartScene.scene;
+    }
+    
+    /**
+     * 
+     * @return background image iVBg
+     */
+    public static ImageView getBackground() {
+        return iVBg;
     }
     
 }

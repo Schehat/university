@@ -1,7 +1,5 @@
 package application;
 
-import javafx.scene.image.ImageView;
-
 /**
  * 
  * @author Schehat
@@ -9,19 +7,36 @@ import javafx.scene.image.ImageView;
  */
 public class Controller {
     private static int speed = 6;
-    public static void moveLeft(ImageView ivPlayer) {
-        ivPlayer.setX(ivPlayer.getX() - speed);
+    
+    /**
+     * decrements x location
+     * @param player
+     */
+    public static void moveLeft(Player player) {
+        player.setX(player.getX() - speed);
     }
     
-    public static void moveRight(ImageView ivPlayer) {
-        ivPlayer.setX(ivPlayer.getX() + speed);
+    /**
+     * increments x location
+     * @param player
+     */
+    public static void moveRight(Player player) {
+        player.setX(player.getX() + speed);
     }
     
-    public static void moveUp(ImageView ivPlayer) {
-        ivPlayer.setY(ivPlayer.getY() - speed);
+    /**
+     * decrements y location
+     * @param player
+     */
+    public static void moveUp(Player player) {
+        player.setY(player.getY() - speed);
     }
     
-    public static void moveDown(ImageView ivPlayer) {
-        ivPlayer.setY(ivPlayer.getY() + speed);
+    /**
+     * increments y location
+     * @param player
+     */
+    public static void moveDown(Player player) {
+        player.setY(player.getY() + speed);
     }
 }
