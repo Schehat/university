@@ -2,7 +2,9 @@ package application;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,11 +36,14 @@ public class StartScene {
     // after mouse hovered over pills 
     private static double pillGrowth = 20;
     
+    private static boolean loadedLevel = false;
+    
     /**
      * create start scene layout
      * @param stage
      */
     public static void setLayout() {      
+        root.getChildren().clear();
         iVBg.setX(0.0);
         iVBg.setY(0.0);
         root.getChildren().addAll(iVBg);
@@ -70,18 +75,38 @@ public class StartScene {
      * set up all events in the start scene
      */
     public static void setEvents() {
-        iVRedPill.setOnMouseEntered(e -> iVRedPill.setFitHeight( iRedPill.getHeight() + pillGrowth));
-        iVRedPill.setOnMouseExited(e -> iVRedPill.setFitHeight(iRedPill.getHeight() - pillGrowth));
+        StartScene.setPillsEvents(iVRedPill);
+        StartScene.setPillsEvents(iVBluePill);
+        
         iVRedPill.setOnMouseClicked(e -> {
-            Level.setStage(stage);
-            Level.setLayout();
-            Level.setEvents();
+            // this block only one time necessary & error if called multiple times
+            if (!loadedLevel) {
+                Level.setStage(stage);
+                Level.setLayout();
+                Level.setEvents();
+                loadedLevel = true;
+            }
             stage.setScene(Level.getScene());
         });
         
-        iVBluePill.setOnMouseEntered(e -> iVBluePill.setFitHeight( iBluePill.getHeight() + pillGrowth));
-        iVBluePill.setOnMouseExited(e -> iVBluePill.setFitHeight( iBluePill.getHeight() - pillGrowth));
         iVBluePill.setOnMouseClicked(e -> stage.close());
+    }
+    
+    /**
+     * set events for pill images
+     * @param btn
+     * @param level
+     */
+    public static void setPillsEvents(ImageView iV) {
+        iV.setOnMouseEntered(e -> {
+            scene.setCursor(Cursor.HAND);
+            iVRedPill.setFitHeight( iRedPill.getHeight() + pillGrowth);
+        });
+        
+        iV.setOnMouseExited(e -> {
+            scene.setCursor(Cursor.DEFAULT);
+            iVRedPill.setFitHeight(iRedPill.getHeight() - pillGrowth);
+        });
     }
     
     /**
@@ -107,5 +132,4 @@ public class StartScene {
     public static ImageView getBackground() {
         return iVBg;
     }
-    
 }
