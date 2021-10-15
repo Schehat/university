@@ -13,7 +13,6 @@
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1631958914081_8" label="prog2" name="prog2">
 <item elementID="=Ab.7" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=Ab.Sender" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Altklausur_2018" type="4"/>
 <item elementID="=U10" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=U18" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=U21" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
@@ -58,6 +57,12 @@
 <item elementID="=U24b" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=Klausurvorbereitung" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=LAb.6" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1634302420423_9" label="prog_proj3" name="prog_proj3">
+<item elementID="=prog_proj3" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1634302631018_11" label="dbs2" name="dbs2">
+<item elementID="=A3" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1616335840979_2" label="Window Working Set" name="Aggregate for window 1616335840979"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1616407828666_3" label="Window Working Set" name="Aggregate for window 1616407828666"/>

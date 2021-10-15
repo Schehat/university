@@ -7,4 +7,6 @@ CREATE TABLE employee(
     CONSTRAINT pk_employee PRIMARY KEY(employee_id)
 );
 
+SELECT * 
+FROM employee;
 
