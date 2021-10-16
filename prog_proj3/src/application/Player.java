@@ -60,4 +60,8 @@ public class Player {
     public ImageView getImageView() {
         return iVPlayer;
     }
+    
+    public Image getImage() {
+        return iPlayer;
+    }
 }

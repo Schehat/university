@@ -77,8 +77,8 @@ public class StartScene {
      * set up all events in the start scene
      */
     public static void setEvents() {
-        StartScene.setPillsEvents(iVRedPill);
-        StartScene.setPillsEvents(iVBluePill);
+        StartScene.setPillsEvents(iVRedPill, iRedPill);
+        StartScene.setPillsEvents(iVBluePill, iBluePill);
         
         iVRedPill.setOnMouseClicked(e -> {
             // this step only one time necessary
@@ -104,15 +104,15 @@ public class StartScene {
      * @param btn
      * @param level
      */
-    public static void setPillsEvents(ImageView iV) {
+    public static void setPillsEvents(ImageView iV, Image i) {
         iV.setOnMouseEntered(e -> {
             scene.setCursor(Cursor.HAND);
-            iVRedPill.setFitHeight( iRedPill.getHeight() + pillGrowth);
+            iV.setFitHeight( i.getHeight() + pillGrowth);
         });
         
         iV.setOnMouseExited(e -> {
             scene.setCursor(Cursor.DEFAULT);
-            iVRedPill.setFitHeight(iRedPill.getHeight() - pillGrowth);
+            iV.setFitHeight(i.getHeight() - pillGrowth);
         });
     }
     

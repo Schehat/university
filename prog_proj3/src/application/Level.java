@@ -78,6 +78,19 @@ public class Level {
     private static boolean upKeyPressed = false;
     private static boolean downKeyPressed = false;
     
+    private static double rectBlueX;
+    private static double rectBlueY;
+    private static double rectBlueW; 
+    private static double rectBlueH;
+    private static double rectRedX;
+    private static double rectRedY;
+    private static double rectRedW; 
+    private static double rectRedH;
+    private static double rectWhiteX;
+    private static double rectWhiteY;
+    private static double rectWhiteW; 
+    private static double rectWhiteH;
+    
     /**
      * create level layout
      */
@@ -148,6 +161,12 @@ public class Level {
             if (e.getCode().equals(KeyCode.RIGHT))  rightKeyPressed = true;
             if(e.getCode().equals(KeyCode.UP))      upKeyPressed = true;
             if (e.getCode().equals(KeyCode.DOWN))   downKeyPressed = true;
+            
+            // surprise! Mainly for debugging purposes skip level
+            if (e.getCode().equals(KeyCode.N)) {
+                maxLevel = 6;
+                Level.gameLoopManager();
+            }
         });
         
         scene.setOnKeyReleased(e -> {
@@ -197,6 +216,23 @@ public class Level {
             }
             
             currentLevel = level;
+            
+            // if green button clicked again then it will turn blue
+            // thats why after setting new level state need to 
+            // turn the button to green color again
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexGreen);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexGreen);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexGreen);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexGreen);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexGreen);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
+            }
             Level.gameLoopManager();
         });
         
@@ -354,32 +390,122 @@ public class Level {
     }
     
     /**
+     * block players movement at level borders
+     */
+    public static void checkMovementBorder() {
+        if (leftKeyPressed) {
+            // rect blue left
+            if (player.getX() - Controller.getSpeed() < rectBlueX) {
+                Controller.moveRight(player);
+            }
+            // rect white bottom & top left
+            if (
+                    (
+                        (player.getY() + player.getImage().getHeight() < rectWhiteY + rectWhiteH
+                        && player.getY() + player.getImage().getHeight() > rectBlueY + rectBlueH)
+                        || 
+                        (player.getY() > rectWhiteY 
+                        && player.getY() < rectBlueY)
+                    )
+                    &&
+                    player.getX() - Controller.getSpeed() < rectWhiteX) {
+                Controller.moveRight(player);
+            }
+        }
+        
+        if (rightKeyPressed) {
+            // red rect right
+            if (player.getX() + Controller.getSpeed() + player.getImage().getWidth() 
+                    > rectRedX + rectRedW) {
+                Controller.moveLeft(player);
+            }
+            // rect white bottom & top right
+            if (
+                    (
+                        (player.getY() + player.getImage().getHeight() < rectWhiteY + rectWhiteH
+                        && player.getY() + player.getImage().getHeight() > rectBlueY + rectBlueH)
+                        || 
+                        (player.getY() > rectWhiteY 
+                        && player.getY() < rectBlueY)
+                    )
+                    &&
+                    player.getX() + Controller.getSpeed() + player.getImage().getWidth() 
+                    > rectWhiteX + rectWhiteW) {
+                Controller.moveLeft(player);
+            }
+        }
+        
+        if (upKeyPressed) {
+            // blue rect top
+            if (player.getX() > rectBlueX && player.getX() < rectBlueX + rectBlueW
+                    && player.getY() - Controller.getSpeed() < rectBlueY) {
+                Controller.moveDown(player);
+            }
+            // white rect top
+            if (player.getX() > rectWhiteX && player.getX() < rectWhiteX + rectWhiteW
+                    && player.getY() - Controller.getSpeed() < rectWhiteY) {
+                Controller.moveDown(player);
+            }
+            // red rect top
+            if (player.getX() + player.getImage().getWidth() > rectRedX 
+                    && player.getX() + player.getImage().getWidth() < rectRedX + rectRedW
+                    && player.getY() - Controller.getSpeed() < rectRedY) {
+                Controller.moveDown(player);
+            }
+        }
+        
+        if (downKeyPressed) {
+            // blue rect bottom
+            if (player.getX() > rectBlueX && player.getX() < rectBlueX + rectBlueW
+                    && player.getY() + Controller.getSpeed() + 
+                    player.getImage().getHeight()> rectBlueY + rectBlueH) {
+                Controller.moveUp(player);
+            }
+            // white rect bottom
+            if (player.getX() > rectWhiteX && player.getX() < rectWhiteX + rectWhiteW
+                    && player.getY() + Controller.getSpeed() 
+                    + player.getImage().getHeight() > rectWhiteY + rectWhiteH) {
+                Controller.moveUp(player);
+            }
+            // red rect bottom
+            if (player.getX() + player.getImage().getWidth() > rectRedX  
+                    && player.getX() + player.getImage().getWidth() < rectRedX + rectRedW
+                    && player.getY() + Controller.getSpeed() + 
+                    player.getImage().getHeight()> rectRedY + rectRedH) {
+                Controller.moveUp(player);
+            }
+        }
+    }
+    
+    /**
      * run game loop to animate level environment & enemies of 1st level
      * @param gc
      */
-    public static void runLvl1(GraphicsContext gc) {
-        Level.checkKeysPressed();
-        
-        double rectBlueX = 50.0;
-        double rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
-        double rectBlueW = 100.0; 
-        double rectBlueH = 100.0;
+    public static void runLvl1(GraphicsContext gc) {          
+        rectBlueX = 50.0;
+        rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectBlueW = 100.0; 
+        rectBlueH = 100.0;
         gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
         gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
         
-        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-        double rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
-        double rectRedW = 100.0; 
-        double rectRedH = 100.0;
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectRedW = 100.0; 
+        rectRedH = 100.0;
         gc.setFill(Color.web("0x" + rectHexRed, 1.0));
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
-        double rectWhiteX = rectBlueX + rectBlueW;
-        double rectWhiteY = rectBlueY - 50;
-        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-        double rectWhiteH = rectBlueH + 2*50.0;
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY - 50;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueH + 2*50.0;
         gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        Level.checkKeysPressed();
+        
+        Level.checkMovementBorder();
         
         if (player.getX() > 400) {
             maxLevel = 2;
@@ -396,41 +522,6 @@ public class Level {
         Level.checkKeysPressed();
         
         double rectBlueX = 50.0;
-        double rectBlueY = 300.0 + 50.0;
-        double rectBlueW = 100.0; 
-        double rectBlueH = 100.0;
-        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
-        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
-        
-        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-        double rectRedY = 250;
-        double rectRedW = 100.0; 
-        double rectRedH = 100.0;
-        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
-        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
-        
-        double rectWhiteX = rectBlueX + rectBlueW;
-        double rectWhiteY = rectBlueY - 100;
-        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-        double rectWhiteH = rectBlueH + 2*100.0;
-        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
-        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
-        
-        if (player.getX() > 400) {
-            maxLevel = 3;
-            Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
-            btnLevel3.setDisable(false);
-        }
-    }
-    
-    /**
-     * run game loop to animate level environment & enemies of 3rd level
-     * @param gc
-     */
-    public static void runLvl3(GraphicsContext gc) {
-        Level.checkKeysPressed();
-        
-        double rectBlueX = 50.0;
         double rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
         double rectBlueW = 100.0; 
         double rectBlueH = 100.0;
@@ -445,9 +536,44 @@ public class Level {
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
         double rectWhiteX = rectBlueX + rectBlueW;
-        double rectWhiteY = rectBlueY - 50;
+        double rectWhiteY = rectBlueY - 100;
         double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-        double rectWhiteH = rectBlueH + 2*50.0;
+        double rectWhiteH = rectBlueH + 2*100.0;
+        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        if (player.getX() > 400) {
+            maxLevel = 3;
+            Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);   
+            btnLevel3.setDisable(false);
+        }
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 3rd level
+     * @param gc
+     */
+    public static void runLvl3(GraphicsContext gc) {
+        Level.checkKeysPressed();
+        
+        double rectBlueX = 50.0;
+        double rectBlueY = 325.0;
+        double rectBlueW = 100.0; 
+        double rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        double rectRedY = 200.0;
+        double rectRedW = 100.0; 
+        double rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        double rectWhiteX = rectBlueX + rectBlueW;
+        double rectWhiteY = rectRedY;
+        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        double rectWhiteH = rectBlueY + rectBlueH - rectRedY;
         gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
@@ -463,11 +589,28 @@ public class Level {
      * @param gc
      */
     public static void runLvl4(GraphicsContext gc) {
-        checkKeysPressed();
-        double rectX = 75.0, rectY = 150.0;
+        Level.checkKeysPressed();
         
-        gc.setFill(Color.web("0xF3F5F6", 1.0));
-        gc.fillRect(rectX, rectY, Main.getSize()[0] - 2*rectX, Main.getSize()[1] - 2*rectY);
+        double rectBlueX = 50.0;
+        double rectBlueY = 375.0;
+        double rectBlueW = 100.0; 
+        double rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        double rectRedY = 150.0;
+        double rectRedW = 100.0; 
+        double rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        double rectWhiteX = rectBlueX + rectBlueW;
+        double rectWhiteY = rectRedY;
+        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        double rectWhiteH = rectBlueY + rectBlueH - rectRedY;
+        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
         if (player.getX() > 400) {
             maxLevel = 5;
@@ -481,11 +624,28 @@ public class Level {
      * @param gc
      */
     public static void runLvl5(GraphicsContext gc) {
-        checkKeysPressed();
-        double rectBlueX = 75.0, rectBlueY = 150.0, rectBlueW = 100.0, rectBlueH = 100.0;
+        Level.checkKeysPressed();
         
+        double rectBlueX = 50.0;
+        double rectBlueY = 200.0;
+        double rectBlueW = 100.0; 
+        double rectBlueH = 75.0;
         gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
-        gc.fillRect(rectBlueX, rectBlueY, Main.getSize()[0] - 2*rectBlueY, Main.getSize()[1] - 2*rectBlueY);
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        double rectRedY = 325.0;
+        double rectRedW = 100.0; 
+        double rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        double rectWhiteX = rectBlueX + rectBlueW;
+        double rectWhiteY = rectBlueY;
+        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        double rectWhiteH = rectRedY + rectBlueH - rectBlueY;
+        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
         if (player.getX() > 400) {
             maxLevel = 6;
@@ -499,10 +659,27 @@ public class Level {
      * @param gc
      */
     public static void runLvl6(GraphicsContext gc) {
-        checkKeysPressed();
-        double rectX = 75.0, rectY = 150.0;
+        Level.checkKeysPressed();
         
-        gc.setFill(Color.web("0xF3F5F6", 1.0));
-        gc.fillRect(rectX, rectY, Main.getSize()[0] - 2*rectX, Main.getSize()[1] - 2*rectY);
+        double rectBlueX = 50.0;
+        double rectBlueY = 150.0;
+        double rectBlueW = 100.0; 
+        double rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        double rectRedY = 375.0;
+        double rectRedW = 100.0; 
+        double rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        double rectWhiteX = rectBlueX + rectBlueW;
+        double rectWhiteY = rectBlueY;
+        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        double rectWhiteH = rectRedY + rectBlueH - rectBlueY;
+        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
     }
 }

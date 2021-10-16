@@ -39,4 +39,8 @@ public class Controller {
     public static void moveDown(Player player) {
         player.setY(player.getY() + speed);
     }
+    
+    public static double getSpeed() {
+        return speed;
+    }
 }
