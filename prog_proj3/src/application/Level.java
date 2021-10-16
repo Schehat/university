@@ -9,11 +9,14 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -26,7 +29,7 @@ public class Level {
     private static Stage stage;
     private static BorderPane root = new BorderPane();
     private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
-    private static Player player = new Player("neo");;
+    private static Player player = new Player("neo");
     private static Image iBg = new Image("background.gif");
     private static ImageView iVBg = new ImageView(iBg);
     private static Image iMorpheus = new Image("morpheus_small.png");
@@ -44,35 +47,61 @@ public class Level {
     
     private static int btnPrefWidth = 100;
     private static int btnPrefHeight = 35;
+    private static String btnTextLevel = "LEVEL";
     private static String btnBackYellow = "#E9DD25";
     private static String btnHexRed = "#C75A41";
     private static String btnHexBlue = "#415FC7";
+    private static String btnHexGreen = "#47D92B";
     private static String btnBorderWidth = "2px";
     private static String btnBorderColor = "#000000"; 
     private static String btnFontSize = "20px";
     private static String btnBorderRadius = "6px";
     
     private static int currentLevel = 1;
+    private static int maxLevel = 1;  // to track the highest level the player can play
     private static Canvas canvas = new Canvas(Main.getSize()[0], Main.getSize()[1]);
     private static GraphicsContext gc = canvas.getGraphicsContext2D();
+    private static String rectHexWhite = "F3F5F6";
+    private static String rectHexRed = "C75A41";
+    private static String rectHexBlue = "415FC7";
+    
+    //free form animation defined by KeyFrames and their duration 
+    private static Timeline tl1 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl1(gc)));
+    private static Timeline tl2 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl2(gc)));
+    private static Timeline tl3 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl3(gc)));
+    private static Timeline tl4 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl4(gc)));
+    private static Timeline tl5 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl5(gc)));
+    private static Timeline tl6 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl6(gc)));
+    
+    private static boolean leftKeyPressed = false;
+    private static boolean rightKeyPressed = false;
+    private static boolean upKeyPressed = false;
+    private static boolean downKeyPressed = false;
     
     /**
      * create level layout
      */
     public static void setLayout() {        
+        root.getChildren().clear();
+        
         iVBg.setX(0.0);
         iVBg.setY(0.0);
         
-        Level.setBtn(btnBack, "Zurück", btnBackYellow);
-        Level.setBtn(btnLevel1, "Level 1", btnHexRed);
-        Level.setBtn(btnLevel2, "Level 2", btnHexBlue);
-        Level.setBtn(btnLevel3, "Level 3", btnHexBlue);
-        Level.setBtn(btnLevel4, "Level 4", btnHexBlue);
-        Level.setBtn(btnLevel5, "Level 5", btnHexBlue);
-        Level.setBtn(btnLevel6, "Level 6", btnHexBlue);
+        Level.setBtn(btnBack, "BACK", btnBackYellow);
+        Level.setBtn(btnLevel1, btnTextLevel + " 1", btnHexGreen);
+        Level.setBtn(btnLevel2, btnTextLevel + " 2", btnHexRed);
+        Level.setBtn(btnLevel3, btnTextLevel + " 3", btnHexRed);
+        Level.setBtn(btnLevel4, btnTextLevel + " 4", btnHexRed);
+        Level.setBtn(btnLevel5, btnTextLevel + " 5", btnHexRed);
+        Level.setBtn(btnLevel6, btnTextLevel + " 6", btnHexRed);
         
         HBox hboxTop = new HBox();
-        hboxTop.getChildren().addAll(iVMorpheus, iVInstructions);
+        Label lblDeathCounter = new Label("DEATH COUNTER:\n0");
+        lblDeathCounter.setFont(new Font("Arial", 18));
+        // to not wrap text with ... sign
+        lblDeathCounter.setMinWidth(170);
+        lblDeathCounter.setTextFill(Color.WHITE);
+        hboxTop.getChildren().addAll(iVMorpheus, iVInstructions, lblDeathCounter);
         hboxTop.setSpacing(10.0);
         hboxTop.setPadding(new Insets(30));
         hboxTop.setAlignment(Pos.CENTER);
@@ -100,7 +129,7 @@ public class Level {
      */
     public static void setBtn(Button btn, String text, String bgColor) {
         btn.setText(text);
-        btn.setPrefWidth(btnPrefWidth);
+        btn.setMaxWidth(btnPrefWidth);
         btn.setMaxHeight(btnPrefHeight);
       
         btn.setStyle("-fx-border-width: " + btnBorderWidth + "; "
@@ -115,22 +144,17 @@ public class Level {
      */
     public static void setEvents() {
         scene.setOnKeyPressed(e -> {
-            switch (e.getCode()) {
-            case LEFT: 
-                Controller.moveLeft(player);
-                break;
-            case RIGHT: 
-                Controller.moveRight(player);
-                break;
-            case UP: 
-                Controller.moveUp(player);
-                break;
-            case DOWN: 
-                Controller.moveDown(player);
-                break;
-            default:
-                break;
-            }
+            if (e.getCode().equals(KeyCode.LEFT))   leftKeyPressed = true; 
+            if (e.getCode().equals(KeyCode.RIGHT))  rightKeyPressed = true;
+            if(e.getCode().equals(KeyCode.UP))      upKeyPressed = true;
+            if (e.getCode().equals(KeyCode.DOWN))   downKeyPressed = true;
+        });
+        
+        scene.setOnKeyReleased(e -> {
+            if (e.getCode().equals(KeyCode.LEFT))   leftKeyPressed = false; 
+            if (e.getCode().equals(KeyCode.RIGHT))  rightKeyPressed = false;
+            if(e.getCode().equals(KeyCode.UP))      upKeyPressed = false;
+            if (e.getCode().equals(KeyCode.DOWN))   downKeyPressed = false;
         });
         
         btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
@@ -155,6 +179,23 @@ public class Level {
      */
     public static void setButtonEvents(Button btn, int level) {
         btn.setOnAction(e -> {
+            Level.setBtn(btn, btn.getText(), btnHexGreen);
+            
+            // change green colored button to blue
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexBlue);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexBlue);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexBlue);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexBlue);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
+            }
+            
             currentLevel = level;
             Level.gameLoopManager();
         });
@@ -192,37 +233,276 @@ public class Level {
     
     
     /**
-     * run game loop to animate level environment & enemies of first level
-     * @param gc
-     */
-    public static void runLvl1(GraphicsContext gc) {
-        double rectX = 75.0, rectY = 150.0;
-        
-        gc.setFill(Color.web("0xF3F5F6", 1.0));
-        gc.fillRect(rectX, rectY, Main.getSize()[0] - 2*rectX, Main.getSize()[1] - 2*rectY);       
-    }
-    
-    /**
      * handles selection of game loop per level & necessary editing before running the level
      */
     public static void gameLoopManager() {
+        // at the start disable all buttons except button 1
+        btnLevel2.setDisable(true);
+        btnLevel3.setDisable(true);
+        btnLevel4.setDisable(true);
+        btnLevel5.setDisable(true);
+        btnLevel6.setDisable(true);
+
+        // maxLevel == 1 not needed, should always be not disabled
+        if (maxLevel >= 2)  btnLevel2.setDisable(false);
+        if (maxLevel >= 3)  btnLevel3.setDisable(false);
+        if (maxLevel >= 4)  btnLevel4.setDisable(false);
+        if (maxLevel >= 5)  btnLevel5.setDisable(false);
+        if (maxLevel >= 6)  btnLevel6.setDisable(false);
+                
         if (currentLevel == 1) {
-            btnLevel1.setDisable(false);
-            btnLevel2.setDisable(true);
-            btnLevel3.setDisable(true);
-            btnLevel4.setDisable(true);
-            btnLevel5.setDisable(true);
-            btnLevel6.setDisable(true);
+            // do not want the game loop of the other level play at background
+            tl2.stop();
+            tl3.stop();
+            tl4.stop();
+            tl5.stop();
+            tl6.stop();
             
-            player.getImageView().setX(200);
             player.setX(200);
             player.setY(300);
             
-            //free form animation defined by KeyFrames and their duration 
-            Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl1(gc)));
             //number of cycles in animation INDEFINITE = repeat indefinitely
-            tl.setCycleCount(Timeline.INDEFINITE);
-            tl.play();
+            tl1.setCycleCount(Timeline.INDEFINITE);
+            
+            // level switches will not continue where they left, instead start at
+            // the beginning again
+            tl1.playFromStart();
+            
+            // clear canvas when switching between levels
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        } else if (currentLevel == 2) {         
+            tl1.stop();
+            tl3.stop();
+            tl4.stop();
+            tl5.stop();
+            tl6.stop();
+            
+            player.setX(200);
+            player.setY(300);
+            
+            tl2.setCycleCount(Timeline.INDEFINITE);
+            tl2.playFromStart();
+            
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        } else if (currentLevel == 3) {     
+            tl1.stop();
+            tl2.stop();
+            tl4.stop();
+            tl5.stop();
+            tl6.stop();
+            
+            player.setX(200);
+            player.setY(300);
+            
+            tl3.setCycleCount(Timeline.INDEFINITE);
+            tl3.playFromStart();
+            
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        } else if (currentLevel == 4) {           
+            tl1.stop();
+            tl2.stop();
+            tl3.stop();
+            tl5.stop();
+            tl6.stop();
+            
+            player.setX(200);
+            player.setY(300);
+            
+            tl4.setCycleCount(Timeline.INDEFINITE);
+            tl4.playFromStart();
+            
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        } else if (currentLevel == 5) {   
+            tl1.stop();
+            tl2.stop();
+            tl3.stop();
+            tl4.stop();
+            tl6.stop();
+            
+            player.setX(200);
+            player.setY(300);
+            
+            tl5.setCycleCount(Timeline.INDEFINITE);
+            tl5.playFromStart();
+            
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        } else if (currentLevel == 6) {      
+            tl1.stop();
+            tl2.stop();
+            tl3.stop();
+            tl4.stop();
+            tl5.stop();
+            
+            player.setX(200);
+            player.setY(300);
+            
+            tl6.setCycleCount(Timeline.INDEFINITE);
+            tl6.playFromStart();
+            
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         }
+    }
+    
+    /**
+     * if keys pressed move player according to the pressed key
+     */
+    public static void checkKeysPressed() {
+        if (leftKeyPressed) Controller.moveLeft(player);
+        if (rightKeyPressed) Controller.moveRight(player);
+        if (upKeyPressed) Controller.moveUp(player);
+        if (downKeyPressed) Controller.moveDown(player);
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 1st level
+     * @param gc
+     */
+    public static void runLvl1(GraphicsContext gc) {
+        Level.checkKeysPressed();
+        
+        double rectBlueX = 50.0;
+        double rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        double rectBlueW = 100.0; 
+        double rectBlueH = 100.0;
+        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        double rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        double rectRedW = 100.0; 
+        double rectRedH = 100.0;
+        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        double rectWhiteX = rectBlueX + rectBlueW;
+        double rectWhiteY = rectBlueY - 50;
+        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        double rectWhiteH = rectBlueH + 2*50.0;
+        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        if (player.getX() > 400) {
+            maxLevel = 2;
+            Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexBlue);   
+            btnLevel2.setDisable(false);
+        }
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 2nd level
+     * @param gc
+     */
+    public static void runLvl2(GraphicsContext gc) {
+        Level.checkKeysPressed();
+        
+        double rectBlueX = 50.0;
+        double rectBlueY = 300.0 + 50.0;
+        double rectBlueW = 100.0; 
+        double rectBlueH = 100.0;
+        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        double rectRedY = 250;
+        double rectRedW = 100.0; 
+        double rectRedH = 100.0;
+        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        double rectWhiteX = rectBlueX + rectBlueW;
+        double rectWhiteY = rectBlueY - 100;
+        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        double rectWhiteH = rectBlueH + 2*100.0;
+        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        if (player.getX() > 400) {
+            maxLevel = 3;
+            Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
+            btnLevel3.setDisable(false);
+        }
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 3rd level
+     * @param gc
+     */
+    public static void runLvl3(GraphicsContext gc) {
+        Level.checkKeysPressed();
+        
+        double rectBlueX = 50.0;
+        double rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        double rectBlueW = 100.0; 
+        double rectBlueH = 100.0;
+        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        double rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        double rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        double rectRedW = 100.0; 
+        double rectRedH = 100.0;
+        gc.setFill(Color.web("0x" + rectHexRed, 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        double rectWhiteX = rectBlueX + rectBlueW;
+        double rectWhiteY = rectBlueY - 50;
+        double rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        double rectWhiteH = rectBlueH + 2*50.0;
+        gc.setFill(Color.web("0x" + rectHexWhite, 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        if (player.getX() > 400) {
+            maxLevel = 4;
+            Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexBlue);
+            btnLevel4.setDisable(false);
+        }
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 4th level
+     * @param gc
+     */
+    public static void runLvl4(GraphicsContext gc) {
+        checkKeysPressed();
+        double rectX = 75.0, rectY = 150.0;
+        
+        gc.setFill(Color.web("0xF3F5F6", 1.0));
+        gc.fillRect(rectX, rectY, Main.getSize()[0] - 2*rectX, Main.getSize()[1] - 2*rectY);
+        
+        if (player.getX() > 400) {
+            maxLevel = 5;
+            Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexBlue);
+            btnLevel5.setDisable(false);
+        }
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 5th level
+     * @param gc
+     */
+    public static void runLvl5(GraphicsContext gc) {
+        checkKeysPressed();
+        double rectBlueX = 75.0, rectBlueY = 150.0, rectBlueW = 100.0, rectBlueH = 100.0;
+        
+        gc.setFill(Color.web("0x" + rectHexBlue, 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, Main.getSize()[0] - 2*rectBlueY, Main.getSize()[1] - 2*rectBlueY);
+        
+        if (player.getX() > 400) {
+            maxLevel = 6;
+            Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
+            btnLevel6.setDisable(false);
+        }
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 6th level
+     * @param gc
+     */
+    public static void runLvl6(GraphicsContext gc) {
+        checkKeysPressed();
+        double rectX = 75.0, rectY = 150.0;
+        
+        gc.setFill(Color.web("0xF3F5F6", 1.0));
+        gc.fillRect(rectX, rectY, Main.getSize()[0] - 2*rectX, Main.getSize()[1] - 2*rectY);
     }
 }

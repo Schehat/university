@@ -6,7 +6,7 @@ package application;
  * controls of the game the user can use
  */
 public class Controller {
-    private static int speed = 6;
+    private static double speed = 1.5;
     
     /**
      * decrements x location

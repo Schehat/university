@@ -33,17 +33,19 @@ public class StartScene {
     private static Image iMorpheus = new Image("morpheus.png");
     private static ImageView iVMorpheus = new ImageView(iMorpheus);
     
+    private static boolean levelLoaded = false;
+    
     // after mouse hovered over pills 
     private static double pillGrowth = 20;
-    
-    private static boolean loadedLevel = false;
     
     /**
      * create start scene layout
      * @param stage
      */
     public static void setLayout() {      
+        // needed when switching between scenes & calling the setLayout method
         root.getChildren().clear();
+        
         iVBg.setX(0.0);
         iVBg.setY(0.0);
         root.getChildren().addAll(iVBg);
@@ -79,12 +81,17 @@ public class StartScene {
         StartScene.setPillsEvents(iVBluePill);
         
         iVRedPill.setOnMouseClicked(e -> {
-            // this block only one time necessary & error if called multiple times
-            if (!loadedLevel) {
+            // this step only one time necessary
+            if (!levelLoaded) {
                 Level.setStage(stage);
                 Level.setLayout();
                 Level.setEvents();
-                loadedLevel = true;
+                levelLoaded = true;
+            }
+            
+            // this step will reset the current game loop
+            if (levelLoaded) {
+                Level.gameLoopManager();
             }
             stage.setScene(Level.getScene());
         });
