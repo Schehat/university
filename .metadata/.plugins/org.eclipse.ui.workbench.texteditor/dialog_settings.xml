@@ -5,15 +5,16 @@
 		<item key="DIALOG_Y_ORIGIN" value="240"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value=";;"/>
+		<item key="selection" value="setBtn"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value=";;"/>
 			<item value="setBtn"/>
+			<item value="-fx-"/>
+			<item value=";;"/>
 			<item value="print"/>
 			<item value="prinz"/>
 			<item value="zahl"/>
@@ -26,8 +27,8 @@
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="985"/>
-		<item key="DIALOG_Y_ORIGIN" value="112"/>
+		<item key="DIALOG_X_ORIGIN" value="700"/>
+		<item key="DIALOG_Y_ORIGIN" value="306"/>
 		<item key="DIALOG_WIDTH" value="284"/>
 		<item key="DIALOG_HEIGHT" value="391"/>
 		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>

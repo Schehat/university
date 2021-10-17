@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.util.Scanner"/>
     <fullyQualifiedTypeName name="de.hsh.fakturierung.rechnung.Rechnung"/>
     <fullyQualifiedTypeName name="de.hsh.fakturierung.rechnung.Rechnungsposition"/>
     <fullyQualifiedTypeName name="java.lang.Override"/>
@@ -44,7 +43,6 @@
     <fullyQualifiedTypeName name="javafx.event.ActionEvent"/>
     <fullyQualifiedTypeName name="javafx.event.EventHandler"/>
     <fullyQualifiedTypeName name="com.sun.tools.javac.Main"/>
-    <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="javafx.scene.control.TextField"/>
     <fullyQualifiedTypeName name="javafx.scene.control.Button"/>
     <fullyQualifiedTypeName name="javafx.scene.layout.HBox"/>
@@ -60,4 +58,6 @@
     <fullyQualifiedTypeName name="javafx.scene.input.KeyCode"/>
     <fullyQualifiedTypeName name="javafx.scene.control.Label"/>
     <fullyQualifiedTypeName name="javafx.scene.text.Font"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="application.Level"/>
 </qualifiedTypeNameHistroy>

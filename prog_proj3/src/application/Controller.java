@@ -40,6 +40,10 @@ public class Controller {
         player.setY(player.getY() + speed);
     }
     
+    /**
+     * 
+     * @return movement speed
+     */
     public static double getSpeed() {
         return speed;
     }

@@ -18,7 +18,6 @@ public class Player {
     Player(String name) {
         iPlayer = new Image(name + ".png");
         iVPlayer = new ImageView(iPlayer);
-        
     }
     
     /**
@@ -61,6 +60,10 @@ public class Player {
         return iVPlayer;
     }
     
+    /**
+     * 
+     * @return image of player object
+     */
     public Image getImage() {
         return iPlayer;
     }

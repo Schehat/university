@@ -5,6 +5,7 @@
 	<item key="org.eclipse.jdt.ui.last.selected.project.jre" value="jdk8u302-full"/>
 	<item key="org.eclipse.jdt.ui.last.external.project" value="C:\Users\Schehat\university\dbs2\ue\03\A3_2"/>
 	<item key="org.eclipse.jdt.ui.lastextjar" value="C:\Users\Schehat\university\dbs2"/>
+	<item key="delegateUpdating" value="false"/>
 	<list key="workingset_selection_history">
 		<item value="dbs2"/>
 	</list>
@@ -48,5 +49,9 @@
 		<item key="org.eclipse.jdt.internal.ui.typehierarchy.HierarchyInformationControlDIALOG_HEIGHT" value="306"/>
 		<item key="org.eclipse.jdt.internal.ui.typehierarchy.HierarchyInformationControlDIALOG_USE_PERSISTED_SIZE" value="true"/>
 		<item key="org.eclipse.jdt.internal.ui.typehierarchy.HierarchyInformationControlDIALOG_USE_PERSISTED_LOCATION" value="false"/>
+	</section>
+	<section name="RenameInformationPopup">
+	</section>
+	<section name="org.eclipse.ltk.ui.refactoring.settings">
 	</section>
 </section>
