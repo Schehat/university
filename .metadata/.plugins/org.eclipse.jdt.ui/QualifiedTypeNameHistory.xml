@@ -38,7 +38,6 @@
     <fullyQualifiedTypeName name="java.awt.Color"/>
     <fullyQualifiedTypeName name="sun.nio.fs.DefaultFileSystemProvider"/>
     <fullyQualifiedTypeName name="sun.java2d.opengl.WGLSurfaceData.WGLVSyncOffScreenSurfaceData"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="javafx.event.ActionEvent"/>
     <fullyQualifiedTypeName name="javafx.event.EventHandler"/>
     <fullyQualifiedTypeName name="com.sun.tools.javac.Main"/>
@@ -60,4 +59,5 @@
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="application.Level"/>
     <fullyQualifiedTypeName name="application.GameLoopManager"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>
