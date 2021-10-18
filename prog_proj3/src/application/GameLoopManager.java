@@ -32,6 +32,9 @@ public class GameLoopManager {
     private static double rectWhiteW; 
     private static double rectWhiteH;
     
+    public static int[] circleSize = {20, 20};  // width & height
+    public static String circleColor = "F3EF10"; // yellow
+    
     public static void gameLoopManager() {
         // at the start disable all buttons except button 1
         Level.getBtnLevel2().setDisable(true);
@@ -166,6 +169,14 @@ public class GameLoopManager {
         gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
+        // oval orbs
+        gc.setFill(Color.web("0x" + circleColor, 1.0));
+        int offsetX = 80;
+        gc.fillOval(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX, 
+                rectWhiteY + rectWhiteH/2 - circleSize[0]/2, circleSize[0], circleSize[1]);
+        gc.fillOval(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX, 
+                rectWhiteY + rectWhiteH/2 - circleSize[0]/2, circleSize[0], circleSize[1]);
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         
@@ -201,6 +212,8 @@ public class GameLoopManager {
         rectWhiteH = rectBlueH + 2*100.0;
         gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(10, 10);
         
         Level.checkKeysPressed();
         checkMovementBorder();
@@ -238,6 +251,8 @@ public class GameLoopManager {
         gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
+        GameLoopManager.drawCirclesInDiagonal(0);
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         
@@ -273,6 +288,8 @@ public class GameLoopManager {
         rectWhiteH = rectBlueY + rectBlueH - rectRedY;
         gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(50, 50);
         
         Level.checkKeysPressed();
         checkMovementBorder();
@@ -310,6 +327,8 @@ public class GameLoopManager {
         gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
+        GameLoopManager.drawCirclesInDiagonal(1);
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         
@@ -345,6 +364,8 @@ public class GameLoopManager {
         rectWhiteH = rectRedY + rectBlueH - rectBlueY;
         gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(80, 80);
         
         Level.checkKeysPressed();
         checkMovementBorder();
@@ -423,6 +444,45 @@ public class GameLoopManager {
                     Level.getPlayer().getImage().getHeight()> rectRedY + rectRedH) {
                 Controller.moveUp(Level.getPlayer());
             }
+        }
+    }
+    
+    /**
+     * 
+     * @param offsetX of circle to static x location
+     * @param offsetY of circle to static y location
+     */
+    public static void drawCirclesInCorners(int offsetX, int offsetY) {
+        gc.setFill(Color.web("0x" + circleColor, 1.0));
+        gc.fillOval(rectWhiteX + offsetX, rectWhiteY + offsetY, circleSize[0], circleSize[1]); // top left 
+        gc.fillOval(rectWhiteX + offsetX, rectWhiteY + rectWhiteH - offsetY - circleSize[1],
+                circleSize[0], circleSize[1]); // bottom left
+        gc.fillOval(rectWhiteX + rectWhiteW - offsetX - circleSize[0], 
+                rectWhiteY + offsetY, circleSize[0], circleSize[1]); // top right 
+        gc.fillOval(rectWhiteX + rectWhiteW - offsetX - circleSize[0], 
+                rectWhiteY + rectWhiteH - offsetY - circleSize[1], circleSize[0], circleSize[1]); // bottom right
+    }
+    
+    /**
+     * draws circles in correct position for the level
+     * @param direction, 0: from bottom left to top right & 1: from top left to bottom right
+     */
+    public static void drawCirclesInDiagonal(int direction) {
+        gc.setFill(Color.web("0x" + circleColor, 1.0));
+        int offsetX = 125, offsetY = 75;
+        gc.fillOval(rectWhiteX + rectWhiteW/2 - circleSize[0]/2, 
+                rectWhiteY + rectWhiteH/2 - circleSize[0]/2, circleSize[0], circleSize[1]); // center
+        if (direction == 0) {
+            gc.fillOval(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX, 
+                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY, circleSize[0],circleSize[1]); // left
+            gc.fillOval(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX, 
+                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY, circleSize[0], circleSize[1]); // right
+        } else {
+            // just switched the sign of offsetY 
+            gc.fillOval(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX, 
+                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY, circleSize[0],circleSize[1]);
+            gc.fillOval(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX, 
+                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY, circleSize[0], circleSize[1]);
         }
     }
     
