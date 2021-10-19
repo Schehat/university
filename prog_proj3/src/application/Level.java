@@ -400,4 +400,8 @@ public class Level {
     public static void setMaxLevel(int max) {
         maxLevel = max;
     }
+    
+    public static BorderPane getRoot() {
+        return root;
+    }
 }

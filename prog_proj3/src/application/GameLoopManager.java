@@ -43,13 +43,11 @@ public class GameLoopManager {
     
     public static String circleColor = "F3EF10"; // yellow
     public static int[] circleSize = {20, 20};  // width & height
-    private static Image iCircle = new Image("circle.png");
-    public static ImageView iVCircle = new ImageView(iCircle);
-    public static ArrayList<Image> arrICircle = new ArrayList<Image>();
     public static ArrayList<ImageView> arrIVCircle = new ArrayList<ImageView>();
+    public static boolean setup = false; // for if statements to run code only once  
     
     public static int maxNeededCircles;
-    public static int circlesObtained;
+    public static int circlesObtained = 0;
     
     /**
      * handling multiple game loops
@@ -71,12 +69,12 @@ public class GameLoopManager {
         
         // reset state
         circlesObtained = 0;
+        setup = false;
         
         // clear canvas when switching between levels
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         
         // clear circles
-        arrICircle.clear();
         arrIVCircle.clear();
         
         if (Level.getCurrentLevel() == 1) {
@@ -94,41 +92,6 @@ public class GameLoopManager {
             maxNeededCircles = 2;
             initilizeCircle();
             
-            rectBlueX = 50.0;
-            rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
-            rectBlueW = 100.0; 
-            rectBlueH = 100.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
-            gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
-            
-            rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-            rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
-            rectRedW = 100.0; 
-            rectRedH = 100.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
-            gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
-            
-            rectWhiteX = rectBlueX + rectBlueW;
-            rectWhiteY = rectBlueY - 50;
-            rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-            rectWhiteH = rectBlueH + 2*50.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
-            gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
-            
-            int offsetX = 80;
-            // left circle
-            gc.drawImage(arrICircle.get(0), rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX, 
-                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
-            // need to set correct positions for the imageView to set collision detection
-            arrIVCircle.get(0).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX);
-            arrIVCircle.get(0).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
-            
-            // right circle
-            gc.drawImage(arrICircle.get(1), rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX, 
-                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
-            arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
-            arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
-
             //number of cycles in animation INDEFINITE = repeat indefinitely
             tl1.setCycleCount(Timeline.INDEFINITE);
             
@@ -148,29 +111,6 @@ public class GameLoopManager {
             maxNeededCircles = 4;
             initilizeCircle();
             
-            rectBlueX = 50.0;
-            rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
-            rectBlueW = 100.0; 
-            rectBlueH = 100.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
-            gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
-            
-            rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-            rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
-            rectRedW = 100.0; 
-            rectRedH = 100.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
-            gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
-            
-            rectWhiteX = rectBlueX + rectBlueW;
-            rectWhiteY = rectBlueY - 100;
-            rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-            rectWhiteH = rectBlueH + 2*100.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
-            gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
-            
-            GameLoopManager.drawCirclesInCorners(10, 10);
-            
             tl2.setCycleCount(Timeline.INDEFINITE);
             tl2.playFromStart();
         } else if (Level.getCurrentLevel() == 3) {     
@@ -185,29 +125,6 @@ public class GameLoopManager {
             
             maxNeededCircles = 3;
             initilizeCircle();
-            
-            rectBlueX = 50.0;
-            rectBlueY = 325.0;
-            rectBlueW = 100.0; 
-            rectBlueH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
-            gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
-            
-            rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-            rectRedY = 200.0;
-            rectRedW = 100.0; 
-            rectRedH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
-            gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
-            
-            rectWhiteX = rectBlueX + rectBlueW;
-            rectWhiteY = rectRedY;
-            rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-            rectWhiteH = rectBlueY + rectBlueH - rectRedY;
-            gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
-            gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
-            
-            GameLoopManager.drawCirclesInDiagonal(0);
             
             tl3.setCycleCount(Timeline.INDEFINITE);
             tl3.playFromStart();
@@ -224,29 +141,6 @@ public class GameLoopManager {
             maxNeededCircles = 4;
             initilizeCircle();
             
-            rectBlueX = 50.0;
-            rectBlueY = 375.0;
-            rectBlueW = 100.0; 
-            rectBlueH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
-            gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
-            
-            rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-            rectRedY = 150.0;
-            rectRedW = 100.0; 
-            rectRedH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
-            gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
-            
-            rectWhiteX = rectBlueX + rectBlueW;
-            rectWhiteY = rectRedY;
-            rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-            rectWhiteH = rectBlueY + rectBlueH - rectRedY;
-            gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
-            gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
-            
-            GameLoopManager.drawCirclesInCorners(50, 50);
-            
             tl4.setCycleCount(Timeline.INDEFINITE);
             tl4.playFromStart();
         } else if (Level.getCurrentLevel() == 5) {   
@@ -261,29 +155,6 @@ public class GameLoopManager {
          
             maxNeededCircles = 3;
             initilizeCircle();
-            
-            rectBlueX = 50.0;
-            rectBlueY = 200.0;
-            rectBlueW = 100.0; 
-            rectBlueH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
-            gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
-            
-            rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-            rectRedY = 325.0;
-            rectRedW = 100.0; 
-            rectRedH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
-            gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
-            
-            rectWhiteX = rectBlueX + rectBlueW;
-            rectWhiteY = rectBlueY;
-            rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-            rectWhiteH = rectRedY + rectBlueH - rectBlueY;
-            gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
-            gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
-            
-            GameLoopManager.drawCirclesInDiagonal(1);
             
             tl5.setCycleCount(Timeline.INDEFINITE);
             tl5.playFromStart();
@@ -300,29 +171,6 @@ public class GameLoopManager {
             maxNeededCircles = 4;
             initilizeCircle();
             
-            rectBlueX = 50.0;
-            rectBlueY = 150.0;
-            rectBlueW = 100.0; 
-            rectBlueH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
-            gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
-            
-            rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
-            rectRedY = 375.0;
-            rectRedW = 100.0; 
-            rectRedH = 75.0;
-            gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
-            gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
-            
-            rectWhiteX = rectBlueX + rectBlueW;
-            rectWhiteY = rectBlueY;
-            rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
-            rectWhiteH = rectRedY + rectBlueH - rectBlueY;
-            gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
-            gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
-            
-            GameLoopManager.drawCirclesInCorners(80, 80);
-            
             tl6.setCycleCount(Timeline.INDEFINITE);
             tl6.playFromStart();
         }
@@ -333,15 +181,43 @@ public class GameLoopManager {
      * @param gc
      */
     public static void runLvl1(GraphicsContext gc) {          
-        Level.checkKeysPressed();
+        rectBlueX = 50.0;
+        rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectBlueW = 100.0; 
+        rectBlueH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectRedW = 100.0; 
+        rectRedH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY - 50;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueH + 2*50.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+
+        int offsetX = 80;
+        // left circle
+        arrIVCircle.get(0).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX);
+        arrIVCircle.get(0).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
+        
+        // right circle
+        arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
+        arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
+        
+        // for some reason not needed to clear before adding when switching between scenes
+        addCirclesToRoot();
+        
+        Level.checkKeysPressed();      
         checkMovementBorder();
         checkCollisionCircle();
-        
-        if (Level.getPlayer().getX() > rectRedX) {
-            Level.setMaxLevel(2);
-            Level.setBtn(Level.getBtnLevel2(), Level.getBtnLevel2().getText(), Level.getBtnHexBlue());   
-            Level.getBtnLevel2().setDisable(false);
-        }
+        checkNextLevel(2);
     }
     
     /**
@@ -349,15 +225,35 @@ public class GameLoopManager {
      * @param gc
      */
     public static void runLvl2(GraphicsContext gc) {          
+        rectBlueX = 50.0;
+        rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectBlueW = 100.0; 
+        rectBlueH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectRedW = 100.0; 
+        rectRedH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY - 100;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueH + 2*100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(10, 10);
+        
+        addCirclesToRoot();
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         checkCollisionCircle();
-        
-        if (Level.getPlayer().getX() > rectRedX) {
-            Level.setMaxLevel(3);
-            Level.setBtn(Level.getBtnLevel3(), Level.getBtnLevel3().getText(), Level.getBtnHexBlue());   
-            Level.getBtnLevel3().setDisable(false);
-        }
+        checkNextLevel(3);
     }
     
     /**
@@ -365,47 +261,107 @@ public class GameLoopManager {
      * @param gc
      */
     public static void runLvl3(GraphicsContext gc) {
+        rectBlueX = 50.0;
+        rectBlueY = 325.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 200.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectRedY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueY + rectBlueH - rectRedY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInDiagonal(0);
+        
+        addCirclesToRoot();
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         checkCollisionCircle();
-        
-        if (Level.getPlayer().getX() > rectRedX) {
-            Level.setMaxLevel(4);
-            Level.setBtn(Level.getBtnLevel4(), Level.getBtnLevel4().getText(), Level.getBtnHexBlue());
-            Level.getBtnLevel4().setDisable(false);
-        }
+        checkNextLevel(4);
     }
     
     /**
      * run game loop to animate level environment & enemies of 4th level
      * @param gc
      */
-    public static void runLvl4(GraphicsContext gc) {       
+    public static void runLvl4(GraphicsContext gc) {   
+        rectBlueX = 50.0;
+        rectBlueY = 375.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 150.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectRedY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueY + rectBlueH - rectRedY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(50, 50);
+        
+        addCirclesToRoot();
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         checkCollisionCircle();
-        
-        if (Level.getPlayer().getX() > rectRedX) {
-            Level.setMaxLevel(5);
-            Level.setBtn(Level.getBtnLevel5(), Level.getBtnLevel5().getText(), Level.getBtnHexBlue());
-            Level.getBtnLevel5().setDisable(false);
-        }
+        checkNextLevel(5);
     }
     
     /**
      * run game loop to animate level environment & enemies of 5th level
      * @param gc
      */
-    public static void runLvl5(GraphicsContext gc) {              
+    public static void runLvl5(GraphicsContext gc) {        
+        rectBlueX = 50.0;
+        rectBlueY = 200.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 325.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectRedY + rectBlueH - rectBlueY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInDiagonal(1);
+        
+        addCirclesToRoot();
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         checkCollisionCircle();
-        
-        if (Level.getPlayer().getX() > rectRedX) {
-            Level.setMaxLevel(6);
-            Level.setBtn(Level.getBtnLevel6(), Level.getBtnLevel6().getText(), Level.getBtnHexBlue());
-            Level.getBtnLevel6().setDisable(false);
-        }
+        checkNextLevel(6);
     }
     
     /**
@@ -413,6 +369,31 @@ public class GameLoopManager {
      * @param gc
      */
     public static void runLvl6(GraphicsContext gc) {
+        rectBlueX = 50.0;
+        rectBlueY = 150.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 375.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectRedY + rectBlueH - rectBlueY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(80, 80);
+        
+        addCirclesToRoot();
+        
         Level.checkKeysPressed();
         checkMovementBorder();
         checkCollisionCircle();
@@ -501,24 +482,18 @@ public class GameLoopManager {
      */
     public static void drawCirclesInCorners(int offsetX, int offsetY) {
         // top left
-        gc.drawImage(arrICircle.get(0), rectWhiteX + offsetX, rectWhiteY + offsetY);
         arrIVCircle.get(0).setX(rectWhiteX + offsetX);
         arrIVCircle.get(0).setY(rectWhiteY + offsetY);
         
         // bottom left
-        gc.drawImage(arrICircle.get(1), rectWhiteX + offsetX, rectWhiteY + rectWhiteH - offsetY - circleSize[1]);
         arrIVCircle.get(1).setX(rectWhiteX + offsetX);
         arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH - offsetY - circleSize[1]);
         
         // top right
-        gc.drawImage(arrICircle.get(1), rectWhiteX + rectWhiteW - offsetX - circleSize[0], 
-                rectWhiteY + offsetY);
         arrIVCircle.get(2).setX(rectWhiteX + rectWhiteW - offsetX - circleSize[0]);
         arrIVCircle.get(2).setY(rectWhiteY + offsetY);
         
         // bottom right
-        gc.drawImage(arrICircle.get(1), rectWhiteX + rectWhiteW - offsetX - circleSize[0], 
-                rectWhiteY + rectWhiteH - offsetY - circleSize[1]);
         arrIVCircle.get(3).setX(rectWhiteX + rectWhiteW - offsetX - circleSize[0]);
         arrIVCircle.get(3).setY(rectWhiteY + rectWhiteH - offsetY - circleSize[1]);
     }
@@ -532,33 +507,23 @@ public class GameLoopManager {
         int offsetX = 125, offsetY = 75;
         
         // center
-        gc.drawImage(arrICircle.get(0), rectWhiteX + rectWhiteW/2 - circleSize[0]/2, 
-                rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
         arrIVCircle.get(0).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2);
         arrIVCircle.get(0).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
         
         if (direction == 0) {
             // left
-            gc.drawImage(arrICircle.get(1), rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX, 
-                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY);
             arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX);
             arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY);
             
             // right
-            gc.drawImage(arrICircle.get(2), rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX, 
-                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY);
             arrIVCircle.get(2).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
             arrIVCircle.get(2).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY);
         } else {
             // left
-            gc.drawImage(arrICircle.get(1), rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX, 
-                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY);
             arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX);
             arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY);
             
             // right
-            gc.drawImage(arrICircle.get(2), rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX, 
-                    rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY);
             arrIVCircle.get(2).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
             arrIVCircle.get(2).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY);
         }
@@ -569,8 +534,12 @@ public class GameLoopManager {
      */
     public static void checkCollisionCircle() {
         for (int i = 0; i < maxNeededCircles; i++) {
-            if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
-                System.out.println(i);
+            // when not checking weather circle in root then collision still works at the background
+            if (Level.getRoot().getChildren().contains(arrIVCircle.get(i))) {
+                if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
+                    Level.getRoot().getChildren().remove(arrIVCircle.get(i));
+                    circlesObtained++;
+                }
             }
         }
     }
@@ -588,8 +557,41 @@ public class GameLoopManager {
      */
     public static void initilizeCircle() {
         for (int i = 0; i < maxNeededCircles; i++ ) {
-            arrICircle.add(new Image("circle.png"));
-            arrIVCircle.add(new ImageView(arrICircle.get(i)));
+            arrIVCircle.add(new ImageView(new Image("circle.png")));
+        }
+    }
+    
+    /**
+     * checks weather next level should be unlocked, meaning the button is 
+     */
+    public static void checkNextLevel(int nextLevel) {
+        if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {
+            Level.setMaxLevel(nextLevel);
+            if (nextLevel == 2) {
+                Level.setBtn(Level.getBtnLevel2(), Level.getBtnLevel2().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel2().setDisable(false);
+            } else if (nextLevel == 3) {
+                Level.setBtn(Level.getBtnLevel3(), Level.getBtnLevel3().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel3().setDisable(false);
+            } else if (nextLevel == 4) {
+                Level.setBtn(Level.getBtnLevel4(), Level.getBtnLevel4().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel4().setDisable(false);
+            }  else if (nextLevel == 5) {
+                Level.setBtn(Level.getBtnLevel5(), Level.getBtnLevel5().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel5().setDisable(false);
+            }  else if (nextLevel == 6) {
+                Level.setBtn(Level.getBtnLevel6(), Level.getBtnLevel6().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel6().setDisable(false);
+            }
+        }
+    }
+    
+    public static void addCirclesToRoot() {
+        if (setup == false) {
+            for (int i = 0; i < maxNeededCircles; i++) {
+                    Level.getRoot().getChildren().add(arrIVCircle.get(i));
+                }
+            setup = true;
         }
     }
 }
