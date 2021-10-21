@@ -586,6 +586,9 @@ public class GameLoopManager {
         }
     }
     
+    /**
+     * add circles to root to be seen
+     */
     public static void addCirclesToRoot() {
         if (setup == false) {
             for (int i = 0; i < maxNeededCircles; i++) {
@@ -593,5 +596,17 @@ public class GameLoopManager {
                 }
             setup = true;
         }
+    }
+    
+    /**
+     * stops all timelines to allow smooth scene switches when clicking the back button
+     */
+    public static void stopAllTimelines() {
+        tl1.stop();
+        tl2.stop();
+        tl3.stop();
+        tl4.stop();
+        tl5.stop();
+        tl6.stop();
     }
 }

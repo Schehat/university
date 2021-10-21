@@ -90,6 +90,7 @@ public class StartScene {
             
             // this step will reset the current game loop
             if (levelLoaded) {
+                Level.setLayout();
                 GameLoopManager.gameLoopManager();
             }
             stage.setScene(Level.getScene());

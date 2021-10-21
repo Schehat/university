@@ -151,6 +151,7 @@ public class Level {
         btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
         btnBack.setOnMouseExited(e -> scene.setCursor(Cursor.DEFAULT));
         btnBack.setOnAction(e -> {
+            GameLoopManager.stopAllTimelines();
             StartScene.setLayout();
             stage.setScene(StartScene.getScene());
         });
@@ -205,6 +206,8 @@ public class Level {
             } else if (currentLevel == 6) {
                 Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
             }
+            
+            Level.setLayout();
             GameLoopManager.gameLoopManager();
         });
         
