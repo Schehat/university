@@ -8727,3 +8727,2680 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2021-10-23 13:15:38.617 -----------------------------------------------
+eclipse.buildId=4.20.0.I20210611-1600
+java.version=15.0.1
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=de_DE
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.jface 2 0 2021-10-23 13:16:00.112
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2021-10-23 13:16:00.112
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@59b853aa,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4ab90d01,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2021-10-23 13:16:18.821
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Schehat'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.core 4 4 2021-10-23 18:49:57.256
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package application;
+
+import java.util.ArrayList;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
+
+/**
+ * 
+ * @author Schehat
+ * handling multiple game loops
+ */
+public class GameLoopManager {
+    private static Canvas canvas = new Canvas(Main.getSize()[0], Main.getSize()[1]);
+    private static GraphicsContext gc = canvas.getGraphicsContext2D();
+    
+    //free form animation defined by KeyFrames and their duration 
+    private static Timeline tl1 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl1(gc)));
+    private static Timeline tl2 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl2(gc)));
+    private static Timeline tl3 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl3(gc)));
+    private static Timeline tl4 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl4(gc)));
+    private static Timeline tl5 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl5(gc)));
+    private static Timeline tl6 = new Timeline(new KeyFrame(Duration.millis(10), e -> runLvl6(gc)));
+    
+    private static double rectBlueX;
+    private static double rectBlueY;
+    private static double rectBlueW; 
+    private static double rectBlueH;
+    private static double rectRedX;
+    private static double rectRedY;
+    private static double rectRedW; 
+    private static double rectRedH;
+    private static double rectWhiteX;
+    private static double rectWhiteY;
+    private static double rectWhiteW; 
+    private static double rectWhiteH;
+    
+    public static String circleColor = "F3EF10"; // yellow
+    public static int[] circleSize = {20, 20};  // width & height
+    public static ArrayList<ImageView> arrIVCircle = new ArrayList<ImageView>();
+    public static int[] enemySize = {30, 30};  // width & height
+    public static ArrayList<ImageView> arrIVEnemy = new ArrayList<ImageView>();
+    public static ArrayList<Integer> arrIVEnemyMove = new ArrayList<Integer>();
+    public static boolean setup = false; // for if statements to run code only once  
+    
+    public static int maxNeededCircles;
+    public static int circlesObtained = 0;
+    public static int maxEnemies = 0;
+    
+    public static double enemyOffsetY;
+    public static double enemyOffsetX;
+    
+    /**
+     * handling multiple game loops
+     */
+    public static void gameLoopManager() {
+        // at the start disable all buttons except button 1
+        Level.getBtnLevel2().setDisable(true);
+        Level.getBtnLevel3().setDisable(true);
+        Level.getBtnLevel4().setDisable(true);
+        Level.getBtnLevel5().setDisable(true);
+        Level.getBtnLevel6().setDisable(true);
+
+        // maxLevel == 1 not needed, should always be not disabled
+        if (Level.getMaxLevel() >= 2)  Level.getBtnLevel2().setDisable(false);
+        if (Level.getMaxLevel() >= 3)  Level.getBtnLevel3().setDisable(false);
+        if (Level.getMaxLevel() >= 4)  Level.getBtnLevel4().setDisable(false);
+        if (Level.getMaxLevel() >= 5)  Level.getBtnLevel5().setDisable(false);
+        if (Level.getMaxLevel() >= 6)  Level.getBtnLevel6().setDisable(false);
+        
+        // reset state
+        circlesObtained = 0;
+        setup = false;
+        
+        // clear canvas when switching between levels
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        
+        // clear circles & enemies
+        arrIVCircle.clear();
+        arrIVEnemy.clear();
+        arrIVEnemyMove.clear();
+        
+        if (Level.getCurrentLevel() == 1) {
+            // do not want the game loop of the other level play at background
+            tl2.stop();
+            tl3.stop();
+            tl4.stop();
+            tl5.stop();
+            tl6.stop();
+            
+            // load circles & enemies
+            maxNeededCircles = 2;
+            initilizeCircle();
+            maxEnemies = 3;
+            initilizeEnemy();
+            
+            //number of cycles in animation INDEFINITE = repeat indefinitely
+            tl1.setCycleCount(Timeline.INDEFINITE);
+            
+            // level switches will not continue where they left, instead start at
+            // the beginning again
+            tl1.playFromStart();
+        } else if (Level.getCurrentLevel() == 2) {         
+            tl1.stop();
+            tl3.stop();
+            tl4.stop();
+            tl5.stop();
+            tl6.stop();
+            
+            maxNeededCircles = 4;
+            initilizeCircle();
+            maxEnemies = 10;
+            initilizeEnemy();
+            
+            tl2.setCycleCount(Timeline.INDEFINITE);
+            tl2.playFromStart();
+        } else if (Level.getCurrentLevel() == 3) {     
+            tl1.stop();
+            tl2.stop();
+            tl4.stop();
+            tl5.stop();
+            tl6.stop();
+            
+            maxNeededCircles = 3;
+            initilizeCircle();
+            maxEnemies = 3;
+            initilizeEnemy();
+            
+            tl3.setCycleCount(Timeline.INDEFINITE);
+            tl3.playFromStart();
+        } else if (Level.getCurrentLevel() == 4) {           
+            tl1.stop();
+            tl2.stop();
+            tl3.stop();
+            tl5.stop();
+            tl6.stop();
+           
+            maxNeededCircles = 4;
+            initilizeCircle();
+            maxEnemies = 8;
+            initilizeEnemy();
+            
+            tl4.setCycleCount(Timeline.INDEFINITE);
+            tl4.playFromStart();
+        } else if (Level.getCurrentLevel() == 5) {   
+            tl1.stop();
+            tl2.stop();
+            tl3.stop();
+            tl4.stop();
+            tl6.stop();
+         
+            maxNeededCircles = 3;
+            initilizeCircle();
+            maxEnemies = 6;
+            initilizeEnemy();
+            
+            tl5.setCycleCount(Timeline.INDEFINITE);
+            tl5.playFromStart();
+        } else if (Level.getCurrentLevel() == 6) {      
+            tl1.stop();
+            tl2.stop();
+            tl3.stop();
+            tl4.stop();
+            tl5.stop();
+            
+            maxNeededCircles = 4;
+            initilizeCircle();
+            maxEnemies = 12;
+            initilizeEnemy();
+            
+            tl6.setCycleCount(Timeline.INDEFINITE);
+            tl6.playFromStart();
+        }
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 1st level
+     * @param gc
+     */
+    public static void runLvl1(GraphicsContext gc) {          
+        rectBlueX = 50.0;
+        rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectBlueW = 100.0; 
+        rectBlueH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectRedW = 100.0; 
+        rectRedH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY - 50;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueH + 2*50.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+
+        int offsetX = 80;
+        // left circle
+        arrIVCircle.get(0).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX);
+        arrIVCircle.get(0).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
+        
+        // right circle
+        arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
+        arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
+        
+        int xPadding = 75;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1) - xPadding;
+            enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1);
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setX(rectWhiteX + i*enemyOffsetX + xPadding);
+                arrIVEnemy.get(i).setY(rectWhiteY + i*enemyOffsetY);
+            }
+        }
+        
+        moveEnemiesVertical(2);
+        
+        // for some reason not needed to clear before adding when switching between scenes
+        addImagesToRoot();
+        
+        Level.checkKeysPressed();      
+        checkMovementBorder();
+        checkCollisionCircle();
+        checkNextLevel(2);
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 2nd level
+     * @param gc
+     */
+    public static void runLvl2(GraphicsContext gc) {          
+        rectBlueX = 50.0;
+        rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectBlueW = 100.0; 
+        rectBlueH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
+        rectRedW = 100.0; 
+        rectRedH = 100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY - 100;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueH + 2*100.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(10, 10);
+        
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1);
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setX(rectWhiteX + i*enemyOffsetX);
+                if (i % 2 == 0) {
+                    arrIVEnemy.get(i).setY(rectWhiteY + 0);
+                } else {
+                    arrIVEnemy.get(i).setY(rectWhiteY + rectWhiteH - enemySize[0]);
+                }
+            }
+        }
+        
+        moveEnemiesVertical(2);
+        
+        addImagesToRoot();
+        
+        Level.checkKeysPressed();
+        checkMovementBorder();
+        checkCollisionCircle();
+        checkNextLevel(3);
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 3rd level
+     * @param gc
+     */
+    public static void runLvl3(GraphicsContext gc) {
+        rectBlueX = 50.0;
+        rectBlueY = 325.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 200.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectRedY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueY + rectBlueH - rectRedY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInDiagonal(0);
+        
+        int yPadding = 35;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1);
+            enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1) - yPadding;
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setX(rectWhiteX + i*enemyOffsetX);
+                arrIVEnemy.get(i).setY(rectWhiteY + i*enemyOffsetY + yPadding);
+            }
+        }
+        
+        moveEnemiesHorizontal(3);
+        
+        addImagesToRoot();
+        
+        Level.checkKeysPressed();
+        checkMovementBorder();
+        checkCollisionCircle();
+        checkNextLevel(4);
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 4th level
+     * @param gc
+     */
+    public static void runLvl4(GraphicsContext gc) {   
+        rectBlueX = 50.0;
+        rectBlueY = 375.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 150.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectRedY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectBlueY + rectBlueH - rectRedY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(50, 50);
+        
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1);
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setY(rectWhiteY + i*enemyOffsetY);
+                if (i % 2 == 0) {
+                    arrIVEnemy.get(i).setX(rectWhiteX);
+                } else {
+                    arrIVEnemy.get(i).setX(rectWhiteX + rectWhiteW - enemySize[0]);
+                }
+            }
+        }
+        
+        moveEnemiesHorizontal(3);
+        
+        addImagesToRoot();
+        
+        Level.checkKeysPressed();
+        checkMovementBorder();
+        checkCollisionCircle();
+        checkNextLevel(5);
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 5th level
+     * @param gc
+     */
+    public static void runLvl5(GraphicsContext gc) {        
+        rectBlueX = 50.0;
+        rectBlueY = 200.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 325.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectRedY + rectBlueH - rectBlueY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInDiagonal(1);
+        
+        int verticalEnemies = 3;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            for (int i = 0; i < verticalEnemies; i++) {
+                arrIVEnemy.get(i).setX(arrIVCircle.get(i).getX() - circleSize[0]/4);
+                /*
+                 * should be i % 2 != 0 but first circle is in center thats why doing this
+                   for proper position so left & right enemy starts at top and the center enemy at the bottom
+                 */
+                if (i > 0) {
+                    arrIVEnemy.get(i).setY(rectWhiteY);
+                } else {
+                    arrIVEnemy.get(i).setY(rectWhiteY + rectWhiteH - enemySize[0]);
+                }
+            }
+        }
+        ;
+        int horizontalEnemies = 3;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            for (int i = horizontalEnemies; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setY(arrIVCircle.get(i - horizontalEnemies).getY() - circleSize[0]/4);
+                if (i > horizontalEnemies) {
+                    arrIVEnemy.get(i).setX(rectWhiteX);
+                } else {
+                    arrIVEnemy.get(i).setX(rectWhiteX + rectWhiteW - enemySize[0]);
+                }
+            }
+        }
+        
+        int speed = 2;
+        // movie enemies vertically
+        for (int i = 0; i < verticalEnemies; i++) {
+            if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setY(arrIVEnemy.get(i).getY() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        speed = 3;
+        // movie enemies horizontally
+        for (int i = horizontalEnemies; i < maxEnemies; i++) {
+            if (arrIVEnemy.get(i).getX() < rectWhiteX || arrIVEnemy.get(i).getX() > rectWhiteX + rectWhiteW - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setX(arrIVEnemy.get(i).getX() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        addImagesToRoot();
+        
+        Level.checkKeysPressed();
+        checkMovementBorder();
+        checkCollisionCircle();
+        checkNextLevel(6);
+    }
+    
+    /**
+     * run game loop to animate level environment & enemies of 6th level
+     * @param gc
+     */
+    public static void runLvl6(GraphicsContext gc) {
+        rectBlueX = 50.0;
+        rectBlueY = 150.0;
+        rectBlueW = 100.0; 
+        rectBlueH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
+        
+        rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
+        rectRedY = 375.0;
+        rectRedW = 100.0; 
+        rectRedH = 75.0;
+        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
+        
+        rectWhiteX = rectBlueX + rectBlueW;
+        rectWhiteY = rectBlueY;
+        rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
+        rectWhiteH = rectRedY + rectBlueH - rectBlueY;
+        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
+        
+        GameLoopManager.drawCirclesInCorners(80, 80);
+        
+        int xPadding = 30;
+        int verticalEnemies = 4;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            for (int i = 0; i < verticalEnemies; i++) {
+                arrIVEnemy.get(i).setX(arrIVCircle.get(i).getX() - circleSize[0]/4 + xPadding);
+                /*
+                 * should be i % 2 != 0 but first circle is in center thats why doing this
+                   for proper position so left & right enemy starts at top and the center enemy at the bottom
+                 */
+                if (i % 2 == 0) {
+                    arrIVEnemy.get(i).setY(rectWhiteY);
+                } else {
+                    arrIVEnemy.get(i).setY(rectWhiteY + rectWhiteH - enemySize[0]);
+                }
+            }
+        }
+        ;
+        int horizontalEnemies = 4;
+        if (setup == false) {
+            for (int i = horizontalEnemies; i < horizontalEnemies + verticalEnemies; i++) {
+                arrIVEnemy.get(i).setY(arrIVCircle.get(i - horizontalEnemies).getY() - circleSize[0]/4);
+                arrIVEnemy.get(i).setX(arrIVCircle.get(i - horizontalEnemies).getX() - circleSize[0]/4);
+            }
+        }
+        
+        // enemies in the center
+        if (setup == false) {
+                arrIVEnemy.get(8).setX(rectWhiteX + rectWhiteW/2 - enemySize[0]/2);
+                arrIVEnemy.get(8).setY(rectWhiteY);
+                
+                arrIVEnemy.get(9).setX(rectWhiteX + rectWhiteW/2 - enemySize[0]/2);
+                arrIVEnemy.get(9).setY(rectWhiteY + rectWhiteH - enemySize[0]/2);
+                
+                arrIVEnemy.get(10).setX(0);
+                arrIVEnemy.get(10).setY(rectWhiteY + rectWhiteH - enemySize[0]/2);
+                
+                arrIVEnemy.get(11).setX(rectWhiteX + rectWhiteW - enemySize[0]/2);
+                arrIVEnemy.get(11).setY(rectWhiteY + rectWhiteH - enemySize[0]/2);
+        }
+        
+        int speed = 2;
+        // movie enemies vertically
+        for (int i = 0; i < verticalEnemies; i++) {
+            if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setY(arrIVEnemy.get(i).getY() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        // special configuration of movement pattern
+        if (setup == false ) {
+            for (int i = horizontalEnemies; i < horizontalEnemies + verticalEnemies; i++) {
+                if (i < horizontalEnemies + 2) {
+                    arrIVEnemyMove.set(i, 1);
+                } else {
+                    arrIVEnemyMove.set(i, -1);
+                }
+            }   
+        }
+        
+        speed = 3;
+        // movie enemies horizontally
+        for (int i = horizontalEnemies; i < horizontalEnemies + verticalEnemies; i++) {
+            if (arrIVEnemy.get(i).getX() < rectWhiteX || arrIVEnemy.get(i).getX() > rectWhiteX + rectWhiteW - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setX(arrIVEnemy.get(i).getX() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        // movie enemies which were place in the center
+        // vertically
+        for ()
+        if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+            arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+        }
+        addImagesToRoot();
+        
+        Level.checkKeysPressed();
+        checkMovementBorder();
+        checkCollisionCircle();
+    }
+    
+    /**
+     * block players movement at level borders
+     */
+    public static void checkMovementBorder() {
+        if (Level.getLeftKeyPressed()) {
+            // rect blue left
+            if (Level.getPlayer().getX() - Controller.getSpeed() < rectBlueX) {
+                Controller.moveRight(Level.getPlayer());
+            }
+            // rect white bottom & top left
+            if (
+                    (Level.getPlayer().getY() + Level.getPlayer().getImage().getHeight() > rectBlueY + rectBlueH
+                        || Level.getPlayer().getY() < rectBlueY
+                    ) && Level.getPlayer().getX() - Controller.getSpeed() < rectWhiteX) {
+                Controller.moveRight(Level.getPlayer());
+            }
+        }
+        
+        if (Level.getRightKeyPressed()) {
+            // red rect right
+            if (Level.getPlayer().getX() + Controller.getSpeed() + Level.getPlayer().getImage().getWidth() 
+                    > rectRedX + rectRedW) {
+                Controller.moveLeft(Level.getPlayer());
+            }
+            // rect white bottom & top right
+            if (
+                    (Level.getPlayer().getY() + Level.getPlayer().getImage().getHeight() > rectRedY + rectRedH
+                        || Level.getPlayer().getY() < rectRedY)
+                    && Level.getPlayer().getX() + Controller.getSpeed() + Level.getPlayer().getImage().getWidth() 
+                    > rectWhiteX + rectWhiteW) {
+                Controller.moveLeft(Level.getPlayer());
+            }
+        }
+        
+        if (Level.getUpKeyPressed()) {
+            // blue rect top
+            if (Level.getPlayer().getX() > rectBlueX && Level.getPlayer().getX() < rectBlueX + rectBlueW
+                    && Level.getPlayer().getY() - Controller.getSpeed() < rectBlueY) {
+                Controller.moveDown(Level.getPlayer());
+            }
+            // white rect top
+            if (Level.getPlayer().getX() > rectWhiteX && Level.getPlayer().getX() < rectWhiteX + rectWhiteW
+                    && Level.getPlayer().getY() - Controller.getSpeed() < rectWhiteY) {
+                Controller.moveDown(Level.getPlayer());
+            }
+            // red rect top
+            if (Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() > rectRedX 
+                    && Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() < rectRedX + rectRedW
+                    && Level.getPlayer().getY() - Controller.getSpeed() < rectRedY) {
+                Controller.moveDown(Level.getPlayer());
+            }
+        }
+        
+        if (Level.getDownKeyPressed()) {
+            // blue rect bottom
+            if (Level.getPlayer().getX() > rectBlueX && Level.getPlayer().getX() < rectBlueX + rectBlueW
+                    && Level.getPlayer().getY() + Controller.getSpeed() + 
+                    Level.getPlayer().getImage().getHeight()> rectBlueY + rectBlueH) {
+                Controller.moveUp(Level.getPlayer());
+            }
+            // white rect bottom
+            if (Level.getPlayer().getX() > rectWhiteX && Level.getPlayer().getX() < rectWhiteX + rectWhiteW
+                    && Level.getPlayer().getY() + Controller.getSpeed() 
+                    + Level.getPlayer().getImage().getHeight() > rectWhiteY + rectWhiteH) {
+                Controller.moveUp(Level.getPlayer());
+            }
+            // red rect bottom
+            if (Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() > rectRedX  
+                    && Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() < rectRedX + rectRedW
+                    && Level.getPlayer().getY() + Controller.getSpeed() + 
+                    Level.getPlayer().getImage().getHeight()> rectRedY + rectRedH) {
+                Controller.moveUp(Level.getPlayer());
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param offsetX of circle to static x location
+     * @param offsetY of circle to static y location
+     */
+    public static void drawCirclesInCorners(int offsetX, int offsetY) {
+        // top left
+        arrIVCircle.get(0).setX(rectWhiteX + offsetX);
+        arrIVCircle.get(0).setY(rectWhiteY + offsetY);
+        
+        // bottom left
+        arrIVCircle.get(1).setX(rectWhiteX + offsetX);
+        arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH - offsetY - circleSize[1]);
+        
+        // top right
+        arrIVCircle.get(2).setX(rectWhiteX + rectWhiteW - offsetX - circleSize[0]);
+        arrIVCircle.get(2).setY(rectWhiteY + offsetY);
+        
+        // bottom right
+        arrIVCircle.get(3).setX(rectWhiteX + rectWhiteW - offsetX - circleSize[0]);
+        arrIVCircle.get(3).setY(rectWhiteY + rectWhiteH - offsetY - circleSize[1]);
+    }
+    
+    /**
+     * draws circles in correct position for the level
+     * @param direction, 0: from bottom left to top right & 1: from top left to bottom right
+     */
+    public static void drawCirclesInDiagonal(int direction) {
+        gc.setFill(Color.web("0x" + circleColor, 1.0));
+        int offsetX = 125, offsetY = 75;
+        
+        // center
+        arrIVCircle.get(0).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2);
+        arrIVCircle.get(0).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
+        
+        if (direction == 0) {
+            // left
+            arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX);
+            arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY);
+            
+            // right
+            arrIVCircle.get(2).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
+            arrIVCircle.get(2).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY);
+        } else {
+            // left
+            arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 - offsetX);
+            arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 - offsetY);
+            
+            // right
+            arrIVCircle.get(2).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
+            arrIVCircle.get(2).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2 + offsetY);
+        }
+    }
+    
+    /**
+     * check collision between player & circles and player & enemies
+     */
+    public static void checkCollisionCircle() {
+        for (int i = 0; i < maxNeededCircles; i++) {
+            // when not checking weather circle in root then collision still works at the background
+            if (Level.getRoot().getChildren().contains(arrIVCircle.get(i))) {
+                if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
+                    Level.getRoot().getChildren().remove(arrIVCircle.get(i));
+                    circlesObtained++;
+                }
+            }
+        }
+        
+        for (int i = 0; i < maxEnemies; i++) {
+            if (Level.getRoot().getChildren().contains(arrIVEnemy.get(i))) {
+                if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
+                    setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                            (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+                }
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @return canvas
+     */
+    public static Canvas getCanvas() {
+        return canvas;
+    }
+    
+    /**
+     * add circle images to array object to display them later
+     */
+    public static void initilizeCircle() {
+        for (int i = 0; i < maxNeededCircles; i++ ) {
+            arrIVCircle.add(new ImageView(new Image("circle.png")));
+        }
+    }
+    
+    /**
+     * add enemy images to array object to display them later
+     */
+    public static void initilizeEnemy() {
+        int sign = 1;
+        for (int i = 0; i < maxEnemies; i++ ) {
+            arrIVEnemy.add(new ImageView(new Image("smith.png")));
+            arrIVEnemyMove.add(sign);
+            sign*= -1;
+        }
+    }
+    
+    /**
+     * checks weather next level should be unlocked, meaning the button is 
+     */
+    public static void checkNextLevel(int nextLevel) {
+        if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {
+            Level.setMaxLevel(nextLevel);
+            if (nextLevel == 2) {
+                Level.setBtn(Level.getBtnLevel2(), Level.getBtnLevel2().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel2().setDisable(false);
+            } else if (nextLevel == 3) {
+                Level.setBtn(Level.getBtnLevel3(), Level.getBtnLevel3().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel3().setDisable(false);
+            } else if (nextLevel == 4) {
+                Level.setBtn(Level.getBtnLevel4(), Level.getBtnLevel4().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel4().setDisable(false);
+            }  else if (nextLevel == 5) {
+                Level.setBtn(Level.getBtnLevel5(), Level.getBtnLevel5().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel5().setDisable(false);
+            }  else if (nextLevel == 6) {
+                Level.setBtn(Level.getBtnLevel6(), Level.getBtnLevel6().getText(), Level.getBtnHexBlue());
+                Level.getBtnLevel6().setDisable(false);
+            }
+        }
+    }
+    
+    /**
+     * add circles & enemies to root to be seen
+     */
+    public static void addImagesToRoot() {
+        if (setup == false) {
+            for (int i = 0; i < maxNeededCircles; i++) {
+                    Level.getRoot().getChildren().add(arrIVCircle.get(i));
+            }
+            for (int i = 0; i < maxEnemies; i++) {
+                Level.getRoot().getChildren().add(arrIVEnemy.get(i));
+            }
+            setup = true;
+        }
+    }
+    
+    /**
+     * stops all timelines to allow smooth scene switches when clicking the back button
+     */
+    public static void stopAllTimelines() {
+        tl1.stop();
+        tl2.stop();
+        tl3.stop();
+        tl4.stop();
+        tl5.stop();
+        tl6.stop();
+    }
+    
+    /**
+     * moving enemies vertically in the level
+     * @param speed
+     */
+    public static void moveEnemiesVertical(double speed) {
+        for (int i = 0; i < maxEnemies; i++) {
+            if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setY(arrIVEnemy.get(i).getY() + speed*arrIVEnemyMove.get(i));
+        }
+    }
+    
+    /**
+     * moving enemies horizontally in the level
+     * @param speed
+     */
+    public static void moveEnemiesHorizontal(double speed) {
+        for (int i = 0; i < maxEnemies; i++) {
+            if (arrIVEnemy.get(i).getX() < rectWhiteX || arrIVEnemy.get(i).getX() > rectWhiteX + rectWhiteW - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setX(arrIVEnemy.get(i).getX() + speed*arrIVEnemyMove.get(i));
+        }
+    }
+    
+    /**
+     * set player position
+     * @param x
+     * @param y
+     */
+    public static void setPlayerPosition(int x, int y) {
+        Level.getPlayer().setX(x);
+        Level.getPlayer().setY(y);
+    }
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2664)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2025)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToExpression(ASTConverter.java:3647)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2185)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2991)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2021-10-23 18:49:57.261
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2664)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2025)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToExpression(ASTConverter.java:3647)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2185)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2991)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2021-10-23 18:49:57.262
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2664)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2025)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToExpression(ASTConverter.java:3647)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2185)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2991)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.core 4 4 2021-10-23 19:18:38.841
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package application;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+/**
+ * 
+ * @author Schehat
+ * configuration of the first level in the game
+ */
+public class Level {
+    private static Stage stage;
+    private static BorderPane root = new BorderPane();
+    private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
+    private static HBox hboxTop = new HBox();
+    private static HBox hboxBottom = new HBox();
+    private static Player player = new Player("neo");
+    private static Image iBg = new Image("background.gif");
+    private static ImageView iVBg = new ImageView(iBg);
+    private static Image iMorpheus = new Image("morpheus_small.png");
+    private static ImageView iVMorpheus = new ImageView(iMorpheus);
+    private static Image iInstructions = new Image("instructions.png");
+    private static ImageView iVInstructions = new ImageView(iInstructions);
+    
+    private static int deathCounter = 0;
+    private static Label lblDeathCounter = new Label("DEATH COUNTER:\n" + deathCounter);
+    private static Button btnBack= new Button(); 
+    private static Button btnLevel1 = new Button();
+    private static Button btnLevel2 = new Button();     
+    private static Button btnLevel3 = new Button();  
+    private static Button btnLevel4 = new Button();  
+    private static Button btnLevel5 = new Button();  
+    private static Button btnLevel6 = new Button();  
+    
+    private static int btnPrefWidth = 100;
+    private static int btnPrefHeight = 35;
+    private static String btnTextLevel = "LEVEL";
+    private static String btnBackYellow = "#E9DD25";
+    private static String btnHexRed = "#C75A41";
+    private static String btnHexBlue = "#415FC7";
+    private static String btnHexGreen = "#47D92B";
+    private static String btnBorderWidth = "2px";
+    private static String btnBorderColor = "#000000"; 
+    private static String btnFontSize = "20px";
+    private static String btnBorderRadius = "6px";
+    
+    private static int currentLevel = 1;
+    private static int maxLevel = 1;  // to track the highest level the player can play
+    private static String rectHexWhite = "F3F5F6";
+    private static String rectHexRed = "C75A41";
+    private static String rectHexBlue = "415FC7";
+    
+    private static boolean leftKeyPressed = false;
+    private static boolean rightKeyPressed = false;
+    private static boolean upKeyPressed = false;
+    private static boolean downKeyPressed = false;
+    
+    /**
+     * create level layout
+     */
+    public static void setLayout() {        
+        root.getChildren().clear();
+        hboxTop.getChildren().clear();
+        hboxBottom.getChildren().clear();
+        
+        iVBg.setX(0.0);
+        iVBg.setY(0.0);
+        
+        Level.setBtn(btnBack, "BACK", btnBackYellow);
+        Level.setBtn(btnLevel1, btnTextLevel + " 1", btnHexGreen);
+        Level.setBtn(btnLevel2, btnTextLevel + " 2", btnHexRed);
+        Level.setBtn(btnLevel3, btnTextLevel + " 3", btnHexRed);
+        Level.setBtn(btnLevel4, btnTextLevel + " 4", btnHexRed);
+        Level.setBtn(btnLevel5, btnTextLevel + " 5", btnHexRed);
+        Level.setBtn(btnLevel6, btnTextLevel + " 6", btnHexRed);
+        
+        lblDeathCounter.setFont(new Font("Arial", 18));
+        // to not wrap text with ... sign
+        lblDeathCounter.setMinWidth(170);
+        lblDeathCounter.setTextFill(Color.WHITE);
+        hboxTop.getChildren().addAll(iVMorpheus, iVInstructions, lblDeathCounter);
+        hboxTop.setSpacing(10.0);
+        hboxTop.setPadding(new Insets(30));
+        hboxTop.setAlignment(Pos.CENTER);
+        
+        hboxBottom.getChildren().addAll(btnBack, btnLevel1, btnLevel2, btnLevel3, 
+                                            btnLevel4, btnLevel5, btnLevel6);
+        hboxBottom.setSpacing(10.0);
+        hboxBottom.setPadding(new Insets(30));
+        hboxBottom.setAlignment(Pos.CENTER);
+              
+        root.getChildren().addAll(iVBg, GameLoopManager.getCanvas(), player.getImageView());
+        root.setTop(hboxTop);
+        root.setBottom(hboxBottom);
+        
+        GameLoopManager.gameLoopManager();
+    }
+    
+    /**
+     * set properties of buttons & css styling
+     * @param btn
+     * @param text
+     * @param bgColor
+     */
+    public static void setBtn(Button btn, String text, String bgColor) {
+        btn.setText(text);
+        btn.setMaxWidth(btnPrefWidth);
+        btn.setMaxHeight(btnPrefHeight);
+      
+        btn.setStyle("-fx-border-width: " + btnBorderWidth + "; "
+                  + "-fx-border-color: " + btnBorderColor + "; "
+                  + "-fx-font-size: " + btnFontSize + "; "
+                  + "-fx-background-color: " + bgColor + "; "
+                  + "-fx-border-radius: " + btnBorderRadius + ";");
+    }
+    
+    /**
+     * set up all events in the first level
+     */
+    public static void setEvents() {
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = true; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D))  rightKeyPressed = true;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = true;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = true;
+            
+            // Mainly for debugging purposes skipping levels
+            if (e.getCode().equals(KeyCode.N)) {
+                maxLevel = 6;
+                clearRoot();
+                GameLoopManager.gameLoopManager();
+            }
+        });
+        
+        scene.setOnKeyReleased(e -> {
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = false; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D)) rightKeyPressed = false;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = false;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = false;
+        });
+        
+        btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
+        btnBack.setOnMouseExited(e -> scene.setCursor(Cursor.DEFAULT));
+        btnBack.setOnAction(e -> {
+            GameLoopManager.stopAllTimelines();
+            StartScene.setLayout();
+            stage.setScene(StartScene.getScene());
+        });
+        
+        Level.setButtonEvents(btnLevel1, 1);
+        Level.setButtonEvents(btnLevel2, 2);
+        Level.setButtonEvents(btnLevel3, 3);
+        Level.setButtonEvents(btnLevel4, 4);
+        Level.setButtonEvents(btnLevel5, 5);
+        Level.setButtonEvents(btnLevel6, 6);
+    }
+    
+    /**
+     * set events for buttons
+     * @param btn
+     * @param level
+     */
+    public static void setButtonEvents(Button btn, int level) {
+        btn.setOnAction(e -> {
+            Level.setBtn(btn, btn.getText(), btnHexGreen);
+            
+            currentLevel = level;
+            
+            // to reset Layout & remove enemies from previous level
+            clearRoot();
+            
+            // change green colored button to blue
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexBlue);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexBlue);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexBlue);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexBlue);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
+            }
+            
+            // if green button clicked again then it will turn blue
+            // thats why after setting new level state need to 
+            // turn the button to green color again
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexGreen);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexGreen);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexGreen);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexGreen);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexGreen);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
+            }
+            
+            GameLoopManager.gameLoopManager();
+        });
+        
+        btn.setOnMouseEntered(e -> {
+            // this if statement at the end not necessary due to 
+            // only buttons which are not disabled allow events 
+            if (!btn.isDisabled()) {
+                scene.setCursor(Cursor.HAND);
+            }
+        });
+        
+        btn.setOnMouseExited(e -> {
+            if (!btn.isDisabled()) {
+                scene.setCursor(Cursor.DEFAULT);
+            }
+        });
+    }
+    
+    /**
+     * 
+     * @return scene of Level
+     */
+    public static Scene getScene() {
+        return Level.scene;
+    }
+    
+    /**
+     * to customize scene need current stage
+     * @param stage
+     */
+    public static void setStage(Stage stage) {
+        Level.stage = stage;
+    }
+    
+    /**
+     * if keys pressed move player according to the pressed key
+     */
+    public static void checkKeysPressed() {
+        if (leftKeyPressed) Controller.moveLeft(player);
+        if (rightKeyPressed) Controller.moveRight(player);
+        if (upKeyPressed) Controller.moveUp(player);
+        if (downKeyPressed) Controller.moveDown(player);
+    }
+    
+    /**
+     * 
+     * @return btnLevel2
+     */
+    public static Button getBtnLevel2() {
+        return btnLevel2;
+    }
+    
+    /**
+     * 
+     * @return btnLevel3
+     */
+    public static Button getBtnLevel3() {
+        return btnLevel3;
+    }
+    
+    /**
+     * 
+     * @return btnLevel4
+     */
+    public static Button getBtnLevel4() {
+        return btnLevel4;
+    }
+    
+    /**
+     * 
+     * @return btnLevel5
+     */
+    public static Button getBtnLevel5() {
+        return btnLevel5;
+    }
+    
+    /**
+     * 
+     * @return btnLevel6
+     */
+    public static Button getBtnLevel6() {
+        return btnLevel6;
+    }
+    
+    /**
+     * 
+     * @return maxLevel
+     */
+    public static int getMaxLevel() {
+        return maxLevel;
+    }
+    
+    /**
+     * 
+     * @return currentLevel
+     */
+    public static int getCurrentLevel() {
+        return currentLevel;
+    }
+    
+    /**
+     * 
+     * @return player
+     */
+    public static Player getPlayer() {
+        return player;
+    }
+    
+    /**
+     * 
+     * @return rectHexBlue
+     */
+    public static String getRectHexBlue() {
+        return rectHexBlue;
+    }
+    
+    /**
+     * 
+     * @return rectHexWhite
+     */
+    public static String getRectHexWhite() {
+        return rectHexWhite;
+    }
+    
+    /**
+     * 
+     * @return rectHexRed
+     */
+    public static String getRectHexRed() {
+        return rectHexRed;
+    }
+    
+    /**
+     * 
+     * @return btnHexBlue
+     */
+    public static String getBtnHexBlue() {
+        return btnHexBlue;
+    }
+    
+    /**
+     * 
+     * @return btnHexGreen
+     */
+    public static String getBtnHexGreen() {
+        return btnHexGreen;
+    }
+    
+    /**
+     * 
+     * @return btnHexRed
+     */
+    public static String getBtnHexRed() {
+        return btnHexRed;
+    }
+    
+    /**
+     * 
+     * @return leftKeyPressed
+     */
+    public static boolean getLeftKeyPressed() {
+        return leftKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return rightKeyPressed
+     */
+    public static boolean getRightKeyPressed() {
+        return rightKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return upKeyPressed
+     */
+    public static boolean getUpKeyPressed() {
+        return upKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return downKeyPressed
+     */
+    public static boolean getDownKeyPressed() {
+        return downKeyPressed;
+    }
+    
+    /**
+     * set maxLevel
+     * @param max
+     */
+    public static void setMaxLevel(int max) {
+        maxLevel = max;
+    }
+    
+    /**
+     * 
+     * @return root BorderPane which the main node in the level
+     */
+    public static BorderPane getRoot() {
+        return root;
+    }
+    
+    /**
+     * reset root to avoid problems when switching between scenes
+     */
+    public static void clearRoot() {
+        root.getChildren().clear();
+        root.getChildren().addAll(iVBg, GameLoopManager.getCanvas(), player.getImageView());
+        root.setTop(hboxTop);
+        root.setBottom(hboxBottom);
+    }
+    
+    
+    /**
+     * increment death counter 
+     * @return deathCounter 
+     */
+    public static void incrementDeathCounter() {
+        deathCounter++;
+        deathCounterLaebl Label("DEATH COUNTER:\n" + deathCounter)
+    }
+}
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2021-10-23 19:18:38.844
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2021-10-23 19:18:38.845
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.core 4 4 2021-10-23 19:18:40.361
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package application;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+/**
+ * 
+ * @author Schehat
+ * configuration of the first level in the game
+ */
+public class Level {
+    private static Stage stage;
+    private static BorderPane root = new BorderPane();
+    private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
+    private static HBox hboxTop = new HBox();
+    private static HBox hboxBottom = new HBox();
+    private static Player player = new Player("neo");
+    private static Image iBg = new Image("background.gif");
+    private static ImageView iVBg = new ImageView(iBg);
+    private static Image iMorpheus = new Image("morpheus_small.png");
+    private static ImageView iVMorpheus = new ImageView(iMorpheus);
+    private static Image iInstructions = new Image("instructions.png");
+    private static ImageView iVInstructions = new ImageView(iInstructions);
+    
+    private static int deathCounter = 0;
+    private static Label lblDeathCounter = new Label("DEATH COUNTER:\n" + deathCounter);
+    private static Button btnBack= new Button(); 
+    private static Button btnLevel1 = new Button();
+    private static Button btnLevel2 = new Button();     
+    private static Button btnLevel3 = new Button();  
+    private static Button btnLevel4 = new Button();  
+    private static Button btnLevel5 = new Button();  
+    private static Button btnLevel6 = new Button();  
+    
+    private static int btnPrefWidth = 100;
+    private static int btnPrefHeight = 35;
+    private static String btnTextLevel = "LEVEL";
+    private static String btnBackYellow = "#E9DD25";
+    private static String btnHexRed = "#C75A41";
+    private static String btnHexBlue = "#415FC7";
+    private static String btnHexGreen = "#47D92B";
+    private static String btnBorderWidth = "2px";
+    private static String btnBorderColor = "#000000"; 
+    private static String btnFontSize = "20px";
+    private static String btnBorderRadius = "6px";
+    
+    private static int currentLevel = 1;
+    private static int maxLevel = 1;  // to track the highest level the player can play
+    private static String rectHexWhite = "F3F5F6";
+    private static String rectHexRed = "C75A41";
+    private static String rectHexBlue = "415FC7";
+    
+    private static boolean leftKeyPressed = false;
+    private static boolean rightKeyPressed = false;
+    private static boolean upKeyPressed = false;
+    private static boolean downKeyPressed = false;
+    
+    /**
+     * create level layout
+     */
+    public static void setLayout() {        
+        root.getChildren().clear();
+        hboxTop.getChildren().clear();
+        hboxBottom.getChildren().clear();
+        
+        iVBg.setX(0.0);
+        iVBg.setY(0.0);
+        
+        Level.setBtn(btnBack, "BACK", btnBackYellow);
+        Level.setBtn(btnLevel1, btnTextLevel + " 1", btnHexGreen);
+        Level.setBtn(btnLevel2, btnTextLevel + " 2", btnHexRed);
+        Level.setBtn(btnLevel3, btnTextLevel + " 3", btnHexRed);
+        Level.setBtn(btnLevel4, btnTextLevel + " 4", btnHexRed);
+        Level.setBtn(btnLevel5, btnTextLevel + " 5", btnHexRed);
+        Level.setBtn(btnLevel6, btnTextLevel + " 6", btnHexRed);
+        
+        lblDeathCounter.setFont(new Font("Arial", 18));
+        // to not wrap text with ... sign
+        lblDeathCounter.setMinWidth(170);
+        lblDeathCounter.setTextFill(Color.WHITE);
+        hboxTop.getChildren().addAll(iVMorpheus, iVInstructions, lblDeathCounter);
+        hboxTop.setSpacing(10.0);
+        hboxTop.setPadding(new Insets(30));
+        hboxTop.setAlignment(Pos.CENTER);
+        
+        hboxBottom.getChildren().addAll(btnBack, btnLevel1, btnLevel2, btnLevel3, 
+                                            btnLevel4, btnLevel5, btnLevel6);
+        hboxBottom.setSpacing(10.0);
+        hboxBottom.setPadding(new Insets(30));
+        hboxBottom.setAlignment(Pos.CENTER);
+              
+        root.getChildren().addAll(iVBg, GameLoopManager.getCanvas(), player.getImageView());
+        root.setTop(hboxTop);
+        root.setBottom(hboxBottom);
+        
+        GameLoopManager.gameLoopManager();
+    }
+    
+    /**
+     * set properties of buttons & css styling
+     * @param btn
+     * @param text
+     * @param bgColor
+     */
+    public static void setBtn(Button btn, String text, String bgColor) {
+        btn.setText(text);
+        btn.setMaxWidth(btnPrefWidth);
+        btn.setMaxHeight(btnPrefHeight);
+      
+        btn.setStyle("-fx-border-width: " + btnBorderWidth + "; "
+                  + "-fx-border-color: " + btnBorderColor + "; "
+                  + "-fx-font-size: " + btnFontSize + "; "
+                  + "-fx-background-color: " + bgColor + "; "
+                  + "-fx-border-radius: " + btnBorderRadius + ";");
+    }
+    
+    /**
+     * set up all events in the first level
+     */
+    public static void setEvents() {
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = true; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D))  rightKeyPressed = true;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = true;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = true;
+            
+            // Mainly for debugging purposes skipping levels
+            if (e.getCode().equals(KeyCode.N)) {
+                maxLevel = 6;
+                clearRoot();
+                GameLoopManager.gameLoopManager();
+            }
+        });
+        
+        scene.setOnKeyReleased(e -> {
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = false; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D)) rightKeyPressed = false;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = false;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = false;
+        });
+        
+        btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
+        btnBack.setOnMouseExited(e -> scene.setCursor(Cursor.DEFAULT));
+        btnBack.setOnAction(e -> {
+            GameLoopManager.stopAllTimelines();
+            StartScene.setLayout();
+            stage.setScene(StartScene.getScene());
+        });
+        
+        Level.setButtonEvents(btnLevel1, 1);
+        Level.setButtonEvents(btnLevel2, 2);
+        Level.setButtonEvents(btnLevel3, 3);
+        Level.setButtonEvents(btnLevel4, 4);
+        Level.setButtonEvents(btnLevel5, 5);
+        Level.setButtonEvents(btnLevel6, 6);
+    }
+    
+    /**
+     * set events for buttons
+     * @param btn
+     * @param level
+     */
+    public static void setButtonEvents(Button btn, int level) {
+        btn.setOnAction(e -> {
+            Level.setBtn(btn, btn.getText(), btnHexGreen);
+            
+            currentLevel = level;
+            
+            // to reset Layout & remove enemies from previous level
+            clearRoot();
+            
+            // change green colored button to blue
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexBlue);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexBlue);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexBlue);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexBlue);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
+            }
+            
+            // if green button clicked again then it will turn blue
+            // thats why after setting new level state need to 
+            // turn the button to green color again
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexGreen);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexGreen);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexGreen);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexGreen);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexGreen);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
+            }
+            
+            GameLoopManager.gameLoopManager();
+        });
+        
+        btn.setOnMouseEntered(e -> {
+            // this if statement at the end not necessary due to 
+            // only buttons which are not disabled allow events 
+            if (!btn.isDisabled()) {
+                scene.setCursor(Cursor.HAND);
+            }
+        });
+        
+        btn.setOnMouseExited(e -> {
+            if (!btn.isDisabled()) {
+                scene.setCursor(Cursor.DEFAULT);
+            }
+        });
+    }
+    
+    /**
+     * 
+     * @return scene of Level
+     */
+    public static Scene getScene() {
+        return Level.scene;
+    }
+    
+    /**
+     * to customize scene need current stage
+     * @param stage
+     */
+    public static void setStage(Stage stage) {
+        Level.stage = stage;
+    }
+    
+    /**
+     * if keys pressed move player according to the pressed key
+     */
+    public static void checkKeysPressed() {
+        if (leftKeyPressed) Controller.moveLeft(player);
+        if (rightKeyPressed) Controller.moveRight(player);
+        if (upKeyPressed) Controller.moveUp(player);
+        if (downKeyPressed) Controller.moveDown(player);
+    }
+    
+    /**
+     * 
+     * @return btnLevel2
+     */
+    public static Button getBtnLevel2() {
+        return btnLevel2;
+    }
+    
+    /**
+     * 
+     * @return btnLevel3
+     */
+    public static Button getBtnLevel3() {
+        return btnLevel3;
+    }
+    
+    /**
+     * 
+     * @return btnLevel4
+     */
+    public static Button getBtnLevel4() {
+        return btnLevel4;
+    }
+    
+    /**
+     * 
+     * @return btnLevel5
+     */
+    public static Button getBtnLevel5() {
+        return btnLevel5;
+    }
+    
+    /**
+     * 
+     * @return btnLevel6
+     */
+    public static Button getBtnLevel6() {
+        return btnLevel6;
+    }
+    
+    /**
+     * 
+     * @return maxLevel
+     */
+    public static int getMaxLevel() {
+        return maxLevel;
+    }
+    
+    /**
+     * 
+     * @return currentLevel
+     */
+    public static int getCurrentLevel() {
+        return currentLevel;
+    }
+    
+    /**
+     * 
+     * @return player
+     */
+    public static Player getPlayer() {
+        return player;
+    }
+    
+    /**
+     * 
+     * @return rectHexBlue
+     */
+    public static String getRectHexBlue() {
+        return rectHexBlue;
+    }
+    
+    /**
+     * 
+     * @return rectHexWhite
+     */
+    public static String getRectHexWhite() {
+        return rectHexWhite;
+    }
+    
+    /**
+     * 
+     * @return rectHexRed
+     */
+    public static String getRectHexRed() {
+        return rectHexRed;
+    }
+    
+    /**
+     * 
+     * @return btnHexBlue
+     */
+    public static String getBtnHexBlue() {
+        return btnHexBlue;
+    }
+    
+    /**
+     * 
+     * @return btnHexGreen
+     */
+    public static String getBtnHexGreen() {
+        return btnHexGreen;
+    }
+    
+    /**
+     * 
+     * @return btnHexRed
+     */
+    public static String getBtnHexRed() {
+        return btnHexRed;
+    }
+    
+    /**
+     * 
+     * @return leftKeyPressed
+     */
+    public static boolean getLeftKeyPressed() {
+        return leftKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return rightKeyPressed
+     */
+    public static boolean getRightKeyPressed() {
+        return rightKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return upKeyPressed
+     */
+    public static boolean getUpKeyPressed() {
+        return upKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return downKeyPressed
+     */
+    public static boolean getDownKeyPressed() {
+        return downKeyPressed;
+    }
+    
+    /**
+     * set maxLevel
+     * @param max
+     */
+    public static void setMaxLevel(int max) {
+        maxLevel = max;
+    }
+    
+    /**
+     * 
+     * @return root BorderPane which the main node in the level
+     */
+    public static BorderPane getRoot() {
+        return root;
+    }
+    
+    /**
+     * reset root to avoid problems when switching between scenes
+     */
+    public static void clearRoot() {
+        root.getChildren().clear();
+        root.getChildren().addAll(iVBg, GameLoopManager.getCanvas(), player.getImageView());
+        root.setTop(hboxTop);
+        root.setBottom(hboxBottom);
+    }
+    
+    
+    /**
+     * increment death counter 
+     * @return deathCounter 
+     */
+    public static void incrementDeathCounter() {
+        deathCounter++;
+        deathCounterLaebl.set Label("DEATH COUNTER:\n" + deathCounter)
+    }
+}
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2021-10-23 19:18:40.363
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2021-10-23 19:18:40.365
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.core 4 4 2021-10-23 19:18:41.383
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package application;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+/**
+ * 
+ * @author Schehat
+ * configuration of the first level in the game
+ */
+public class Level {
+    private static Stage stage;
+    private static BorderPane root = new BorderPane();
+    private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
+    private static HBox hboxTop = new HBox();
+    private static HBox hboxBottom = new HBox();
+    private static Player player = new Player("neo");
+    private static Image iBg = new Image("background.gif");
+    private static ImageView iVBg = new ImageView(iBg);
+    private static Image iMorpheus = new Image("morpheus_small.png");
+    private static ImageView iVMorpheus = new ImageView(iMorpheus);
+    private static Image iInstructions = new Image("instructions.png");
+    private static ImageView iVInstructions = new ImageView(iInstructions);
+    
+    private static int deathCounter = 0;
+    private static Label lblDeathCounter = new Label("DEATH COUNTER:\n" + deathCounter);
+    private static Button btnBack= new Button(); 
+    private static Button btnLevel1 = new Button();
+    private static Button btnLevel2 = new Button();     
+    private static Button btnLevel3 = new Button();  
+    private static Button btnLevel4 = new Button();  
+    private static Button btnLevel5 = new Button();  
+    private static Button btnLevel6 = new Button();  
+    
+    private static int btnPrefWidth = 100;
+    private static int btnPrefHeight = 35;
+    private static String btnTextLevel = "LEVEL";
+    private static String btnBackYellow = "#E9DD25";
+    private static String btnHexRed = "#C75A41";
+    private static String btnHexBlue = "#415FC7";
+    private static String btnHexGreen = "#47D92B";
+    private static String btnBorderWidth = "2px";
+    private static String btnBorderColor = "#000000"; 
+    private static String btnFontSize = "20px";
+    private static String btnBorderRadius = "6px";
+    
+    private static int currentLevel = 1;
+    private static int maxLevel = 1;  // to track the highest level the player can play
+    private static String rectHexWhite = "F3F5F6";
+    private static String rectHexRed = "C75A41";
+    private static String rectHexBlue = "415FC7";
+    
+    private static boolean leftKeyPressed = false;
+    private static boolean rightKeyPressed = false;
+    private static boolean upKeyPressed = false;
+    private static boolean downKeyPressed = false;
+    
+    /**
+     * create level layout
+     */
+    public static void setLayout() {        
+        root.getChildren().clear();
+        hboxTop.getChildren().clear();
+        hboxBottom.getChildren().clear();
+        
+        iVBg.setX(0.0);
+        iVBg.setY(0.0);
+        
+        Level.setBtn(btnBack, "BACK", btnBackYellow);
+        Level.setBtn(btnLevel1, btnTextLevel + " 1", btnHexGreen);
+        Level.setBtn(btnLevel2, btnTextLevel + " 2", btnHexRed);
+        Level.setBtn(btnLevel3, btnTextLevel + " 3", btnHexRed);
+        Level.setBtn(btnLevel4, btnTextLevel + " 4", btnHexRed);
+        Level.setBtn(btnLevel5, btnTextLevel + " 5", btnHexRed);
+        Level.setBtn(btnLevel6, btnTextLevel + " 6", btnHexRed);
+        
+        lblDeathCounter.setFont(new Font("Arial", 18));
+        // to not wrap text with ... sign
+        lblDeathCounter.setMinWidth(170);
+        lblDeathCounter.setTextFill(Color.WHITE);
+        hboxTop.getChildren().addAll(iVMorpheus, iVInstructions, lblDeathCounter);
+        hboxTop.setSpacing(10.0);
+        hboxTop.setPadding(new Insets(30));
+        hboxTop.setAlignment(Pos.CENTER);
+        
+        hboxBottom.getChildren().addAll(btnBack, btnLevel1, btnLevel2, btnLevel3, 
+                                            btnLevel4, btnLevel5, btnLevel6);
+        hboxBottom.setSpacing(10.0);
+        hboxBottom.setPadding(new Insets(30));
+        hboxBottom.setAlignment(Pos.CENTER);
+              
+        root.getChildren().addAll(iVBg, GameLoopManager.getCanvas(), player.getImageView());
+        root.setTop(hboxTop);
+        root.setBottom(hboxBottom);
+        
+        GameLoopManager.gameLoopManager();
+    }
+    
+    /**
+     * set properties of buttons & css styling
+     * @param btn
+     * @param text
+     * @param bgColor
+     */
+    public static void setBtn(Button btn, String text, String bgColor) {
+        btn.setText(text);
+        btn.setMaxWidth(btnPrefWidth);
+        btn.setMaxHeight(btnPrefHeight);
+      
+        btn.setStyle("-fx-border-width: " + btnBorderWidth + "; "
+                  + "-fx-border-color: " + btnBorderColor + "; "
+                  + "-fx-font-size: " + btnFontSize + "; "
+                  + "-fx-background-color: " + bgColor + "; "
+                  + "-fx-border-radius: " + btnBorderRadius + ";");
+    }
+    
+    /**
+     * set up all events in the first level
+     */
+    public static void setEvents() {
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = true; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D))  rightKeyPressed = true;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = true;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = true;
+            
+            // Mainly for debugging purposes skipping levels
+            if (e.getCode().equals(KeyCode.N)) {
+                maxLevel = 6;
+                clearRoot();
+                GameLoopManager.gameLoopManager();
+            }
+        });
+        
+        scene.setOnKeyReleased(e -> {
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = false; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D)) rightKeyPressed = false;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = false;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = false;
+        });
+        
+        btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
+        btnBack.setOnMouseExited(e -> scene.setCursor(Cursor.DEFAULT));
+        btnBack.setOnAction(e -> {
+            GameLoopManager.stopAllTimelines();
+            StartScene.setLayout();
+            stage.setScene(StartScene.getScene());
+        });
+        
+        Level.setButtonEvents(btnLevel1, 1);
+        Level.setButtonEvents(btnLevel2, 2);
+        Level.setButtonEvents(btnLevel3, 3);
+        Level.setButtonEvents(btnLevel4, 4);
+        Level.setButtonEvents(btnLevel5, 5);
+        Level.setButtonEvents(btnLevel6, 6);
+    }
+    
+    /**
+     * set events for buttons
+     * @param btn
+     * @param level
+     */
+    public static void setButtonEvents(Button btn, int level) {
+        btn.setOnAction(e -> {
+            Level.setBtn(btn, btn.getText(), btnHexGreen);
+            
+            currentLevel = level;
+            
+            // to reset Layout & remove enemies from previous level
+            clearRoot();
+            
+            // change green colored button to blue
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexBlue);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexBlue);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexBlue);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexBlue);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
+            }
+            
+            // if green button clicked again then it will turn blue
+            // thats why after setting new level state need to 
+            // turn the button to green color again
+            if (currentLevel == 1) {
+                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexGreen);
+            } else if (currentLevel == 2) {
+                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexGreen);
+            } else if (currentLevel == 3) {
+                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexGreen);
+            } else if (currentLevel == 4) {
+                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexGreen);
+            } else if (currentLevel == 5) {
+                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexGreen);
+            } else if (currentLevel == 6) {
+                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
+            }
+            
+            GameLoopManager.gameLoopManager();
+        });
+        
+        btn.setOnMouseEntered(e -> {
+            // this if statement at the end not necessary due to 
+            // only buttons which are not disabled allow events 
+            if (!btn.isDisabled()) {
+                scene.setCursor(Cursor.HAND);
+            }
+        });
+        
+        btn.setOnMouseExited(e -> {
+            if (!btn.isDisabled()) {
+                scene.setCursor(Cursor.DEFAULT);
+            }
+        });
+    }
+    
+    /**
+     * 
+     * @return scene of Level
+     */
+    public static Scene getScene() {
+        return Level.scene;
+    }
+    
+    /**
+     * to customize scene need current stage
+     * @param stage
+     */
+    public static void setStage(Stage stage) {
+        Level.stage = stage;
+    }
+    
+    /**
+     * if keys pressed move player according to the pressed key
+     */
+    public static void checkKeysPressed() {
+        if (leftKeyPressed) Controller.moveLeft(player);
+        if (rightKeyPressed) Controller.moveRight(player);
+        if (upKeyPressed) Controller.moveUp(player);
+        if (downKeyPressed) Controller.moveDown(player);
+    }
+    
+    /**
+     * 
+     * @return btnLevel2
+     */
+    public static Button getBtnLevel2() {
+        return btnLevel2;
+    }
+    
+    /**
+     * 
+     * @return btnLevel3
+     */
+    public static Button getBtnLevel3() {
+        return btnLevel3;
+    }
+    
+    /**
+     * 
+     * @return btnLevel4
+     */
+    public static Button getBtnLevel4() {
+        return btnLevel4;
+    }
+    
+    /**
+     * 
+     * @return btnLevel5
+     */
+    public static Button getBtnLevel5() {
+        return btnLevel5;
+    }
+    
+    /**
+     * 
+     * @return btnLevel6
+     */
+    public static Button getBtnLevel6() {
+        return btnLevel6;
+    }
+    
+    /**
+     * 
+     * @return maxLevel
+     */
+    public static int getMaxLevel() {
+        return maxLevel;
+    }
+    
+    /**
+     * 
+     * @return currentLevel
+     */
+    public static int getCurrentLevel() {
+        return currentLevel;
+    }
+    
+    /**
+     * 
+     * @return player
+     */
+    public static Player getPlayer() {
+        return player;
+    }
+    
+    /**
+     * 
+     * @return rectHexBlue
+     */
+    public static String getRectHexBlue() {
+        return rectHexBlue;
+    }
+    
+    /**
+     * 
+     * @return rectHexWhite
+     */
+    public static String getRectHexWhite() {
+        return rectHexWhite;
+    }
+    
+    /**
+     * 
+     * @return rectHexRed
+     */
+    public static String getRectHexRed() {
+        return rectHexRed;
+    }
+    
+    /**
+     * 
+     * @return btnHexBlue
+     */
+    public static String getBtnHexBlue() {
+        return btnHexBlue;
+    }
+    
+    /**
+     * 
+     * @return btnHexGreen
+     */
+    public static String getBtnHexGreen() {
+        return btnHexGreen;
+    }
+    
+    /**
+     * 
+     * @return btnHexRed
+     */
+    public static String getBtnHexRed() {
+        return btnHexRed;
+    }
+    
+    /**
+     * 
+     * @return leftKeyPressed
+     */
+    public static boolean getLeftKeyPressed() {
+        return leftKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return rightKeyPressed
+     */
+    public static boolean getRightKeyPressed() {
+        return rightKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return upKeyPressed
+     */
+    public static boolean getUpKeyPressed() {
+        return upKeyPressed;
+    }
+    
+    /**
+     * 
+     * @return downKeyPressed
+     */
+    public static boolean getDownKeyPressed() {
+        return downKeyPressed;
+    }
+    
+    /**
+     * set maxLevel
+     * @param max
+     */
+    public static void setMaxLevel(int max) {
+        maxLevel = max;
+    }
+    
+    /**
+     * 
+     * @return root BorderPane which the main node in the level
+     */
+    public static BorderPane getRoot() {
+        return root;
+    }
+    
+    /**
+     * reset root to avoid problems when switching between scenes
+     */
+    public static void clearRoot() {
+        root.getChildren().clear();
+        root.getChildren().addAll(iVBg, GameLoopManager.getCanvas(), player.getImageView());
+        root.setTop(hboxTop);
+        root.setBottom(hboxBottom);
+    }
+    
+    
+    /**
+     * increment death counter 
+     * @return deathCounter 
+     */
+    public static void incrementDeathCounter() {
+        deathCounter++;
+        deathCounterLaebl.set Label("DEATH COUNTER:\n" + deathCounter)
+    }
+}
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2021-10-23 19:18:41.384
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2021-10-23 19:18:41.385
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2031)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3795)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1943)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1974)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3052)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3347)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1524)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:494)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1142)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1319)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)

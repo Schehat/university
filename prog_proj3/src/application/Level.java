@@ -24,6 +24,8 @@ public class Level {
     private static Stage stage;
     private static BorderPane root = new BorderPane();
     private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
+    private static HBox hboxTop = new HBox();
+    private static HBox hboxBottom = new HBox();
     private static Player player = new Player("neo");
     private static Image iBg = new Image("background.gif");
     private static ImageView iVBg = new ImageView(iBg);
@@ -32,6 +34,8 @@ public class Level {
     private static Image iInstructions = new Image("instructions.png");
     private static ImageView iVInstructions = new ImageView(iInstructions);
     
+    private static int deathCounter = 0;
+    private static Label lblDeathCounter = new Label("DEATH COUNTER:\n" + deathCounter);
     private static Button btnBack= new Button(); 
     private static Button btnLevel1 = new Button();
     private static Button btnLevel2 = new Button();     
@@ -68,6 +72,8 @@ public class Level {
      */
     public static void setLayout() {        
         root.getChildren().clear();
+        hboxTop.getChildren().clear();
+        hboxBottom.getChildren().clear();
         
         iVBg.setX(0.0);
         iVBg.setY(0.0);
@@ -80,8 +86,6 @@ public class Level {
         Level.setBtn(btnLevel5, btnTextLevel + " 5", btnHexRed);
         Level.setBtn(btnLevel6, btnTextLevel + " 6", btnHexRed);
         
-        HBox hboxTop = new HBox();
-        Label lblDeathCounter = new Label("DEATH COUNTER:\n0");
         lblDeathCounter.setFont(new Font("Arial", 18));
         // to not wrap text with ... sign
         lblDeathCounter.setMinWidth(170);
@@ -91,8 +95,6 @@ public class Level {
         hboxTop.setPadding(new Insets(30));
         hboxTop.setAlignment(Pos.CENTER);
         
-        
-        HBox hboxBottom = new HBox();
         hboxBottom.getChildren().addAll(btnBack, btnLevel1, btnLevel2, btnLevel3, 
                                             btnLevel4, btnLevel5, btnLevel6);
         hboxBottom.setSpacing(10.0);
@@ -129,23 +131,24 @@ public class Level {
      */
     public static void setEvents() {
         scene.setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.LEFT))   leftKeyPressed = true; 
-            if (e.getCode().equals(KeyCode.RIGHT))  rightKeyPressed = true;
-            if(e.getCode().equals(KeyCode.UP))      upKeyPressed = true;
-            if (e.getCode().equals(KeyCode.DOWN))   downKeyPressed = true;
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = true; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D))  rightKeyPressed = true;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = true;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = true;
             
-            // surprise! Mainly for debugging purposes skipping levels
+            // Mainly for debugging purposes skipping levels
             if (e.getCode().equals(KeyCode.N)) {
                 maxLevel = 6;
+                clearRoot();
                 GameLoopManager.gameLoopManager();
             }
         });
         
         scene.setOnKeyReleased(e -> {
-            if (e.getCode().equals(KeyCode.LEFT))   leftKeyPressed = false; 
-            if (e.getCode().equals(KeyCode.RIGHT))  rightKeyPressed = false;
-            if(e.getCode().equals(KeyCode.UP))      upKeyPressed = false;
-            if (e.getCode().equals(KeyCode.DOWN))   downKeyPressed = false;
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = false; 
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D)) rightKeyPressed = false;
+            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = false;
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = false;
         });
         
         btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
@@ -173,6 +176,11 @@ public class Level {
         btn.setOnAction(e -> {
             Level.setBtn(btn, btn.getText(), btnHexGreen);
             
+            currentLevel = level;
+            
+            // to reset Layout & remove enemies from previous level
+            clearRoot();
+            
             // change green colored button to blue
             if (currentLevel == 1) {
                 Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexBlue);
@@ -187,8 +195,6 @@ public class Level {
             } else if (currentLevel == 6) {
                 Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
             }
-            
-            currentLevel = level;
             
             // if green button clicked again then it will turn blue
             // thats why after setting new level state need to 
@@ -207,7 +213,9 @@ public class Level {
                 Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
             }
             
-            Level.setLayout();
+            deathCounter = 0;
+            lblDeathCounter.setText("DEATH COUNTER:\n" + deathCounter);
+            
             GameLoopManager.gameLoopManager();
         });
         
@@ -404,7 +412,31 @@ public class Level {
         maxLevel = max;
     }
     
+    /**
+     * 
+     * @return root BorderPane which the main node in the level
+     */
     public static BorderPane getRoot() {
         return root;
+    }
+    
+    /**
+     * reset root to avoid problems when switching between scenes
+     */
+    public static void clearRoot() {
+        root.getChildren().clear();
+        root.getChildren().addAll(iVBg, GameLoopManager.getCanvas(), player.getImageView());
+        root.setTop(hboxTop);
+        root.setBottom(hboxBottom);
+    }
+    
+    
+    /**
+     * increment death counter & updates the label
+     * @return deathCounter 
+     */
+    public static void incrementDeathCounter() {
+        deathCounter++;
+        lblDeathCounter.setText("DEATH COUNTER:\n" + deathCounter);
     }
 }

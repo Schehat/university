@@ -44,10 +44,17 @@ public class GameLoopManager {
     public static String circleColor = "F3EF10"; // yellow
     public static int[] circleSize = {20, 20};  // width & height
     public static ArrayList<ImageView> arrIVCircle = new ArrayList<ImageView>();
+    public static int[] enemySize = {30, 30};  // width & height
+    public static ArrayList<ImageView> arrIVEnemy = new ArrayList<ImageView>();
+    public static ArrayList<Integer> arrIVEnemyMove = new ArrayList<Integer>();
     public static boolean setup = false; // for if statements to run code only once  
     
     public static int maxNeededCircles;
     public static int circlesObtained = 0;
+    public static int maxEnemies = 0;
+    
+    public static double enemyOffsetY;
+    public static double enemyOffsetX;
     
     /**
      * handling multiple game loops
@@ -74,8 +81,10 @@ public class GameLoopManager {
         // clear canvas when switching between levels
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         
-        // clear circles
+        // clear circles & enemies
         arrIVCircle.clear();
+        arrIVEnemy.clear();
+        arrIVEnemyMove.clear();
         
         if (Level.getCurrentLevel() == 1) {
             // do not want the game loop of the other level play at background
@@ -85,12 +94,11 @@ public class GameLoopManager {
             tl5.stop();
             tl6.stop();
             
-            Level.getPlayer().setX(200);
-            Level.getPlayer().setY(300);
-            
-            // load circles
+            // load circles & enemies
             maxNeededCircles = 2;
             initilizeCircle();
+            maxEnemies = 3;
+            initilizeEnemy();
             
             //number of cycles in animation INDEFINITE = repeat indefinitely
             tl1.setCycleCount(Timeline.INDEFINITE);
@@ -105,11 +113,10 @@ public class GameLoopManager {
             tl5.stop();
             tl6.stop();
             
-            Level.getPlayer().setX(200);
-            Level.getPlayer().setY(300);
-            
             maxNeededCircles = 4;
             initilizeCircle();
+            maxEnemies = 10;
+            initilizeEnemy();
             
             tl2.setCycleCount(Timeline.INDEFINITE);
             tl2.playFromStart();
@@ -120,11 +127,10 @@ public class GameLoopManager {
             tl5.stop();
             tl6.stop();
             
-            Level.getPlayer().setX(200);
-            Level.getPlayer().setY(300);
-            
             maxNeededCircles = 3;
             initilizeCircle();
+            maxEnemies = 3;
+            initilizeEnemy();
             
             tl3.setCycleCount(Timeline.INDEFINITE);
             tl3.playFromStart();
@@ -134,12 +140,11 @@ public class GameLoopManager {
             tl3.stop();
             tl5.stop();
             tl6.stop();
-            
-            Level.getPlayer().setX(200);
-            Level.getPlayer().setY(300);
-            
+           
             maxNeededCircles = 4;
             initilizeCircle();
+            maxEnemies = 8;
+            initilizeEnemy();
             
             tl4.setCycleCount(Timeline.INDEFINITE);
             tl4.playFromStart();
@@ -149,12 +154,11 @@ public class GameLoopManager {
             tl3.stop();
             tl4.stop();
             tl6.stop();
-            
-            Level.getPlayer().setX(200);
-            Level.getPlayer().setY(300);
          
             maxNeededCircles = 3;
             initilizeCircle();
+            maxEnemies = 6;
+            initilizeEnemy();
             
             tl5.setCycleCount(Timeline.INDEFINITE);
             tl5.playFromStart();
@@ -165,11 +169,10 @@ public class GameLoopManager {
             tl4.stop();
             tl5.stop();
             
-            Level.getPlayer().setX(200);
-            Level.getPlayer().setY(300);
-            
             maxNeededCircles = 4;
             initilizeCircle();
+            maxEnemies = 12;
+            initilizeEnemy();
             
             tl6.setCycleCount(Timeline.INDEFINITE);
             tl6.playFromStart();
@@ -211,12 +214,27 @@ public class GameLoopManager {
         arrIVCircle.get(1).setX(rectWhiteX + rectWhiteW/2 - circleSize[0]/2 + offsetX);
         arrIVCircle.get(1).setY(rectWhiteY + rectWhiteH/2 - circleSize[0]/2);
         
+        int xPadding = 75;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1) - xPadding;
+            enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1);
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setX(rectWhiteX + i*enemyOffsetX + xPadding);
+                arrIVEnemy.get(i).setY(rectWhiteY + i*enemyOffsetY);
+            }
+        }
+        
+        moveEnemiesVertical(2);
+        
         // for some reason not needed to clear before adding when switching between scenes
-        addCirclesToRoot();
+        addImagesToRoot();
         
         Level.checkKeysPressed();      
         checkMovementBorder();
-        checkCollisionCircle();
+        checkCollision();
         checkNextLevel(2);
     }
     
@@ -248,11 +266,28 @@ public class GameLoopManager {
         
         GameLoopManager.drawCirclesInCorners(10, 10);
         
-        addCirclesToRoot();
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1);
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setX(rectWhiteX + i*enemyOffsetX);
+                if (i % 2 == 0) {
+                    arrIVEnemy.get(i).setY(rectWhiteY + 0);
+                } else {
+                    arrIVEnemy.get(i).setY(rectWhiteY + rectWhiteH - enemySize[0]);
+                }
+            }
+        }
+        
+        moveEnemiesVertical(2);
+        
+        addImagesToRoot();
         
         Level.checkKeysPressed();
         checkMovementBorder();
-        checkCollisionCircle();
+        checkCollision();
         checkNextLevel(3);
     }
     
@@ -284,11 +319,26 @@ public class GameLoopManager {
         
         GameLoopManager.drawCirclesInDiagonal(0);
         
-        addCirclesToRoot();
+        int yPadding = 35;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1);
+            enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1) - yPadding;
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setX(rectWhiteX + i*enemyOffsetX);
+                arrIVEnemy.get(i).setY(rectWhiteY + i*enemyOffsetY + yPadding);
+            }
+        }
+        
+        moveEnemiesHorizontal(3);
+        
+        addImagesToRoot();
         
         Level.checkKeysPressed();
         checkMovementBorder();
-        checkCollisionCircle();
+        checkCollision();
         checkNextLevel(4);
     }
     
@@ -320,11 +370,28 @@ public class GameLoopManager {
         
         GameLoopManager.drawCirclesInCorners(50, 50);
         
-        addCirclesToRoot();
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            
+            enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1);
+            for (int i = 0; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setY(rectWhiteY + i*enemyOffsetY);
+                if (i % 2 == 0) {
+                    arrIVEnemy.get(i).setX(rectWhiteX);
+                } else {
+                    arrIVEnemy.get(i).setX(rectWhiteX + rectWhiteW - enemySize[0]);
+                }
+            }
+        }
+        
+        moveEnemiesHorizontal(3);
+        
+        addImagesToRoot();
         
         Level.checkKeysPressed();
         checkMovementBorder();
-        checkCollisionCircle();
+        checkCollision();
         checkNextLevel(5);
     }
     
@@ -356,11 +423,61 @@ public class GameLoopManager {
         
         GameLoopManager.drawCirclesInDiagonal(1);
         
-        addCirclesToRoot();
+        int verticalEnemies = 3;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            for (int i = 0; i < verticalEnemies; i++) {
+                arrIVEnemy.get(i).setX(arrIVCircle.get(i).getX() - circleSize[0]/4);
+                /*
+                 * should be i % 2 != 0 but first circle is in center thats why doing this
+                   for proper position so left & right enemy starts at top and the center enemy at the bottom
+                 */
+                if (i > 0) {
+                    arrIVEnemy.get(i).setY(rectWhiteY);
+                } else {
+                    arrIVEnemy.get(i).setY(rectWhiteY + rectWhiteH - enemySize[0]);
+                }
+            }
+        }
+        ;
+        int horizontalEnemies = 3;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            for (int i = horizontalEnemies; i < maxEnemies; i++) {
+                arrIVEnemy.get(i).setY(arrIVCircle.get(i - horizontalEnemies).getY() - circleSize[0]/4);
+                if (i > horizontalEnemies) {
+                    arrIVEnemy.get(i).setX(rectWhiteX);
+                } else {
+                    arrIVEnemy.get(i).setX(rectWhiteX + rectWhiteW - enemySize[0]);
+                }
+            }
+        }
+        
+        int speed = 2;
+        // movie enemies vertically
+        for (int i = 0; i < verticalEnemies; i++) {
+            if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setY(arrIVEnemy.get(i).getY() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        speed = 3;
+        // movie enemies horizontally
+        for (int i = horizontalEnemies; i < maxEnemies; i++) {
+            if (arrIVEnemy.get(i).getX() < rectWhiteX || arrIVEnemy.get(i).getX() > rectWhiteX + rectWhiteW - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setX(arrIVEnemy.get(i).getX() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        addImagesToRoot();
         
         Level.checkKeysPressed();
         checkMovementBorder();
-        checkCollisionCircle();
+        checkCollision();
         checkNextLevel(6);
     }
     
@@ -392,11 +509,101 @@ public class GameLoopManager {
         
         GameLoopManager.drawCirclesInCorners(80, 80);
         
-        addCirclesToRoot();
+        int xPadding = 35;
+        int verticalEnemies = 4;
+        if (setup == false) {
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            for (int i = 0; i < verticalEnemies; i++) {
+                arrIVEnemy.get(i).setX(arrIVCircle.get(i).getX() - circleSize[0]/4 + xPadding);
+                /*
+                 * should be i % 2 != 0 but first circle is in center thats why doing this
+                   for proper position so left & right enemy starts at top and the center enemy at the bottom
+                 */
+                if (i % 2 == 0) {
+                    arrIVEnemy.get(i).setY(rectWhiteY);
+                } else {
+                    arrIVEnemy.get(i).setY(rectWhiteY + rectWhiteH - enemySize[0]);
+                }
+            }
+        }
+        ;
+        int horizontalEnemies = 4;
+        if (setup == false) {
+            for (int i = horizontalEnemies; i < horizontalEnemies + verticalEnemies; i++) {
+                arrIVEnemy.get(i).setY(arrIVCircle.get(i - horizontalEnemies).getY() - circleSize[0]/4);
+                arrIVEnemy.get(i).setX(arrIVCircle.get(i - horizontalEnemies).getX() - circleSize[0]/4);
+            }
+        }
+        
+        // enemies in the center
+        if (setup == false) {
+                // center top
+                arrIVEnemy.get(8).setX(rectWhiteX + rectWhiteW/2 - enemySize[0]/2);
+                arrIVEnemy.get(8).setY(rectWhiteY);
+                
+                // center bottom
+                arrIVEnemy.get(9).setX(rectWhiteX + rectWhiteW/2 - enemySize[0]/2);
+                arrIVEnemy.get(9).setY(rectWhiteY + rectWhiteH - enemySize[0]);
+                
+                // center left
+                arrIVEnemy.get(10).setX(rectWhiteX);
+                arrIVEnemy.get(10).setY(rectWhiteY + rectWhiteH/2 - enemySize[0]/2);
+                
+                // center right
+                arrIVEnemy.get(11).setX(rectWhiteX + rectWhiteW - enemySize[0]);
+                arrIVEnemy.get(11).setY(rectWhiteY + rectWhiteH/2 - enemySize[0]/2);
+        }
+        
+        int speed = 2;
+        // movie enemies vertically
+        for (int i = 0; i < verticalEnemies; i++) {
+            if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setY(arrIVEnemy.get(i).getY() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        // special configuration of movement pattern
+        if (setup == false ) {
+            for (int i = horizontalEnemies; i < horizontalEnemies + verticalEnemies; i++) {
+                if (i < horizontalEnemies + 2) {
+                    arrIVEnemyMove.set(i, 1);
+                } else {
+                    arrIVEnemyMove.set(i, -1);
+                }
+            }   
+        }
+        
+        // movie enemies horizontally
+        for (int i = horizontalEnemies; i < horizontalEnemies + verticalEnemies; i++) {
+            if (arrIVEnemy.get(i).getX() < rectWhiteX || arrIVEnemy.get(i).getX() > rectWhiteX + rectWhiteW - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setX(arrIVEnemy.get(i).getX() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        // movie enemies which were place in the center
+        // vertically
+        for (int i = 8; i <= 9; i++) {
+            if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            } 
+            arrIVEnemy.get(i).setY(arrIVEnemy.get(i).getY() + speed*arrIVEnemyMove.get(i));
+        }
+        // horizontally 
+        for (int i = 10; i <= 11; i++) {
+            if (arrIVEnemy.get(i).getX() < rectWhiteX || arrIVEnemy.get(i).getX() > rectWhiteX + rectWhiteW - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setX(arrIVEnemy.get(i).getX() + speed*arrIVEnemyMove.get(i));
+        }
+        
+        addImagesToRoot();
         
         Level.checkKeysPressed();
         checkMovementBorder();
-        checkCollisionCircle();
+        checkCollision();
     }
     
     /**
@@ -530,15 +737,29 @@ public class GameLoopManager {
     }
     
     /**
-     * check collision between player & circles
+     * check collision between player & circles and player & enemies
      */
-    public static void checkCollisionCircle() {
+    public static void checkCollision() {
         for (int i = 0; i < maxNeededCircles; i++) {
             // when not checking weather circle in root then collision still works at the background
             if (Level.getRoot().getChildren().contains(arrIVCircle.get(i))) {
                 if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
                     Level.getRoot().getChildren().remove(arrIVCircle.get(i));
                     circlesObtained++;
+                }
+            }
+        }
+        
+        for (int i = 0; i < maxEnemies; i++) {
+            if (Level.getRoot().getChildren().contains(arrIVEnemy.get(i))) {
+                if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
+                    setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                            (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+                    Level.incrementDeathCounter();
+                    circlesObtained = 0;
+                    Level.clearRoot();
+                    setup = false;  // so addImagesToRoot works
+                    addImagesToRoot();
                 }
             }
         }
@@ -553,11 +774,23 @@ public class GameLoopManager {
     }
     
     /**
-     * add images to array object to draw them next
+     * add circle images to array object to display them later
      */
     public static void initilizeCircle() {
         for (int i = 0; i < maxNeededCircles; i++ ) {
             arrIVCircle.add(new ImageView(new Image("circle.png")));
+        }
+    }
+    
+    /**
+     * add enemy images to array object to display them later
+     */
+    public static void initilizeEnemy() {
+        int sign = 1;
+        for (int i = 0; i < maxEnemies; i++ ) {
+            arrIVEnemy.add(new ImageView(new Image("smith.png")));
+            arrIVEnemyMove.add(sign);
+            sign*= -1;
         }
     }
     
@@ -587,13 +820,16 @@ public class GameLoopManager {
     }
     
     /**
-     * add circles to root to be seen
+     * add circles & enemies to root to be seen
      */
-    public static void addCirclesToRoot() {
+    public static void addImagesToRoot() {
         if (setup == false) {
             for (int i = 0; i < maxNeededCircles; i++) {
                     Level.getRoot().getChildren().add(arrIVCircle.get(i));
-                }
+            }
+            for (int i = 0; i < maxEnemies; i++) {
+                Level.getRoot().getChildren().add(arrIVEnemy.get(i));
+            }
             setup = true;
         }
     }
@@ -608,5 +844,41 @@ public class GameLoopManager {
         tl4.stop();
         tl5.stop();
         tl6.stop();
+    }
+    
+    /**
+     * moving enemies vertically in the level
+     * @param speed
+     */
+    public static void moveEnemiesVertical(double speed) {
+        for (int i = 0; i < maxEnemies; i++) {
+            if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setY(arrIVEnemy.get(i).getY() + speed*arrIVEnemyMove.get(i));
+        }
+    }
+    
+    /**
+     * moving enemies horizontally in the level
+     * @param speed
+     */
+    public static void moveEnemiesHorizontal(double speed) {
+        for (int i = 0; i < maxEnemies; i++) {
+            if (arrIVEnemy.get(i).getX() < rectWhiteX || arrIVEnemy.get(i).getX() > rectWhiteX + rectWhiteW - enemySize[0]) {
+                arrIVEnemyMove.set(i, -1*arrIVEnemyMove.get(i));
+            }
+            arrIVEnemy.get(i).setX(arrIVEnemy.get(i).getX() + speed*arrIVEnemyMove.get(i));
+        }
+    }
+    
+    /**
+     * set player position
+     * @param x
+     * @param y
+     */
+    public static void setPlayerPosition(int x, int y) {
+        Level.getPlayer().setX(x);
+        Level.getPlayer().setY(y);
     }
 }

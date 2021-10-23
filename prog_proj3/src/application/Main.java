@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 /**
  * 
  * @author Schehat
- * client program to execute the game
+ * client program to start the game
  */
 public class Main extends Application {
     private static double WIDTH = 800.0;

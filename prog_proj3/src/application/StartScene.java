@@ -101,8 +101,8 @@ public class StartScene {
     
     /**
      * set events for pill images
-     * @param btn
-     * @param level
+     * @param iV
+     * @param i
      */
     public static void setPillsEvents(ImageView iV, Image i) {
         iV.setOnMouseEntered(e -> {
