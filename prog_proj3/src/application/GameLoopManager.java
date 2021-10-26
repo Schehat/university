@@ -744,22 +744,32 @@ public class GameLoopManager {
             // when not checking weather circle in root then collision still works at the background
             if (Level.getRoot().getChildren().contains(arrIVCircle.get(i))) {
                 if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
+                    // reset play time of the collecting sound effect, otherwise playing
+                    // sonud effect only one time possible
+                    Level.getMPCollect().play();
+                    Level.getMPCollect().seek(Duration.seconds(0.0));
+                    
                     Level.getRoot().getChildren().remove(arrIVCircle.get(i));
                     circlesObtained++;
                 }
             }
         }
         
-        for (int i = 0; i < maxEnemies; i++) {
-            if (Level.getRoot().getChildren().contains(arrIVEnemy.get(i))) {
-                if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
-                    setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                            (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
-                    Level.incrementDeathCounter();
-                    circlesObtained = 0;
-                    Level.clearRoot();
-                    setup = false;  // so addImagesToRoot works
-                    addImagesToRoot();
+        if (!Level.getInvincible()) {
+            for (int i = 0; i < maxEnemies; i++) {
+                if (Level.getRoot().getChildren().contains(arrIVEnemy.get(i))) {
+                    if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
+                        setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
+                                (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+                        Level.getMPPunch().play();
+                        Level.getMPPunch().seek(Duration.seconds(0.0));
+                        
+                        Level.incrementDeathCounter();
+                        circlesObtained = 0;
+                        Level.clearRoot();
+                        setup = false;  // so addImagesToRoot works
+                        addImagesToRoot();
+                    }
                 }
             }
         }

@@ -1,5 +1,7 @@
 package application;
 
+import java.io.File;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -11,9 +13,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * 
@@ -33,6 +38,13 @@ public class Level {
     private static ImageView iVMorpheus = new ImageView(iMorpheus);
     private static Image iInstructions = new Image("instructions.png");
     private static ImageView iVInstructions = new ImageView(iInstructions);
+    
+    private static Media mPunch = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\punch.mp3").toURI().toString());
+    private static MediaPlayer mPPunch = new MediaPlayer(mPunch);
+    private static Media mCollect = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\collect.mp3").toURI().toString());
+    private static MediaPlayer mPCollect = new MediaPlayer(mCollect);
+    private static Media mButtonClicked = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\buttonClicked.mp3").toURI().toString());
+    private static MediaPlayer mPButtonClicked = new MediaPlayer(mButtonClicked);
     
     private static int deathCounter = 0;
     private static Label lblDeathCounter = new Label("DEATH COUNTER:\n" + deathCounter);
@@ -66,6 +78,9 @@ public class Level {
     private static boolean rightKeyPressed = false;
     private static boolean upKeyPressed = false;
     private static boolean downKeyPressed = false;
+    
+    public static boolean invincible = false;  // allow player to be invincible
+    public static boolean reversedControls = false; // allow reversed controls
     
     /**
      * create level layout
@@ -131,10 +146,34 @@ public class Level {
      */
     public static void setEvents() {
         scene.setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = true; 
-            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D))  rightKeyPressed = true;
-            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = true;
-            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = true;
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) {
+                if (reversedControls) {
+                    rightKeyPressed = true;
+                } else {
+                    leftKeyPressed = true; 
+                }
+            }
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D))   {
+                if (reversedControls) {
+                    leftKeyPressed = true;
+                } else {
+                    rightKeyPressed = true; 
+                }
+            }
+            if (e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) {
+                if (reversedControls) {
+                    downKeyPressed = true;
+                } else {
+                    upKeyPressed = true; 
+                }
+            }
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) {
+                if (reversedControls) {
+                    upKeyPressed = true;
+                } else {
+                    downKeyPressed = true; 
+                }
+            }
             
             // Mainly for debugging purposes skipping levels
             if (e.getCode().equals(KeyCode.N)) {
@@ -142,18 +181,54 @@ public class Level {
                 clearRoot();
                 GameLoopManager.gameLoopManager();
             }
+            
+            // player gets invincible be pressing i key
+            if (e.getCode().equals(KeyCode.I)) {
+                invincible = !invincible;
+            }
+            
+            // player gets reversed controls be pressing r key
+            if (e.getCode().equals(KeyCode.R)) {
+                reversedControls = !reversedControls;
+            }
         });
         
         scene.setOnKeyReleased(e -> {
-            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) leftKeyPressed = false; 
-            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D)) rightKeyPressed = false;
-            if(e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) upKeyPressed = false;
-            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) downKeyPressed = false;
+            if (e.getCode().equals(KeyCode.LEFT) || e.getCode().equals(KeyCode.A)) {
+                if (reversedControls) {
+                    rightKeyPressed = false;
+                } else {
+                    leftKeyPressed = false; 
+                }
+            }
+            if (e.getCode().equals(KeyCode.RIGHT) || e.getCode().equals(KeyCode.D))   {
+                if (reversedControls) {
+                    leftKeyPressed = false;
+                } else {
+                    rightKeyPressed = false; 
+                }
+            }
+            if (e.getCode().equals(KeyCode.UP) || e.getCode().equals(KeyCode.W)) {
+                if (reversedControls) {
+                    downKeyPressed = false;
+                } else {
+                    upKeyPressed = false; 
+                }
+            }
+            if (e.getCode().equals(KeyCode.DOWN) || e.getCode().equals(KeyCode.S)) {
+                if (reversedControls) {
+                    upKeyPressed = false;
+                } else {
+                    downKeyPressed = false; 
+                }
+            }
         });
         
         btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
         btnBack.setOnMouseExited(e -> scene.setCursor(Cursor.DEFAULT));
         btnBack.setOnAction(e -> {
+            mPButtonClicked.play();
+            mPButtonClicked.seek(Duration.seconds(0.0));
             GameLoopManager.stopAllTimelines();
             StartScene.setLayout();
             stage.setScene(StartScene.getScene());
@@ -174,6 +249,9 @@ public class Level {
      */
     public static void setButtonEvents(Button btn, int level) {
         btn.setOnAction(e -> {
+            mPButtonClicked.play();
+            mPButtonClicked.seek(Duration.seconds(0.0));
+            
             Level.setBtn(btn, btn.getText(), btnHexGreen);
             
             currentLevel = level;
@@ -438,5 +516,29 @@ public class Level {
     public static void incrementDeathCounter() {
         deathCounter++;
         lblDeathCounter.setText("DEATH COUNTER:\n" + deathCounter);
+    }
+    
+    /**
+     * 
+     * @return mPPunsh punching sound effect
+     */
+    public static MediaPlayer getMPPunch() {
+        return mPPunch;
+    }
+    
+    /**
+     * 
+     * @return mPCollect collecting sound effect 
+     */
+    public static MediaPlayer getMPCollect() {
+        return mPCollect;
+    }
+    
+    /**
+     * 
+     * @return invincible 
+     */
+    public static boolean getInvincible() {
+        return invincible;
     }
 }

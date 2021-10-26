@@ -1,5 +1,7 @@
 package application;
 
+import java.io.File;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -10,9 +12,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 /**
  * 
  * @author Schehat
@@ -31,6 +36,9 @@ public class StartScene {
     private static ImageView iVBluePill = new ImageView(iBluePill);
     private static Image iMorpheus = new Image("morpheus.png");
     private static ImageView iVMorpheus = new ImageView(iMorpheus);
+    
+    private static Media mButtonClicked = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\buttonClicked.mp3").toURI().toString());
+    private static MediaPlayer mPButtonClicked = new MediaPlayer(mButtonClicked);
     
     private static boolean levelLoaded = false;
     
@@ -80,6 +88,9 @@ public class StartScene {
         StartScene.setPillsEvents(iVBluePill, iBluePill);
         
         iVRedPill.setOnMouseClicked(e -> {
+            mPButtonClicked.play();
+            mPButtonClicked.seek(Duration.seconds(0.0));
+            
             // this step only one time necessary
             if (!levelLoaded) {
                 Level.setStage(stage);
@@ -89,8 +100,8 @@ public class StartScene {
             }
             
             // this step will reset the current game loop
-            if (levelLoaded) {
-                Level.setLayout();
+            if (levelLoaded) {                
+                Level.clearRoot();
                 GameLoopManager.gameLoopManager();
             }
             stage.setScene(Level.getScene());
