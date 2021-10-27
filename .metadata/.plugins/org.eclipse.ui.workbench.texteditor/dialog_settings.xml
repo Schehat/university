@@ -5,13 +5,14 @@
 		<item key="DIALOG_Y_ORIGIN" value="240"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="collision"/>
+		<item key="selection" value="checkNe"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="checkNe"/>
 			<item value="collision"/>
 			<item value="system"/>
 			<item value="speed"/>
@@ -26,7 +27,6 @@
 			<item value="-fx-"/>
 			<item value=";;"/>
 			<item value="print"/>
-			<item value="prinz"/>
 		</list>
 		<list key="replacehistory">
 		</list>

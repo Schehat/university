@@ -332,7 +332,7 @@ public class GameLoopManager {
             }
         }
         
-        moveEnemiesHorizontal(3);
+        moveEnemiesHorizontal(4);
         
         addImagesToRoot();
         
@@ -555,7 +555,7 @@ public class GameLoopManager {
                 arrIVEnemy.get(11).setY(rectWhiteY + rectWhiteH/2 - enemySize[0]/2);
         }
         
-        int speed = 2;
+        int speed = 3;
         // movie enemies vertically
         for (int i = 0; i < verticalEnemies; i++) {
             if (arrIVEnemy.get(i).getY() < rectWhiteY || arrIVEnemy.get(i).getY() > rectWhiteY + rectWhiteH - enemySize[0]) {
@@ -808,7 +808,13 @@ public class GameLoopManager {
      * checks weather next level should be unlocked, meaning the button is 
      */
     public static void checkNextLevel(int nextLevel) {
-        if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {
+        // for some reason Player.x < rectRedX works but it should be Player.x > rectRedX
+        if (Level.getPlayer().getX() < rectRedX && circlesObtained == maxNeededCircles) {
+            Level.getMPSucess().play();
+            Level.getMPSucess().seek(Duration.seconds(0.0));
+        }
+        
+        if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {            
             Level.setMaxLevel(nextLevel);
             if (nextLevel == 2) {
                 Level.setBtn(Level.getBtnLevel2(), Level.getBtnLevel2().getText(), Level.getBtnHexBlue());

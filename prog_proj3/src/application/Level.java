@@ -45,6 +45,8 @@ public class Level {
     private static MediaPlayer mPCollect = new MediaPlayer(mCollect);
     private static Media mButtonClicked = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\buttonClicked.mp3").toURI().toString());
     private static MediaPlayer mPButtonClicked = new MediaPlayer(mButtonClicked);
+    private static Media mSuccess = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\success.mp3").toURI().toString());
+    private static MediaPlayer mPSuccess = new MediaPlayer(mSuccess);
     
     private static int deathCounter = 0;
     private static Label lblDeathCounter = new Label("DEATH COUNTER:\n" + deathCounter);
@@ -532,6 +534,14 @@ public class Level {
      */
     public static MediaPlayer getMPCollect() {
         return mPCollect;
+    }
+    
+    /**
+     * 
+     * @return mPSuccess mission complete sound effect
+     */
+    public static MediaPlayer getMPSucess() {
+        return mPSuccess;
     }
     
     /**
