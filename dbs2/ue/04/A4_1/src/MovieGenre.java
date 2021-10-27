@@ -7,18 +7,18 @@ import java.sql.SQLException;
  * @author Schehat
  * Genre record
  */
-public class Genre {
+public class MovieGenre {
     private Long genreId;
-    private String genre;
+    private Long movieId;
     
     /**
      * constructor with parameters & Long object
      * @param genreId
      * @param genre
      */
-    Genre (Long genreId, String genre) {
+    MovieGenre (Long genreId, Long movieId) {
         setGenreId(genreId);
-        setGenre(genre);
+        setMovieId(movieId);
     }
     
     /**
@@ -26,17 +26,17 @@ public class Genre {
      * @param genreId
      * @param genre
      */
-    Genre (long genreId, String genre) {
+    MovieGenre (long genreId, long movieId) {
         setGenreId(new Long(genreId));
-        setGenre(genre);
+        setMovieId(new Long(movieId));
     }
     
     /**
      * constructor with no parameters
      */
-    Genre () {
+    MovieGenre () {
         setGenreId(new Long(0));
-        setGenre("");
+        setMovieId(new Long(0));
     }
     
     /**
@@ -49,7 +49,7 @@ public class Genre {
     
     /**
      * 
-     * @param genreId primitive long 
+     * @param genreId primitive long
      */
     public void setGenreId(long genreId) {
         this.genreId = new Long(genreId);
@@ -59,15 +59,15 @@ public class Genre {
      * 
      * @param genre
      */
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId.longValue();
     }
     
     /**
      * 
      * @return genreId
      */
-    public long getGenreId() {
+    public Long getGenreId() {
         return genreId;
     }
     
@@ -75,47 +75,8 @@ public class Genre {
      * 
      * @return genre
      */
-    public String getGenre() {
-        return genre;
-    }
-    
-    /**
-     * insert Genre object to table 
-     * @throws SQLException
-     */
-    public void insert() throws SQLException {
-        boolean ok = false;
-        
-        // if genreId = 0 this means no custom id was set thus using a sequence
-        if (genreId.longValue() == 0) {
-            String getSeq = "SELECT genre_seq.nextval FROM DUAL";
-            try (PreparedStatement seq = ConnectionManager.getConnection().prepareStatement(getSeq)) {
-                ResultSet rs = seq.executeQuery();
-                rs.next();
-                genreId = rs.getLong("nextval");
-            } finally {  // this rollback only resets the sequence 
-                if (!ok) {
-                    ConnectionManager.getConnection().rollback();
-                }
-            }
-        }
-        
-        String SQL = "INSERT INTO Genre VALUES (?, ?)";
-        
-        try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            stmt.setLong(1, genreId);
-            stmt.setString(2, genre);
-            
-            int n = stmt.executeUpdate();
-            ConnectionManager.getConnection().commit();
-            ok = true;
-            
-            System.out.println("Inserts made: " + n);
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
-        }
+    public Long getMovieId() {
+        return movieId;
     }
     
     /**
