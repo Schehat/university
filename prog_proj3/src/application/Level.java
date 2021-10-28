@@ -1,7 +1,5 @@
 package application;
 
-import java.io.File;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -13,17 +11,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * 
  * @author Schehat
- * configuration of the first level in the game
+ * configuration of the all levels in the game
  */
 public class Level {
     private static Stage stage;
@@ -38,15 +33,6 @@ public class Level {
     private static ImageView iVMorpheus = new ImageView(iMorpheus);
     private static Image iInstructions = new Image("instructions.png");
     private static ImageView iVInstructions = new ImageView(iInstructions);
-    
-    private static Media mPunch = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\punch.mp3").toURI().toString());
-    private static MediaPlayer mPPunch = new MediaPlayer(mPunch);
-    private static Media mCollect = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\collect.mp3").toURI().toString());
-    private static MediaPlayer mPCollect = new MediaPlayer(mCollect);
-    private static Media mButtonClicked = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\buttonClicked.mp3").toURI().toString());
-    private static MediaPlayer mPButtonClicked = new MediaPlayer(mButtonClicked);
-    private static Media mSuccess = new Media(new File("C:\\Users\\Schehat\\university\\prog_proj3\\src\\success.mp3").toURI().toString());
-    private static MediaPlayer mPSuccess = new MediaPlayer(mSuccess);
     
     private static int deathCounter = 0;
     private static Label lblDeathCounter = new Label("DEATH COUNTER:\n" + deathCounter);
@@ -91,6 +77,9 @@ public class Level {
         root.getChildren().clear();
         hboxTop.getChildren().clear();
         hboxBottom.getChildren().clear();
+        
+        iVBg.setFitHeight(600);         
+        iVBg.setFitWidth(800);
         
         iVBg.setX(0.0);
         iVBg.setY(0.0);
@@ -229,8 +218,8 @@ public class Level {
         btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
         btnBack.setOnMouseExited(e -> scene.setCursor(Cursor.DEFAULT));
         btnBack.setOnAction(e -> {
-            mPButtonClicked.play();
-            mPButtonClicked.seek(Duration.seconds(0.0));
+//            Sound.mPButtonClickedStop();
+//            Sound.mPButtonClickedPlay();
             GameLoopManager.stopAllTimelines();
             StartScene.setLayout();
             stage.setScene(StartScene.getScene());
@@ -251,8 +240,8 @@ public class Level {
      */
     public static void setButtonEvents(Button btn, int level) {
         btn.setOnAction(e -> {
-            mPButtonClicked.play();
-            mPButtonClicked.seek(Duration.seconds(0.0));
+//            Sound.mPButtonClickedStop();
+//            Sound.mPButtonClickedPlay();
             
             Level.setBtn(btn, btn.getText(), btnHexGreen);
             
@@ -519,31 +508,7 @@ public class Level {
         deathCounter++;
         lblDeathCounter.setText("DEATH COUNTER:\n" + deathCounter);
     }
-    
-    /**
-     * 
-     * @return mPPunsh punching sound effect
-     */
-    public static MediaPlayer getMPPunch() {
-        return mPPunch;
-    }
-    
-    /**
-     * 
-     * @return mPCollect collecting sound effect 
-     */
-    public static MediaPlayer getMPCollect() {
-        return mPCollect;
-    }
-    
-    /**
-     * 
-     * @return mPSuccess mission complete sound effect
-     */
-    public static MediaPlayer getMPSucess() {
-        return mPSuccess;
-    }
-    
+  
     /**
      * 
      * @return invincible 

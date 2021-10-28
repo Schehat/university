@@ -1,8 +1,8 @@
 package application;
 	
 import javafx.application.Application;
-import javafx.stage.Stage;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 /**
  * 
@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 public class Main extends Application {
     private static double WIDTH = 800.0;
     private static double HEIGHT = 600.0;
-    private static String gameTitle = "Construct";
+    private static String gameTitle = "CONSTRUCT";
     private static String iconName = "neo.png";
     
     /**

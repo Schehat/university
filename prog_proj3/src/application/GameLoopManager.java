@@ -86,14 +86,10 @@ public class GameLoopManager {
         arrIVEnemy.clear();
         arrIVEnemyMove.clear();
         
+        // do not want the game loop of the other level play at background
+        stopAllTimelines();
+        
         if (Level.getCurrentLevel() == 1) {
-            // do not want the game loop of the other level play at background
-            tl2.stop();
-            tl3.stop();
-            tl4.stop();
-            tl5.stop();
-            tl6.stop();
-            
             // load circles & enemies
             maxNeededCircles = 2;
             initilizeCircle();
@@ -106,13 +102,7 @@ public class GameLoopManager {
             // level switches will not continue where they left, instead start at
             // the beginning again
             tl1.playFromStart();
-        } else if (Level.getCurrentLevel() == 2) {         
-            tl1.stop();
-            tl3.stop();
-            tl4.stop();
-            tl5.stop();
-            tl6.stop();
-            
+        } else if (Level.getCurrentLevel() == 2) {                    
             maxNeededCircles = 4;
             initilizeCircle();
             maxEnemies = 10;
@@ -121,12 +111,6 @@ public class GameLoopManager {
             tl2.setCycleCount(Timeline.INDEFINITE);
             tl2.playFromStart();
         } else if (Level.getCurrentLevel() == 3) {     
-            tl1.stop();
-            tl2.stop();
-            tl4.stop();
-            tl5.stop();
-            tl6.stop();
-            
             maxNeededCircles = 3;
             initilizeCircle();
             maxEnemies = 3;
@@ -135,12 +119,6 @@ public class GameLoopManager {
             tl3.setCycleCount(Timeline.INDEFINITE);
             tl3.playFromStart();
         } else if (Level.getCurrentLevel() == 4) {           
-            tl1.stop();
-            tl2.stop();
-            tl3.stop();
-            tl5.stop();
-            tl6.stop();
-           
             maxNeededCircles = 4;
             initilizeCircle();
             maxEnemies = 8;
@@ -149,12 +127,6 @@ public class GameLoopManager {
             tl4.setCycleCount(Timeline.INDEFINITE);
             tl4.playFromStart();
         } else if (Level.getCurrentLevel() == 5) {   
-            tl1.stop();
-            tl2.stop();
-            tl3.stop();
-            tl4.stop();
-            tl6.stop();
-         
             maxNeededCircles = 3;
             initilizeCircle();
             maxEnemies = 6;
@@ -163,12 +135,6 @@ public class GameLoopManager {
             tl5.setCycleCount(Timeline.INDEFINITE);
             tl5.playFromStart();
         } else if (Level.getCurrentLevel() == 6) {      
-            tl1.stop();
-            tl2.stop();
-            tl3.stop();
-            tl4.stop();
-            tl5.stop();
-            
             maxNeededCircles = 4;
             initilizeCircle();
             maxEnemies = 12;
@@ -746,8 +712,8 @@ public class GameLoopManager {
                 if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
                     // reset play time of the collecting sound effect, otherwise playing
                     // sonud effect only one time possible
-                    Level.getMPCollect().play();
-                    Level.getMPCollect().seek(Duration.seconds(0.0));
+//                    Sound.mPCollectStop();
+//                    Sound.mPCollectPlay();
                     
                     Level.getRoot().getChildren().remove(arrIVCircle.get(i));
                     circlesObtained++;
@@ -761,8 +727,8 @@ public class GameLoopManager {
                     if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
                         setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
                                 (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
-                        Level.getMPPunch().play();
-                        Level.getMPPunch().seek(Duration.seconds(0.0));
+//                        Sound.mPPunshStop();
+//                        Sound.mPPunshPlay();
                         
                         Level.incrementDeathCounter();
                         circlesObtained = 0;
@@ -809,10 +775,11 @@ public class GameLoopManager {
      */
     public static void checkNextLevel(int nextLevel) {
         // for some reason Player.x < rectRedX works but it should be Player.x > rectRedX
-        if (Level.getPlayer().getX() < rectRedX && circlesObtained == maxNeededCircles) {
-            Level.getMPSucess().play();
-            Level.getMPSucess().seek(Duration.seconds(0.0));
-        }
+//        if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {
+//            Sound.mPSuccessPlay();
+//        } else {
+//            Sound.mPSuccessStop();
+//        }
         
         if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {            
             Level.setMaxLevel(nextLevel);
