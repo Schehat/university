@@ -1,11 +1,10 @@
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * 
  * @author Schehat
- * Genre record
+ * MovieGenre record
  */
 public class MovieGenre {
     private Long genreId;
@@ -14,7 +13,7 @@ public class MovieGenre {
     /**
      * constructor with parameters & Long object
      * @param genreId
-     * @param genre
+     * @param movieId
      */
     MovieGenre (Long genreId, Long movieId) {
         setGenreId(genreId);
@@ -24,7 +23,7 @@ public class MovieGenre {
     /**
      * constructor with parameters & primitive data type long
      * @param genreId
-     * @param genre
+     * @param movieId
      */
     MovieGenre (long genreId, long movieId) {
         setGenreId(new Long(genreId));
@@ -57,10 +56,18 @@ public class MovieGenre {
     
     /**
      * 
-     * @param genre
+     * @param movieId Long object
      */
     public void setMovieId(Long movieId) {
-        this.movieId = movieId.longValue();
+        this.movieId = movieId;
+    }
+    
+    /**
+     * 
+     * @param movieId primitive long
+     */
+    public void setMovieId(long movieId) {
+        this.movieId = new Long(movieId);
     }
     
     /**
@@ -73,58 +80,41 @@ public class MovieGenre {
     
     /**
      * 
-     * @return genre
+     * @return movieId
      */
     public Long getMovieId() {
         return movieId;
     }
     
     /**
-     * update existing tuples in table. Does not check if genreId exists (yet?)
+     * insert MovieGenre object to table 
      * @throws SQLException
      */
-    public void update() throws SQLException {
-        boolean ok = false;
-        
-        String SQL = "UPDATE Genre SET Genre = ? WHERE GenreId = ?";
+    public void insert() throws SQLException {        
+        String SQL = "INSERT INTO MovieGenre VALUES (?, ?)";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            stmt.setString(1, genre);
-            stmt.setLong(2, genreId);
+            stmt.setLong(1, genreId);
+            stmt.setLong(2, movieId);
             
             int n = stmt.executeUpdate();
-            ConnectionManager.getConnection().commit();
-            ok = true;
-            
-            System.out.println("Updates made: " + n);
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
+            System.out.println("Inserts made: " + n);
         }
     }
     
     /**
-     * deletes existing tuples in table. Does not check if genreId exists (yet?)
+     * deletes existing tuples in table. Does not check if genreId or movieId exists (yet?)
      * @throws SQLException
      */
     public void delete() throws SQLException {
-        boolean ok = false;
-        
-        String SQL = "DELETE FROM Genre WHERE GenreId = ?";
+        String SQL = "DELETE FROM MovieGenre WHERE GenreId = ? AND MovieId = ?";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, genreId);
+            stmt.setLong(2, movieId);
             
             int n = stmt.executeUpdate();
-            ConnectionManager.getConnection().commit();
-            ok = true;
-            
             System.out.println("Deletions made: " + n);
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
         }
     }
 }

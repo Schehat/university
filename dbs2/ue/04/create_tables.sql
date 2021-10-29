@@ -35,7 +35,8 @@ CREATE TABLE Person (
     PersonID INTEGER,
     Name VARCHAR(100),
     Sex CHAR(1),
-    CONSTRAINT pk_person PRIMARY KEY (PersonID)
+    CONSTRAINT pk_person PRIMARY KEY (PersonID),
+    CONSTRAINT u_name UNIQUE(name)
 );
 
 CREATE TABLE MovieCharacter (
@@ -58,7 +59,7 @@ CREATE SEQUENCE mov_char_seq;
 commit;
 
 SELECT * FROM Genre;
-SELECT * FROM hasGenre;
+SELECT * FROM MovieGenre;
 SELECT * FROM Movie;
 SELECT * FROM MovieCharacter;
 SELECT * FROM Person;

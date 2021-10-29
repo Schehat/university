@@ -84,8 +84,6 @@ public class Genre {
      * @throws SQLException
      */
     public void insert() throws SQLException {
-        boolean ok = false;
-        
         // if genreId = 0 this means no custom id was set thus using a sequence
         if (genreId.longValue() == 0) {
             String getSeq = "SELECT genre_seq.nextval FROM DUAL";
@@ -93,11 +91,7 @@ public class Genre {
                 ResultSet rs = seq.executeQuery();
                 rs.next();
                 genreId = rs.getLong("nextval");
-            } finally {  // this rollback only resets the sequence 
-                if (!ok) {
-                    ConnectionManager.getConnection().rollback();
-                }
-            }
+            } 
         }
         
         String SQL = "INSERT INTO Genre VALUES (?, ?)";
@@ -107,14 +101,7 @@ public class Genre {
             stmt.setString(2, genre);
             
             int n = stmt.executeUpdate();
-            ConnectionManager.getConnection().commit();
-            ok = true;
-            
             System.out.println("Inserts made: " + n);
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
         }
     }
     
@@ -123,23 +110,14 @@ public class Genre {
      * @throws SQLException
      */
     public void update() throws SQLException {
-        boolean ok = false;
-        
         String SQL = "UPDATE Genre SET Genre = ? WHERE GenreId = ?";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setString(1, genre);
             stmt.setLong(2, genreId);
             
-            int n = stmt.executeUpdate();
-            ConnectionManager.getConnection().commit();
-            ok = true;
-            
+            int n = stmt.executeUpdate();           
             System.out.println("Updates made: " + n);
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
         }
     }
     
@@ -148,22 +126,13 @@ public class Genre {
      * @throws SQLException
      */
     public void delete() throws SQLException {
-        boolean ok = false;
-        
         String SQL = "DELETE FROM Genre WHERE GenreId = ?";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, genreId);
             
             int n = stmt.executeUpdate();
-            ConnectionManager.getConnection().commit();
-            ok = true;
-            
             System.out.println("Deletions made: " + n);
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
-        }
+        } 
     }
 }

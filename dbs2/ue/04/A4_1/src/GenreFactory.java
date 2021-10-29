@@ -17,8 +17,6 @@ public class GenreFactory {
      * @throws SQLException
      */
     public static Genre findByGenreId(Long genreId) throws SQLException {
-        boolean ok = false;
-        
         String genre = null;
         String SQL = "SELECT Genre FROM Genre WHERE GenreID = ?";
         
@@ -30,23 +28,10 @@ public class GenreFactory {
             if (rs.next()) {
                 genre = rs.getString("Genre");
             } else {
-                System.out.println("Datensatz mit genreId = " + genreId + " nicht vorhanden");
+                throw new SQLException("Datensatz mit genreId = \" + genreId + \" nicht vorhanden");
             }
-           
-            ConnectionManager.getConnection().commit();
-            ok = true;
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
-            
         }
-        
-        if (ok) {
-            return new Genre(new Long(genreId), genre);
-        } else {
-            return null;
-        }
+        return new Genre(genreId, genre);
     }
     
     /**
@@ -55,8 +40,6 @@ public class GenreFactory {
      * @throws SQLException
      */
     public static ArrayList<Genre> findByGenreAll() throws SQLException {
-        boolean ok = false;
-        
         ArrayList<Genre> genres = new ArrayList<Genre>(); 
         
         String SQL = "SELECT Genre FROM Genre";
@@ -65,19 +48,11 @@ public class GenreFactory {
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
-                long genreId = rs.getLong("GenreId");
+                Long genreId = rs.getLong("GenreId");
                 String genre = rs.getString("Genre");
                 genres.add(new Genre(genreId, genre));
             }            
-            
-            ConnectionManager.getConnection().commit();
-            ok = true;
-        } finally {
-            if (!ok) {
-                ConnectionManager.getConnection().rollback();
-            }
-        }
-        
+        } 
         if (genres.size() == 0) {
             System.out.println("Tabelle ist leer");
         }
