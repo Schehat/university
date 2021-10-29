@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  * @author Schehat
  * configuration of the all levels in the game
  */
-public class Level {
+public class LevelScene {
     private static Stage stage;
     private static BorderPane root = new BorderPane();
     private static Scene scene = new Scene(root, Main.getSize()[0], Main.getSize()[1]);
@@ -84,13 +84,13 @@ public class Level {
         iVBg.setX(0.0);
         iVBg.setY(0.0);
         
-        Level.setBtn(btnBack, "BACK", btnBackYellow);
-        Level.setBtn(btnLevel1, btnTextLevel + " 1", btnHexGreen);
-        Level.setBtn(btnLevel2, btnTextLevel + " 2", btnHexRed);
-        Level.setBtn(btnLevel3, btnTextLevel + " 3", btnHexRed);
-        Level.setBtn(btnLevel4, btnTextLevel + " 4", btnHexRed);
-        Level.setBtn(btnLevel5, btnTextLevel + " 5", btnHexRed);
-        Level.setBtn(btnLevel6, btnTextLevel + " 6", btnHexRed);
+        LevelScene.setBtn(btnBack, "BACK", btnBackYellow);
+        LevelScene.setBtn(btnLevel1, btnTextLevel + " 1", btnHexGreen);
+        LevelScene.setBtn(btnLevel2, btnTextLevel + " 2", btnHexRed);
+        LevelScene.setBtn(btnLevel3, btnTextLevel + " 3", btnHexRed);
+        LevelScene.setBtn(btnLevel4, btnTextLevel + " 4", btnHexRed);
+        LevelScene.setBtn(btnLevel5, btnTextLevel + " 5", btnHexRed);
+        LevelScene.setBtn(btnLevel6, btnTextLevel + " 6", btnHexRed);
         
         lblDeathCounter.setFont(new Font("Arial", 18));
         // to not wrap text with ... sign
@@ -225,12 +225,12 @@ public class Level {
             stage.setScene(StartScene.getScene());
         });
         
-        Level.setButtonEvents(btnLevel1, 1);
-        Level.setButtonEvents(btnLevel2, 2);
-        Level.setButtonEvents(btnLevel3, 3);
-        Level.setButtonEvents(btnLevel4, 4);
-        Level.setButtonEvents(btnLevel5, 5);
-        Level.setButtonEvents(btnLevel6, 6);
+        LevelScene.setButtonEvents(btnLevel1, 1);
+        LevelScene.setButtonEvents(btnLevel2, 2);
+        LevelScene.setButtonEvents(btnLevel3, 3);
+        LevelScene.setButtonEvents(btnLevel4, 4);
+        LevelScene.setButtonEvents(btnLevel5, 5);
+        LevelScene.setButtonEvents(btnLevel6, 6);
     }
     
     /**
@@ -243,7 +243,7 @@ public class Level {
 //            Sound.mPButtonClickedStop();
 //            Sound.mPButtonClickedPlay();
             
-            Level.setBtn(btn, btn.getText(), btnHexGreen);
+            LevelScene.setBtn(btn, btn.getText(), btnHexGreen);
             
             currentLevel = level;
             
@@ -252,34 +252,34 @@ public class Level {
             
             // change green colored button to blue
             if (currentLevel == 1) {
-                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexBlue);
+                LevelScene.setBtn(btnLevel1, btnLevel1.getText(), btnHexBlue);
             } else if (currentLevel == 2) {
-                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexBlue);
+                LevelScene.setBtn(btnLevel2, btnLevel2.getText(), btnHexBlue);
             } else if (currentLevel == 3) {
-                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
+                LevelScene.setBtn(btnLevel3, btnLevel3.getText(), btnHexBlue);
             } else if (currentLevel == 4) {
-                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexBlue);
+                LevelScene.setBtn(btnLevel4, btnLevel4.getText(), btnHexBlue);
             } else if (currentLevel == 5) {
-                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexBlue);
+                LevelScene.setBtn(btnLevel5, btnLevel5.getText(), btnHexBlue);
             } else if (currentLevel == 6) {
-                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
+                LevelScene.setBtn(btnLevel6, btnLevel6.getText(), btnHexBlue);
             }
             
             // if green button clicked again then it will turn blue
             // thats why after setting new level state need to 
             // turn the button to green color again
             if (currentLevel == 1) {
-                Level.setBtn(btnLevel1, btnLevel1.getText(), btnHexGreen);
+                LevelScene.setBtn(btnLevel1, btnLevel1.getText(), btnHexGreen);
             } else if (currentLevel == 2) {
-                Level.setBtn(btnLevel2, btnLevel2.getText(), btnHexGreen);
+                LevelScene.setBtn(btnLevel2, btnLevel2.getText(), btnHexGreen);
             } else if (currentLevel == 3) {
-                Level.setBtn(btnLevel3, btnLevel3.getText(), btnHexGreen);
+                LevelScene.setBtn(btnLevel3, btnLevel3.getText(), btnHexGreen);
             } else if (currentLevel == 4) {
-                Level.setBtn(btnLevel4, btnLevel4.getText(), btnHexGreen);
+                LevelScene.setBtn(btnLevel4, btnLevel4.getText(), btnHexGreen);
             } else if (currentLevel == 5) {
-                Level.setBtn(btnLevel5, btnLevel5.getText(), btnHexGreen);
+                LevelScene.setBtn(btnLevel5, btnLevel5.getText(), btnHexGreen);
             } else if (currentLevel == 6) {
-                Level.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
+                LevelScene.setBtn(btnLevel6, btnLevel6.getText(), btnHexGreen);
             }
             
             deathCounter = 0;
@@ -308,7 +308,7 @@ public class Level {
      * @return scene of Level
      */
     public static Scene getScene() {
-        return Level.scene;
+        return LevelScene.scene;
     }
     
     /**
@@ -316,7 +316,7 @@ public class Level {
      * @param stage
      */
     public static void setStage(Stage stage) {
-        Level.stage = stage;
+        LevelScene.stage = stage;
     }
     
     /**

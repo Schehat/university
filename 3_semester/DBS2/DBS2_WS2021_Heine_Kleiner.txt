@@ -1,0 +1,105 @@
+1. Wissensfragen
+
+- Wie kann man mit JDBC SQL Injections vermeiden?
+- Ein Update Statement will auf eine Tabelle mit einem Trigger zugreifen.
+  Fehlermeldung: "Tabelle wird geändert, Trigger bemerkt Änderung evtl. nicht."
+  Auf was weist die Fehlermeldung hin?
+- Kann statisches mit dynamischen SQL gemischt werden? Begründen Sie.
+- Wieviele Relationen gibt es bei der Vererbungsstrategie Universalrelation pro Vererbungshierarchie?
+  Nennen Sie jeweils 2 Vor- und Nachteile dieser Vererbungsstrategie.
+
+2. Analytische Funktionen
+
+	ID	WERT1	WERT2
+	 1	     3	    2
+	 2 	     5	    8
+	 3	     4	   10
+	 4	     1	    1
+	 5	     2	    8
+	 6	     5	    4
+	 7	     4	    9
+	 8	     4	    9
+	 9	     4	    6
+	10	     2	    8
+
+   a) ROW_NUMBER() OVER (ORDER BY WERT1)
+   b) RANK() OVER (ORDER BY WERT1)
+   c) DENSE_RANK() OVER (ORDER BY WERT1)	
+   d) SUM(WERT2) OVER (PARTITION BY WERT1)
+   e) SUM(WERT2) OVER (PARTITION BY WERT1 ORDER BY ID)
+
+   ID	WERT1	WERT2	a)	b)	 c) 	d)	 e)
+   1	3	 2
+   2 	5	 8
+   3 	4	 10
+   4 	1	 1
+   5 	2	 8
+   6 	5	 4
+   7 	4	 9
+   8 	4	 9
+   9 	4	 6
+  10	2	 8
+
+  Entsprechend die Tabelle für a-e ausfüllen
+
+
+3. JDBC
+
+Zwei Tabellen
+	- Kunde (PK-Kunden_id)
+	- Fahrrad(PK-Fahrrad_id, FK-Kunden_id)
+Schreibe eine Methode in JDBC die das ausleihen handelt und Transaktion mit händelt.
+Sie soll prüfen, ob das Fahrrad verfügbar ist (in Tabelle Fahrrad ist entsprechende Kunde_id=NULL).
+Wenn Fahrrad verfügbar, dann soll der Kunde hinzugefügt werden, sonst soll eine Exception geworfen werden.
+
+void ausleihen(int fahrrad_id, int kunde_id) {...}
+
+4. Gegeben sind 2 Entities in einem ER-Diagramm.
+	Kunde	<-1-------------0...n->	Journey
+	- int ID			- int ID
+	- string name		- string name
+	- <nochwas>		- <nochwas>
+   Schreiben Sie den Java Code mit allen nötigen Annotationen für JPA, damit das ER-Diagramm so genau wie möglich
+   abgebildet wird. Methoden können vernachlässigt werden
+   Alle Entitäts-Tabellen sollen in der Datenbank mit "E" beginnen.
+   Alle Attribute sollen in der Datenbank mit "A" beginnen.
+
+5. Gegeben ist ein Schedule mit 3 Transaktionen.
+
+- Prüfen Sie ob der Schedule konflikt-serialisierbar ist.
+  Zeichnen Sie den Abhängigkeitsgraphen.
+
+- Füllen Sie die Tabelle für das Zeitstempelverfahren mit dem gegebenen Schedule durch.
+  Klappt das? Begründen.
+
+- Füllen Sie die Tabelle für das strikte 2PL Protokoll mit Mehrfachmodi-Sperren durch.
+  Klappt das? Begründen.
+
+- Gegeben ist folgender Schedule.
+  Zeichnen Sie ein an welchen Stellen Aborts/Commits eingefügt werden müssen, um
+  a) einen kaskadierenden Abbruch zu verursachen
+  b) den Schedule nicht rücksetzbar zu machen
+
+6. Triggeraufgabe
+
+CREATE OR REPLACE TRIGGER trg_projekt
+AFTER DELETE OR UPDATE OF projektnr ON Projekte_Angestellte
+DECLARE anzAngest NUMBER;
+BEGIN
+	SELECT min(cnt) INTO anzAngest FROM
+		(SELECT COUNT(*) cnt, abtnr FROM Projekte_Angestellte GROUP BY projektnr);
+	IF (anzAngest < 2) THEN
+		RAISE_APPLICATION_ERROR(num => -20000,
+			msg => 'Angest2Min verletzt!'
+		);
+	END IF;
+END;
+Erklären sie was hierbei genau passiert!
+
+
+7. Geben Sie den Befehl an, um folgende SQL Berechtigungen zu ermöglichen.
+   Falls es keinen geeigneten Befehl gibt, skizzieren Sie einen Lösungsweg.
+
+- Die Rolle Mitarbeiter soll Leserechte auf die Tabelle Angestellte haben.
+- Die Rolle Mitarbeiter soll alle Spalten außer der Spalte Gehalt lesen können.
+- Die Rolle Mitarbeiter soll alle Aufträge updaten dürfen, außer Aufträge, die im Status "Abgeschlossen" sind.

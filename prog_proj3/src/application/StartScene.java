@@ -88,18 +88,18 @@ public class StartScene {
             
             // this step only one time necessary
             if (!levelLoaded) {
-                Level.setStage(stage);
-                Level.setLayout();
-                Level.setEvents();
+                LevelScene.setStage(stage);
+                LevelScene.setLayout();
+                LevelScene.setEvents();
                 levelLoaded = true;
             }
             
             // this step will reset the current game loop
             if (levelLoaded) {                
-                Level.clearRoot();
+                LevelScene.clearRoot();
                 GameLoopManager.gameLoopManager();
             }
-            stage.setScene(Level.getScene());
+            stage.setScene(LevelScene.getScene());
         });
         
         iVBluePill.setOnMouseClicked(e -> stage.close());

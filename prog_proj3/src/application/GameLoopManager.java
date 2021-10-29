@@ -61,18 +61,18 @@ public class GameLoopManager {
      */
     public static void gameLoopManager() {
         // at the start disable all buttons except button 1
-        Level.getBtnLevel2().setDisable(true);
-        Level.getBtnLevel3().setDisable(true);
-        Level.getBtnLevel4().setDisable(true);
-        Level.getBtnLevel5().setDisable(true);
-        Level.getBtnLevel6().setDisable(true);
+        LevelScene.getBtnLevel2().setDisable(true);
+        LevelScene.getBtnLevel3().setDisable(true);
+        LevelScene.getBtnLevel4().setDisable(true);
+        LevelScene.getBtnLevel5().setDisable(true);
+        LevelScene.getBtnLevel6().setDisable(true);
 
         // maxLevel == 1 not needed, should always be not disabled
-        if (Level.getMaxLevel() >= 2)  Level.getBtnLevel2().setDisable(false);
-        if (Level.getMaxLevel() >= 3)  Level.getBtnLevel3().setDisable(false);
-        if (Level.getMaxLevel() >= 4)  Level.getBtnLevel4().setDisable(false);
-        if (Level.getMaxLevel() >= 5)  Level.getBtnLevel5().setDisable(false);
-        if (Level.getMaxLevel() >= 6)  Level.getBtnLevel6().setDisable(false);
+        if (LevelScene.getMaxLevel() >= 2)  LevelScene.getBtnLevel2().setDisable(false);
+        if (LevelScene.getMaxLevel() >= 3)  LevelScene.getBtnLevel3().setDisable(false);
+        if (LevelScene.getMaxLevel() >= 4)  LevelScene.getBtnLevel4().setDisable(false);
+        if (LevelScene.getMaxLevel() >= 5)  LevelScene.getBtnLevel5().setDisable(false);
+        if (LevelScene.getMaxLevel() >= 6)  LevelScene.getBtnLevel6().setDisable(false);
         
         // reset state
         circlesObtained = 0;
@@ -89,7 +89,7 @@ public class GameLoopManager {
         // do not want the game loop of the other level play at background
         stopAllTimelines();
         
-        if (Level.getCurrentLevel() == 1) {
+        if (LevelScene.getCurrentLevel() == 1) {
             // load circles & enemies
             maxNeededCircles = 2;
             initilizeCircle();
@@ -102,7 +102,7 @@ public class GameLoopManager {
             // level switches will not continue where they left, instead start at
             // the beginning again
             tl1.playFromStart();
-        } else if (Level.getCurrentLevel() == 2) {                    
+        } else if (LevelScene.getCurrentLevel() == 2) {                    
             maxNeededCircles = 4;
             initilizeCircle();
             maxEnemies = 10;
@@ -110,7 +110,7 @@ public class GameLoopManager {
             
             tl2.setCycleCount(Timeline.INDEFINITE);
             tl2.playFromStart();
-        } else if (Level.getCurrentLevel() == 3) {     
+        } else if (LevelScene.getCurrentLevel() == 3) {     
             maxNeededCircles = 3;
             initilizeCircle();
             maxEnemies = 3;
@@ -118,7 +118,7 @@ public class GameLoopManager {
             
             tl3.setCycleCount(Timeline.INDEFINITE);
             tl3.playFromStart();
-        } else if (Level.getCurrentLevel() == 4) {           
+        } else if (LevelScene.getCurrentLevel() == 4) {           
             maxNeededCircles = 4;
             initilizeCircle();
             maxEnemies = 8;
@@ -126,7 +126,7 @@ public class GameLoopManager {
             
             tl4.setCycleCount(Timeline.INDEFINITE);
             tl4.playFromStart();
-        } else if (Level.getCurrentLevel() == 5) {   
+        } else if (LevelScene.getCurrentLevel() == 5) {   
             maxNeededCircles = 3;
             initilizeCircle();
             maxEnemies = 6;
@@ -134,7 +134,7 @@ public class GameLoopManager {
             
             tl5.setCycleCount(Timeline.INDEFINITE);
             tl5.playFromStart();
-        } else if (Level.getCurrentLevel() == 6) {      
+        } else if (LevelScene.getCurrentLevel() == 6) {      
             maxNeededCircles = 4;
             initilizeCircle();
             maxEnemies = 12;
@@ -154,21 +154,21 @@ public class GameLoopManager {
         rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
         rectBlueW = 100.0; 
         rectBlueH = 100.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexBlue(), 1.0));
         gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
         
         rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
         rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
         rectRedW = 100.0; 
         rectRedH = 100.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexRed(), 1.0));
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
         rectWhiteX = rectBlueX + rectBlueW;
         rectWhiteY = rectBlueY - 50;
         rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
         rectWhiteH = rectBlueH + 2*50.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
 
         int offsetX = 80;
@@ -182,8 +182,8 @@ public class GameLoopManager {
         
         int xPadding = 75;
         if (setup == false) {
-            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
             
             enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1) - xPadding;
             enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1);
@@ -198,7 +198,7 @@ public class GameLoopManager {
         // for some reason not needed to clear before adding when switching between scenes
         addImagesToRoot();
         
-        Level.checkKeysPressed();      
+        LevelScene.checkKeysPressed();      
         checkMovementBorder();
         checkCollision();
         checkNextLevel(2);
@@ -213,28 +213,28 @@ public class GameLoopManager {
         rectBlueY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
         rectBlueW = 100.0; 
         rectBlueH = 100.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexBlue(), 1.0));
         gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
         
         rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
         rectRedY = 300.0 - 50.0; // center from canvas 150 to 450 then +- 50 
         rectRedW = 100.0; 
         rectRedH = 100.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexRed(), 1.0));
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
         rectWhiteX = rectBlueX + rectBlueW;
         rectWhiteY = rectBlueY - 100;
         rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
         rectWhiteH = rectBlueH + 2*100.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
         GameLoopManager.drawCirclesInCorners(10, 10);
         
         if (setup == false) {
-            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
             
             enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1);
             for (int i = 0; i < maxEnemies; i++) {
@@ -251,7 +251,7 @@ public class GameLoopManager {
         
         addImagesToRoot();
         
-        Level.checkKeysPressed();
+        LevelScene.checkKeysPressed();
         checkMovementBorder();
         checkCollision();
         checkNextLevel(3);
@@ -266,29 +266,29 @@ public class GameLoopManager {
         rectBlueY = 325.0;
         rectBlueW = 100.0; 
         rectBlueH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexBlue(), 1.0));
         gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
         
         rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
         rectRedY = 200.0;
         rectRedW = 100.0; 
         rectRedH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexRed(), 1.0));
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
         rectWhiteX = rectBlueX + rectBlueW;
         rectWhiteY = rectRedY;
         rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
         rectWhiteH = rectBlueY + rectBlueH - rectRedY;
-        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
         GameLoopManager.drawCirclesInDiagonal(0);
         
         int yPadding = 35;
         if (setup == false) {
-            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
             
             enemyOffsetX = (rectWhiteW - enemySize[0]) / (maxEnemies-1);
             enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1) - yPadding;
@@ -302,7 +302,7 @@ public class GameLoopManager {
         
         addImagesToRoot();
         
-        Level.checkKeysPressed();
+        LevelScene.checkKeysPressed();
         checkMovementBorder();
         checkCollision();
         checkNextLevel(4);
@@ -317,28 +317,28 @@ public class GameLoopManager {
         rectBlueY = 375.0;
         rectBlueW = 100.0; 
         rectBlueH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexBlue(), 1.0));
         gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
         
         rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
         rectRedY = 150.0;
         rectRedW = 100.0; 
         rectRedH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexRed(), 1.0));
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
         rectWhiteX = rectBlueX + rectBlueW;
         rectWhiteY = rectRedY;
         rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
         rectWhiteH = rectBlueY + rectBlueH - rectRedY;
-        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
         GameLoopManager.drawCirclesInCorners(50, 50);
         
         if (setup == false) {
-            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
             
             enemyOffsetY = (rectWhiteH - enemySize[0]) / (maxEnemies-1);
             for (int i = 0; i < maxEnemies; i++) {
@@ -355,7 +355,7 @@ public class GameLoopManager {
         
         addImagesToRoot();
         
-        Level.checkKeysPressed();
+        LevelScene.checkKeysPressed();
         checkMovementBorder();
         checkCollision();
         checkNextLevel(5);
@@ -370,29 +370,29 @@ public class GameLoopManager {
         rectBlueY = 200.0;
         rectBlueW = 100.0; 
         rectBlueH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexBlue(), 1.0));
         gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
         
         rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
         rectRedY = 325.0;
         rectRedW = 100.0; 
         rectRedH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexRed(), 1.0));
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
         rectWhiteX = rectBlueX + rectBlueW;
         rectWhiteY = rectBlueY;
         rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
         rectWhiteH = rectRedY + rectBlueH - rectBlueY;
-        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
         GameLoopManager.drawCirclesInDiagonal(1);
         
         int verticalEnemies = 3;
         if (setup == false) {
-            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
             for (int i = 0; i < verticalEnemies; i++) {
                 arrIVEnemy.get(i).setX(arrIVCircle.get(i).getX() - circleSize[0]/4);
                 /*
@@ -409,8 +409,8 @@ public class GameLoopManager {
         ;
         int horizontalEnemies = 3;
         if (setup == false) {
-            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
             for (int i = horizontalEnemies; i < maxEnemies; i++) {
                 arrIVEnemy.get(i).setY(arrIVCircle.get(i - horizontalEnemies).getY() - circleSize[0]/4);
                 if (i > horizontalEnemies) {
@@ -441,7 +441,7 @@ public class GameLoopManager {
         
         addImagesToRoot();
         
-        Level.checkKeysPressed();
+        LevelScene.checkKeysPressed();
         checkMovementBorder();
         checkCollision();
         checkNextLevel(6);
@@ -456,21 +456,21 @@ public class GameLoopManager {
         rectBlueY = 150.0;
         rectBlueW = 100.0; 
         rectBlueH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexBlue(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexBlue(), 1.0));
         gc.fillRect(rectBlueX, rectBlueY, rectBlueW, rectBlueH);
         
         rectRedX = Main.getSize()[0] - 2*rectBlueX - rectBlueX;
         rectRedY = 375.0;
         rectRedW = 100.0; 
         rectRedH = 75.0;
-        gc.setFill(Color.web("0x" + Level.getRectHexRed(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexRed(), 1.0));
         gc.fillRect(rectRedX, rectRedY, rectRedW, rectRedH);
         
         rectWhiteX = rectBlueX + rectBlueW;
         rectWhiteY = rectBlueY;
         rectWhiteW = rectRedX - rectBlueX - rectBlueW; 
         rectWhiteH = rectRedY + rectBlueH - rectBlueY;
-        gc.setFill(Color.web("0x" + Level.getRectHexWhite(), 1.0));
+        gc.setFill(Color.web("0x" + LevelScene.getRectHexWhite(), 1.0));
         gc.fillRect(rectWhiteX, rectWhiteY, rectWhiteW, rectWhiteH);
         
         GameLoopManager.drawCirclesInCorners(80, 80);
@@ -478,8 +478,8 @@ public class GameLoopManager {
         int xPadding = 35;
         int verticalEnemies = 4;
         if (setup == false) {
-            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                    (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+            setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                    (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
             for (int i = 0; i < verticalEnemies; i++) {
                 arrIVEnemy.get(i).setX(arrIVCircle.get(i).getX() - circleSize[0]/4 + xPadding);
                 /*
@@ -567,7 +567,7 @@ public class GameLoopManager {
         
         addImagesToRoot();
         
-        Level.checkKeysPressed();
+        LevelScene.checkKeysPressed();
         checkMovementBorder();
         checkCollision();
     }
@@ -576,74 +576,74 @@ public class GameLoopManager {
      * block players movement at level borders
      */
     public static void checkMovementBorder() {
-        if (Level.getLeftKeyPressed()) {
+        if (LevelScene.getLeftKeyPressed()) {
             // rect blue left
-            if (Level.getPlayer().getX() - Controller.getSpeed() < rectBlueX) {
-                Controller.moveRight(Level.getPlayer());
+            if (LevelScene.getPlayer().getX() - Controller.getSpeed() < rectBlueX) {
+                Controller.moveRight(LevelScene.getPlayer());
             }
             // rect white bottom & top left
             if (
-                    (Level.getPlayer().getY() + Level.getPlayer().getImage().getHeight() > rectBlueY + rectBlueH
-                        || Level.getPlayer().getY() < rectBlueY
-                    ) && Level.getPlayer().getX() - Controller.getSpeed() < rectWhiteX) {
-                Controller.moveRight(Level.getPlayer());
+                    (LevelScene.getPlayer().getY() + LevelScene.getPlayer().getImage().getHeight() > rectBlueY + rectBlueH
+                        || LevelScene.getPlayer().getY() < rectBlueY
+                    ) && LevelScene.getPlayer().getX() - Controller.getSpeed() < rectWhiteX) {
+                Controller.moveRight(LevelScene.getPlayer());
             }
         }
         
-        if (Level.getRightKeyPressed()) {
+        if (LevelScene.getRightKeyPressed()) {
             // red rect right
-            if (Level.getPlayer().getX() + Controller.getSpeed() + Level.getPlayer().getImage().getWidth() 
+            if (LevelScene.getPlayer().getX() + Controller.getSpeed() + LevelScene.getPlayer().getImage().getWidth() 
                     > rectRedX + rectRedW) {
-                Controller.moveLeft(Level.getPlayer());
+                Controller.moveLeft(LevelScene.getPlayer());
             }
             // rect white bottom & top right
             if (
-                    (Level.getPlayer().getY() + Level.getPlayer().getImage().getHeight() > rectRedY + rectRedH
-                        || Level.getPlayer().getY() < rectRedY)
-                    && Level.getPlayer().getX() + Controller.getSpeed() + Level.getPlayer().getImage().getWidth() 
+                    (LevelScene.getPlayer().getY() + LevelScene.getPlayer().getImage().getHeight() > rectRedY + rectRedH
+                        || LevelScene.getPlayer().getY() < rectRedY)
+                    && LevelScene.getPlayer().getX() + Controller.getSpeed() + LevelScene.getPlayer().getImage().getWidth() 
                     > rectWhiteX + rectWhiteW) {
-                Controller.moveLeft(Level.getPlayer());
+                Controller.moveLeft(LevelScene.getPlayer());
             }
         }
         
-        if (Level.getUpKeyPressed()) {
+        if (LevelScene.getUpKeyPressed()) {
             // blue rect top
-            if (Level.getPlayer().getX() > rectBlueX && Level.getPlayer().getX() < rectBlueX + rectBlueW
-                    && Level.getPlayer().getY() - Controller.getSpeed() < rectBlueY) {
-                Controller.moveDown(Level.getPlayer());
+            if (LevelScene.getPlayer().getX() > rectBlueX && LevelScene.getPlayer().getX() < rectBlueX + rectBlueW
+                    && LevelScene.getPlayer().getY() - Controller.getSpeed() < rectBlueY) {
+                Controller.moveDown(LevelScene.getPlayer());
             }
             // white rect top
-            if (Level.getPlayer().getX() > rectWhiteX && Level.getPlayer().getX() < rectWhiteX + rectWhiteW
-                    && Level.getPlayer().getY() - Controller.getSpeed() < rectWhiteY) {
-                Controller.moveDown(Level.getPlayer());
+            if (LevelScene.getPlayer().getX() > rectWhiteX && LevelScene.getPlayer().getX() < rectWhiteX + rectWhiteW
+                    && LevelScene.getPlayer().getY() - Controller.getSpeed() < rectWhiteY) {
+                Controller.moveDown(LevelScene.getPlayer());
             }
             // red rect top
-            if (Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() > rectRedX 
-                    && Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() < rectRedX + rectRedW
-                    && Level.getPlayer().getY() - Controller.getSpeed() < rectRedY) {
-                Controller.moveDown(Level.getPlayer());
+            if (LevelScene.getPlayer().getX() + LevelScene.getPlayer().getImage().getWidth() > rectRedX 
+                    && LevelScene.getPlayer().getX() + LevelScene.getPlayer().getImage().getWidth() < rectRedX + rectRedW
+                    && LevelScene.getPlayer().getY() - Controller.getSpeed() < rectRedY) {
+                Controller.moveDown(LevelScene.getPlayer());
             }
         }
         
-        if (Level.getDownKeyPressed()) {
+        if (LevelScene.getDownKeyPressed()) {
             // blue rect bottom
-            if (Level.getPlayer().getX() > rectBlueX && Level.getPlayer().getX() < rectBlueX + rectBlueW
-                    && Level.getPlayer().getY() + Controller.getSpeed() + 
-                    Level.getPlayer().getImage().getHeight()> rectBlueY + rectBlueH) {
-                Controller.moveUp(Level.getPlayer());
+            if (LevelScene.getPlayer().getX() > rectBlueX && LevelScene.getPlayer().getX() < rectBlueX + rectBlueW
+                    && LevelScene.getPlayer().getY() + Controller.getSpeed() + 
+                    LevelScene.getPlayer().getImage().getHeight()> rectBlueY + rectBlueH) {
+                Controller.moveUp(LevelScene.getPlayer());
             }
             // white rect bottom
-            if (Level.getPlayer().getX() > rectWhiteX && Level.getPlayer().getX() < rectWhiteX + rectWhiteW
-                    && Level.getPlayer().getY() + Controller.getSpeed() 
-                    + Level.getPlayer().getImage().getHeight() > rectWhiteY + rectWhiteH) {
-                Controller.moveUp(Level.getPlayer());
+            if (LevelScene.getPlayer().getX() > rectWhiteX && LevelScene.getPlayer().getX() < rectWhiteX + rectWhiteW
+                    && LevelScene.getPlayer().getY() + Controller.getSpeed() 
+                    + LevelScene.getPlayer().getImage().getHeight() > rectWhiteY + rectWhiteH) {
+                Controller.moveUp(LevelScene.getPlayer());
             }
             // red rect bottom
-            if (Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() > rectRedX  
-                    && Level.getPlayer().getX() + Level.getPlayer().getImage().getWidth() < rectRedX + rectRedW
-                    && Level.getPlayer().getY() + Controller.getSpeed() + 
-                    Level.getPlayer().getImage().getHeight()> rectRedY + rectRedH) {
-                Controller.moveUp(Level.getPlayer());
+            if (LevelScene.getPlayer().getX() + LevelScene.getPlayer().getImage().getWidth() > rectRedX  
+                    && LevelScene.getPlayer().getX() + LevelScene.getPlayer().getImage().getWidth() < rectRedX + rectRedW
+                    && LevelScene.getPlayer().getY() + Controller.getSpeed() + 
+                    LevelScene.getPlayer().getImage().getHeight()> rectRedY + rectRedH) {
+                Controller.moveUp(LevelScene.getPlayer());
             }
         }
     }
@@ -708,31 +708,31 @@ public class GameLoopManager {
     public static void checkCollision() {
         for (int i = 0; i < maxNeededCircles; i++) {
             // when not checking weather circle in root then collision still works at the background
-            if (Level.getRoot().getChildren().contains(arrIVCircle.get(i))) {
-                if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
+            if (LevelScene.getRoot().getChildren().contains(arrIVCircle.get(i))) {
+                if (LevelScene.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
                     // reset play time of the collecting sound effect, otherwise playing
                     // sonud effect only one time possible
 //                    Sound.mPCollectStop();
 //                    Sound.mPCollectPlay();
                     
-                    Level.getRoot().getChildren().remove(arrIVCircle.get(i));
+                    LevelScene.getRoot().getChildren().remove(arrIVCircle.get(i));
                     circlesObtained++;
                 }
             }
         }
         
-        if (!Level.getInvincible()) {
+        if (!LevelScene.getInvincible()) {
             for (int i = 0; i < maxEnemies; i++) {
-                if (Level.getRoot().getChildren().contains(arrIVEnemy.get(i))) {
-                    if (Level.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
-                        setPlayerPosition((int) (rectBlueX + rectBlueW/2 - Level.getPlayer().getImage().getWidth()/2), 
-                                (int) (rectBlueY + rectBlueH/2 - Level.getPlayer().getImage().getHeight()/2));
+                if (LevelScene.getRoot().getChildren().contains(arrIVEnemy.get(i))) {
+                    if (LevelScene.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
+                        setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
+                                (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
 //                        Sound.mPPunshStop();
 //                        Sound.mPPunshPlay();
                         
-                        Level.incrementDeathCounter();
+                        LevelScene.incrementDeathCounter();
                         circlesObtained = 0;
-                        Level.clearRoot();
+                        LevelScene.clearRoot();
                         setup = false;  // so addImagesToRoot works
                         addImagesToRoot();
                     }
@@ -781,23 +781,23 @@ public class GameLoopManager {
 //            Sound.mPSuccessStop();
 //        }
         
-        if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {            
-            Level.setMaxLevel(nextLevel);
+        if (LevelScene.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {            
+            LevelScene.setMaxLevel(nextLevel);
             if (nextLevel == 2) {
-                Level.setBtn(Level.getBtnLevel2(), Level.getBtnLevel2().getText(), Level.getBtnHexBlue());
-                Level.getBtnLevel2().setDisable(false);
+                LevelScene.setBtn(LevelScene.getBtnLevel2(), LevelScene.getBtnLevel2().getText(), LevelScene.getBtnHexBlue());
+                LevelScene.getBtnLevel2().setDisable(false);
             } else if (nextLevel == 3) {
-                Level.setBtn(Level.getBtnLevel3(), Level.getBtnLevel3().getText(), Level.getBtnHexBlue());
-                Level.getBtnLevel3().setDisable(false);
+                LevelScene.setBtn(LevelScene.getBtnLevel3(), LevelScene.getBtnLevel3().getText(), LevelScene.getBtnHexBlue());
+                LevelScene.getBtnLevel3().setDisable(false);
             } else if (nextLevel == 4) {
-                Level.setBtn(Level.getBtnLevel4(), Level.getBtnLevel4().getText(), Level.getBtnHexBlue());
-                Level.getBtnLevel4().setDisable(false);
+                LevelScene.setBtn(LevelScene.getBtnLevel4(), LevelScene.getBtnLevel4().getText(), LevelScene.getBtnHexBlue());
+                LevelScene.getBtnLevel4().setDisable(false);
             }  else if (nextLevel == 5) {
-                Level.setBtn(Level.getBtnLevel5(), Level.getBtnLevel5().getText(), Level.getBtnHexBlue());
-                Level.getBtnLevel5().setDisable(false);
+                LevelScene.setBtn(LevelScene.getBtnLevel5(), LevelScene.getBtnLevel5().getText(), LevelScene.getBtnHexBlue());
+                LevelScene.getBtnLevel5().setDisable(false);
             }  else if (nextLevel == 6) {
-                Level.setBtn(Level.getBtnLevel6(), Level.getBtnLevel6().getText(), Level.getBtnHexBlue());
-                Level.getBtnLevel6().setDisable(false);
+                LevelScene.setBtn(LevelScene.getBtnLevel6(), LevelScene.getBtnLevel6().getText(), LevelScene.getBtnHexBlue());
+                LevelScene.getBtnLevel6().setDisable(false);
             }
         }
     }
@@ -808,10 +808,10 @@ public class GameLoopManager {
     public static void addImagesToRoot() {
         if (setup == false) {
             for (int i = 0; i < maxNeededCircles; i++) {
-                    Level.getRoot().getChildren().add(arrIVCircle.get(i));
+                    LevelScene.getRoot().getChildren().add(arrIVCircle.get(i));
             }
             for (int i = 0; i < maxEnemies; i++) {
-                Level.getRoot().getChildren().add(arrIVEnemy.get(i));
+                LevelScene.getRoot().getChildren().add(arrIVEnemy.get(i));
             }
             setup = true;
         }
@@ -861,7 +861,7 @@ public class GameLoopManager {
      * @param y
      */
     public static void setPlayerPosition(int x, int y) {
-        Level.getPlayer().setX(x);
-        Level.getPlayer().setY(y);
+        LevelScene.getPlayer().setX(x);
+        LevelScene.getPlayer().setY(y);
     }
 }
