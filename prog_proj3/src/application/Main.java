@@ -12,8 +12,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private static double WIDTH = 800.0;
     private static double HEIGHT = 600.0;
-    private static String gameTitle = "CONSTRUCT";
-    private static String iconName = "neo.png";
+    private static String GAME_TITLE = "CONSTRUCT";
+    private static String ICON_NAME = "neo.png";
     
     /**
      *  stage control & setup of StartScene
@@ -41,8 +41,8 @@ public class Main extends Application {
 	 * @return stage
 	 */
 	public static Stage setStage(Stage stage) {
-        stage.setTitle(gameTitle); 
-        Image icon = new Image(iconName);
+        stage.setTitle(GAME_TITLE); 
+        Image icon = new Image(ICON_NAME);
         stage.getIcons().add(icon);
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);

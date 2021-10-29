@@ -83,8 +83,8 @@ public class StartScene {
         StartScene.setPillsEvents(iVBluePill, iBluePill);
         
         iVRedPill.setOnMouseClicked(e -> {
-//            Sound.mPButtonClickedStop();
-//            Sound.mPButtonClickedPlay();
+            Sound.mPButtonClickedStop();
+            Sound.mPButtonClickedPlay();
             
             // this step only one time necessary
             if (!levelLoaded) {

@@ -218,8 +218,8 @@ public class LevelScene {
         btnBack.setOnMouseEntered(e -> scene.setCursor(Cursor.HAND));
         btnBack.setOnMouseExited(e -> scene.setCursor(Cursor.DEFAULT));
         btnBack.setOnAction(e -> {
-//            Sound.mPButtonClickedStop();
-//            Sound.mPButtonClickedPlay();
+            Sound.mPButtonClickedStop();
+            Sound.mPButtonClickedPlay();
             GameLoopManager.stopAllTimelines();
             StartScene.setLayout();
             stage.setScene(StartScene.getScene());
@@ -240,8 +240,8 @@ public class LevelScene {
      */
     public static void setButtonEvents(Button btn, int level) {
         btn.setOnAction(e -> {
-//            Sound.mPButtonClickedStop();
-//            Sound.mPButtonClickedPlay();
+            Sound.mPButtonClickedStop();
+            Sound.mPButtonClickedPlay();
             
             LevelScene.setBtn(btn, btn.getText(), btnHexGreen);
             

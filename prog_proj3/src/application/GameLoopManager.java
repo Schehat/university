@@ -712,8 +712,8 @@ public class GameLoopManager {
                 if (LevelScene.getPlayer().getImageView().getBoundsInParent().intersects(arrIVCircle.get(i).getBoundsInParent())) {
                     // reset play time of the collecting sound effect, otherwise playing
                     // sonud effect only one time possible
-//                    Sound.mPCollectStop();
-//                    Sound.mPCollectPlay();
+                    Sound.mPCollectStop();
+                    Sound.mPCollectPlay();
                     
                     LevelScene.getRoot().getChildren().remove(arrIVCircle.get(i));
                     circlesObtained++;
@@ -727,8 +727,8 @@ public class GameLoopManager {
                     if (LevelScene.getPlayer().getImageView().getBoundsInParent().intersects(arrIVEnemy.get(i).getBoundsInParent())) {
                         setPlayerPosition((int) (rectBlueX + rectBlueW/2 - LevelScene.getPlayer().getImage().getWidth()/2), 
                                 (int) (rectBlueY + rectBlueH/2 - LevelScene.getPlayer().getImage().getHeight()/2));
-//                        Sound.mPPunshStop();
-//                        Sound.mPPunshPlay();
+                        Sound.mPPunshStop();
+                        Sound.mPPunshPlay();
                         
                         LevelScene.incrementDeathCounter();
                         circlesObtained = 0;
@@ -775,11 +775,11 @@ public class GameLoopManager {
      */
     public static void checkNextLevel(int nextLevel) {
         // for some reason Player.x < rectRedX works but it should be Player.x > rectRedX
-//        if (Level.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {
-//            Sound.mPSuccessPlay();
-//        } else {
-//            Sound.mPSuccessStop();
-//        }
+        if (LevelScene.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {
+            Sound.mPSuccessPlay();
+        } else {
+            Sound.mPSuccessStop();
+        }
         
         if (LevelScene.getPlayer().getX() > rectRedX && circlesObtained == maxNeededCircles) {            
             LevelScene.setMaxLevel(nextLevel);
