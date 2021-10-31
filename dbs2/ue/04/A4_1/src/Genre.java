@@ -1,6 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * 
@@ -12,7 +13,7 @@ public class Genre {
     private String genre;
     
     /**
-     * constructor with parameters & Long object
+     * constructor with parameters
      * @param genreId
      * @param genre
      */
@@ -21,38 +22,19 @@ public class Genre {
         setGenre(genre);
     }
     
-    /**
-     * constructor with parameters & primitive data type long
-     * @param genreId
-     * @param genre
+    /*
+     * empty constructor
      */
-    Genre (long genreId, String genre) {
-        setGenreId(new Long(genreId));
-        setGenre(genre);
-    }
-    
-    /**
-     * constructor with no parameters
-     */
-    Genre () {
-        setGenreId(new Long(0));
-        setGenre("");
+    Genre() {
+        
     }
     
     /**
      * 
-     * @param genreId Long object
+     * @param genreId
      */
     public void setGenreId(Long genreId) {
         this.genreId = genreId;
-    }
-    
-    /**
-     * 
-     * @param genreId primitive long 
-     */
-    public void setGenreId(long genreId) {
-        this.genreId = new Long(genreId);
     }
     
     /**
@@ -67,7 +49,7 @@ public class Genre {
      * 
      * @return genreId
      */
-    public long getGenreId() {
+    public Long getGenreId() {
         return genreId;
     }
     
@@ -84,8 +66,8 @@ public class Genre {
      * @throws SQLException
      */
     public void insert() throws SQLException {
-        // if genreId = 0 this means no custom id was set thus using a sequence
-        if (genreId.longValue() == 0) {
+        // this means no custom id was set thus using a sequence
+        if (genreId == null) {
             String getSeq = "SELECT genre_seq.nextval FROM DUAL";
             try (PreparedStatement seq = ConnectionManager.getConnection().prepareStatement(getSeq)) {
                 ResultSet rs = seq.executeQuery();
@@ -98,7 +80,12 @@ public class Genre {
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, genreId);
-            stmt.setString(2, genre);
+            
+            if (genre != null) {
+                stmt.setString(2, genre);
+            } else {
+                stmt.setNull(2, Types.NULL);
+            }
             
             int n = stmt.executeUpdate();
             System.out.println("Inserts made: " + n);
@@ -113,7 +100,12 @@ public class Genre {
         String SQL = "UPDATE Genre SET Genre = ? WHERE GenreId = ?";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            stmt.setString(1, genre);
+            if (genre != null) {
+                stmt.setString(1, genre);
+            } else {
+                stmt.setNull(1, Types.NULL);
+            }
+            
             stmt.setLong(2, genreId);
             
             int n = stmt.executeUpdate();           

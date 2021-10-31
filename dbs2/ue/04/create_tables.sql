@@ -24,8 +24,8 @@ CREATE TABLE Movie (
 );
 
 CREATE TABLE MovieGenre(
-    GenreID INTEGER,
     MovieID INTEGER,
+    GenreID INTEGER,
     CONSTRAINT fk_to_genre FOREIGN KEY (GenreID) REFERENCES Genre(GenreID),
     CONSTRAINT fk_to_movie FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
     CONSTRAINT pk_has_genre PRIMARY KEY (GenreID, MovieID)
@@ -41,11 +41,11 @@ CREATE TABLE Person (
 
 CREATE TABLE MovieCharacter (
     MovCharID INTEGER,
-    MovieID INTEGER,
-    PersonID INTEGER,
     Character VARCHAR(100),
     Alias VARCHAR(100),
     Position INTEGER,
+    MovieID INTEGER,
+    PersonID INTEGER,
     CONSTRAINT fk_mov_char_to_movie FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
     CONSTRAINT fk_mov_char_to_person FOREIGN KEY (PersonID) REFERENCES Person(PersonID),
     CONSTRAINT pk_mov_char PRIMARY KEY (MovCharID)

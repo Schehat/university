@@ -28,7 +28,7 @@ public class GenreFactory {
             if (rs.next()) {
                 genre = rs.getString("Genre");
             } else {
-                throw new SQLException("Datensatz mit genreId = \" + genreId + \" nicht vorhanden");
+                throw new SQLException("Datensatz mit genreId = " + genreId + " nicht vorhanden");
             }
         }
         return new Genre(genreId, genre);
@@ -42,7 +42,7 @@ public class GenreFactory {
     public static ArrayList<Genre> findByGenreAll() throws SQLException {
         ArrayList<Genre> genres = new ArrayList<Genre>(); 
         
-        String SQL = "SELECT Genre FROM Genre";
+        String SQL = "SELECT GenreId, Genre FROM Genre";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             ResultSet rs = stmt.executeQuery();

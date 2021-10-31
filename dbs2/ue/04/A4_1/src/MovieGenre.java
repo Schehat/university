@@ -7,40 +7,29 @@ import java.sql.SQLException;
  * MovieGenre record
  */
 public class MovieGenre {
-    private Long genreId;
     private Long movieId;
+    private Long genreId;
     
     /**
-     * constructor with parameters & Long object
+     * constructor with parameters
      * @param genreId
      * @param movieId
      */
-    MovieGenre (Long genreId, Long movieId) {
-        setGenreId(genreId);
+    MovieGenre (Long movieId, Long genreId) {
         setMovieId(movieId);
+        setGenreId(genreId);
     }
     
     /**
-     * constructor with parameters & primitive data type long
-     * @param genreId
-     * @param movieId
-     */
-    MovieGenre (long genreId, long movieId) {
-        setGenreId(new Long(genreId));
-        setMovieId(new Long(movieId));
-    }
-    
-    /**
-     * constructor with no parameters
+     * empty constructor
      */
     MovieGenre () {
-        setGenreId(new Long(0));
-        setMovieId(new Long(0));
+        
     }
     
     /**
      * 
-     * @param genreId Long object
+     * @param genreId
      */
     public void setGenreId(Long genreId) {
         this.genreId = genreId;
@@ -48,26 +37,10 @@ public class MovieGenre {
     
     /**
      * 
-     * @param genreId primitive long
-     */
-    public void setGenreId(long genreId) {
-        this.genreId = new Long(genreId);
-    }
-    
-    /**
-     * 
-     * @param movieId Long object
+     * @param movieId
      */
     public void setMovieId(Long movieId) {
         this.movieId = movieId;
-    }
-    
-    /**
-     * 
-     * @param movieId primitive long
-     */
-    public void setMovieId(long movieId) {
-        this.movieId = new Long(movieId);
     }
     
     /**
@@ -94,8 +67,8 @@ public class MovieGenre {
         String SQL = "INSERT INTO MovieGenre VALUES (?, ?)";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            stmt.setLong(1, genreId);
-            stmt.setLong(2, movieId);
+            stmt.setLong(1, movieId);
+            stmt.setLong(2, genreId);
             
             int n = stmt.executeUpdate();
             System.out.println("Inserts made: " + n);
@@ -107,11 +80,11 @@ public class MovieGenre {
      * @throws SQLException
      */
     public void delete() throws SQLException {
-        String SQL = "DELETE FROM MovieGenre WHERE GenreId = ? AND MovieId = ?";
+        String SQL = "DELETE FROM MovieGenre WHERE MovieId = ? AND GenreId = ?";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            stmt.setLong(1, genreId);
-            stmt.setLong(2, movieId);
+            stmt.setLong(1, movieId);
+            stmt.setLong(2, genreId);
             
             int n = stmt.executeUpdate();
             System.out.println("Deletions made: " + n);
