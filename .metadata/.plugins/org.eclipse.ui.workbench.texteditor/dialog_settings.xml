@@ -5,13 +5,15 @@
 		<item key="DIALOG_Y_ORIGIN" value="240"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="Result"/>
+		<item key="selection" value="Sys"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="sys"/>
+			<item value="system"/>
 			<item value="Result"/>
 			<item value="Sound"/>
 			<item value="sound"/>
@@ -21,12 +23,10 @@
 			<item value="mP"/>
 			<item value="checkNe"/>
 			<item value="collision"/>
-			<item value="system"/>
 			<item value="speed"/>
 			<item value="circleSize"/>
 			<item value="keyCode"/>
 			<item value="back"/>
-			<item value="btnBack"/>
 		</list>
 		<list key="replacehistory">
 		</list>

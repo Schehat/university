@@ -24,7 +24,25 @@ public class MovieManager {
 	public List<MovieDTO> getMovieList(String search) throws Exception {
 		System.out.println("getMovieList");
 		
-		return new ArrayList<>();
+		 boolean ok = false;
+		 
+		 ArrayList<MovieDTO> mDTO = new ArrayList<MovieDTO>();
+		 try {
+		     ArrayList<Movie> ms = records.MovieFactory.findByMovieAll();
+		     for (Movie m : ms) {
+		         if (m.getTitle().contains(search) || search.equals("")) {
+		             mDTO.add(getMovie(m.getMovieId()));
+		         }
+		     }
+		     
+		     ConnectionManager.getConnection().commit();
+		     ok = true;
+		 } finally {
+		     if (!ok)
+		         ConnectionManager.getConnection().rollback();
+		 }
+		 
+		return mDTO;
 	}
 
 	/**
@@ -37,7 +55,54 @@ public class MovieManager {
 	 * @throws Exception
 	 */
 	public void insertUpdateMovie(MovieDTO movieDTO) throws Exception {
-		// TODO
+	    System.out.println("insertUpdateMovie");
+        
+        boolean ok = false;
+    
+		try {
+	        Movie m = new Movie(movieDTO.getId(), movieDTO.getTitle(), movieDTO.getYear(), movieDTO.getType().charAt(0));
+	        
+	        // if movieDTO exists in database delete all dependencies
+	        if (movieDTO.getId() != null) {
+	            m.setMovieId(movieDTO.getId());
+	            deleteMovie(movieDTO.getId());
+	        }
+	        
+	        m.insert();
+	        
+	        for (String genre : movieDTO.getGenres()) {
+	            Genre g = new Genre();
+	            g.setGenre(genre);
+	            g.insert();  // genre id automatically generated if null
+	            
+	            MovieGenre mg = new MovieGenre(m.getMovieId(), g.getGenreId());
+	            System.out.println(mg.getMovieId());
+	            mg.insert();
+	        }
+	        
+	        for (CharacterDTO cDTO : movieDTO.getCharacters()) {
+	            MovieCharacter mc = new MovieCharacter();
+	            mc.setCharacter(cDTO.getCharacter());
+	            mc.setAlias(cDTO.getAlias());
+	            mc.setMovieId(m.getMovieId());
+	            
+	            Person p = new Person();
+	            p.setName(cDTO.getPlayer());
+	            
+	            p.insert();  // id generated too
+	          
+	            mc.setPersonId(p.getPersonId());
+	            
+	            // mc.position == null, will be inserted as null in database
+	            mc.insert();
+	        }
+	        
+	        ConnectionManager.getConnection().commit();
+	        ok = true;
+		} finally {
+            if (!ok)
+                ConnectionManager.getConnection().rollback();
+        }
 	}
 
 	/**
@@ -47,7 +112,45 @@ public class MovieManager {
 	 * @throws Exception
 	 */
 	public void deleteMovie(long movieId) throws Exception {
-		// TODO Auto-generated method stub
+	    System.out.println("deleteMovie");
+	    
+	    boolean ok = false;
+	    
+	    try {
+    	    ArrayList<MovieGenre> mgs = records.MovieGenreFactory.findByMovieGenreAll();
+    	    for (MovieGenre mg : mgs) {
+    	        if (mg.getMovieId().equals(movieId)) {
+    	            Genre g = new Genre();
+    	            g.setGenreId(mg.getGenreId());
+    	            
+    	            //order important due to foreign key constraint
+    	            mg.delete();
+    	            g.delete();
+    	        }
+    	    }
+    	    
+    	    ArrayList<MovieCharacter> mcs = records.MovieCharacterFactory.findByMovieCharacterAll();
+    	    for (MovieCharacter mc : mcs) {
+    	        if (mc.getMovieId().equals(movieId)) {
+    	            Person p = new Person();
+    	            p.setPersonId(mc.getPersonId());
+    	            
+    	            // order important due to foreign key constraint 
+    	            mc.delete();
+    	            p.delete();
+    	        }
+    	    }
+    	    
+    	    Movie m = new Movie();
+    	    m.setMovieId(movieId);
+    	    m.delete();
+    	    
+    	    ConnectionManager.getConnection().commit();
+    	    ok = true;
+	    } finally {
+            if (!ok)
+                ConnectionManager.getConnection().rollback();
+        }
 	}
 
 	/**
@@ -58,7 +161,9 @@ public class MovieManager {
 	 */
 	public MovieDTO getMovie(long movieId) throws Exception {
 	    System.out.println("getMovie");
+	    
 	    boolean ok = false;
+	    
         MovieDTO mDTO = new MovieDTO();
 	    try {
     		Movie movie = records.MovieFactory.findByMovieId(movieId);
@@ -89,11 +194,13 @@ public class MovieManager {
     		        mDTO.addCharacter(cDTO); 
     		    }
     		}
+    		
+    		ConnectionManager.getConnection().commit();
+    		ok = true;
 	    } finally {
 	        if (!ok)
                 ConnectionManager.getConnection().rollback();
             }
 		return mDTO;
 	}
-
 }

@@ -24,7 +24,7 @@ public class MovieCharacter {
      * @param alias
      * @param type
      */
-    MovieCharacter (Long movCharId, String character, String alias, Integer position, Long movieId, Long personId) {
+    public MovieCharacter (Long movCharId, String character, String alias, Integer position, Long movieId, Long personId) {
         setMovCharId(movCharId);
         setCharacter(character);
         setAlias(alias);
@@ -36,7 +36,7 @@ public class MovieCharacter {
     /**
      * empty constructor
      */
-    MovieCharacter() {
+    public MovieCharacter() {
         
     }
     

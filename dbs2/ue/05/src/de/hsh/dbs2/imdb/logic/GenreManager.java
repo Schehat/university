@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import records.ConnectionManager;
 import records.Genre;
 
 public class GenreManager {
@@ -16,13 +17,25 @@ public class GenreManager {
 	 */
 	public List<String> getGenres() throws Exception {
 	    System.out.println("getGenres");
-	    ArrayList<Genre> genres = records.GenreFactory.findByGenreAll();
+	    
+	    boolean ok = false;
+	    
 	    ArrayList<String> genresS = new ArrayList<String>();
-	    for (Genre gs : genres) {
-	        genresS.add(gs.getGenre());
-	    }
-	    Collections.sort(genresS);
-		return genresS;
+	    try  {
+    	    ArrayList<Genre> genres = records.GenreFactory.findByGenreAll();
+    	    
+    	    for (Genre gs : genres) {
+    	        genresS.add(gs.getGenre());
+    	    }
+    	    
+    	    Collections.sort(genresS);
+    	    
+    	    ConnectionManager.getConnection().commit();
+    	    ok = true;
+	    } finally {
+            if (!ok)
+                ConnectionManager.getConnection().rollback();
+        }
+	    return genresS;
 	}
-
 }

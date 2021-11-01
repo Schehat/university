@@ -22,7 +22,7 @@ public class Movie {
      * @param year
      * @param type
      */
-    Movie (Long movieId, String title, Integer year, Character type) {
+    public Movie (Long movieId, String title, Integer year, Character type) {
         setMovieId(movieId);
         setTitle(title);
         setYear(year);
@@ -32,7 +32,7 @@ public class Movie {
     /**
      * empty constructor
      */
-    Movie() {
+    public Movie() {
         
     }
     

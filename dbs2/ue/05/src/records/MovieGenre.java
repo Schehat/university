@@ -16,7 +16,7 @@ public class MovieGenre {
      * @param genreId
      * @param movieId
      */
-    MovieGenre (Long movieId, Long genreId) {
+    public MovieGenre (Long movieId, Long genreId) {
         setMovieId(movieId);
         setGenreId(genreId);
     }
@@ -24,7 +24,7 @@ public class MovieGenre {
     /**
      * empty constructor
      */
-    MovieGenre () {
+    public MovieGenre () {
         
     }
     

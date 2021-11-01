@@ -3,6 +3,9 @@ package de.hsh.dbs2.imdb.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import records.ConnectionManager;
+import records.Person;
+
 public class PersonManager {
 
 	/**
@@ -12,8 +15,25 @@ public class PersonManager {
 	 * @throws Exception
 	 */
 	public List<String> getPersonList(String text) throws Exception {
-		// TODO
-		return new ArrayList<>();
+	    System.out.println("getPersonList");
+	    
+	    boolean ok = false;
+	    
+	    ArrayList<String> persons = new ArrayList<String>();
+	    try {
+	        ArrayList<Person> ps = records.PersonFactory.findByPersonAll();	        
+	        for (Person p : ps) {
+	            if (p.getName().contains(text)) {
+	                persons.add(p.getName());
+	            }
+	        }
+	       
+	        ConnectionManager.getConnection().commit();
+            ok = true;
+        } finally {
+            if (!ok)
+                ConnectionManager.getConnection().rollback();
+        }
+		return persons;
 	}
-
 }

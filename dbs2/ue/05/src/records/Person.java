@@ -20,7 +20,7 @@ public class Person {
      * @param name
      * @param sex
      */
-    Person (Long personId, String name, Character sex) {
+    public Person (Long personId, String name, Character sex) {
         setPersonId(personId);
         setName(name);
         setSex(sex);
@@ -29,7 +29,7 @@ public class Person {
     /**
      * empty constructor
      */
-    Person() {
+    public Person() {
         
     }
     

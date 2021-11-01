@@ -40,7 +40,7 @@ CREATE TABLE Person (
 );
 
 CREATE TABLE MovieCharacter (
-    MovCharID INTEGER,
+   MovCharID INTEGER,
     Character VARCHAR(100),
     Alias VARCHAR(100),
     Position INTEGER,
@@ -48,7 +48,7 @@ CREATE TABLE MovieCharacter (
     PersonID INTEGER,
     CONSTRAINT fk_mov_char_to_movie FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
     CONSTRAINT fk_mov_char_to_person FOREIGN KEY (PersonID) REFERENCES Person(PersonID),
-    CONSTRAINT pk_mov_char PRIMARY KEY (MovCharID)
+    CONSTRAINT pk_mov_char PRIMARY KEY (MovCharID) 
 );
 
 CREATE SEQUENCE genre_seq;

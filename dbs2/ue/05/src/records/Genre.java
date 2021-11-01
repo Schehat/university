@@ -18,7 +18,7 @@ public class Genre {
      * @param genreId
      * @param genre
      */
-    Genre (Long genreId, String genre) {
+    public Genre (Long genreId, String genre) {
         setGenreId(genreId);
         setGenre(genre);
     }
@@ -26,7 +26,7 @@ public class Genre {
     /*
      * empty constructor
      */
-    Genre() {
+    public Genre() {
         
     }
     
