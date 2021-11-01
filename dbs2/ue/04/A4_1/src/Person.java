@@ -89,9 +89,10 @@ public class Person {
         if (personId == null) {
             String getSeq = "SELECT person_seq.nextval FROM DUAL";
             try (PreparedStatement seq = ConnectionManager.getConnection().prepareStatement(getSeq)) {
-                ResultSet rs = seq.executeQuery();
-                rs.next();
-                personId = rs.getLong("nextval");
+                try (ResultSet rs = seq.executeQuery()) {
+                    rs.next();
+                    personId = rs.getLong("nextval");
+                }
             } 
         }
         

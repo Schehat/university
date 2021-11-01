@@ -22,13 +22,14 @@ public class GenreFactory {
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, genreId);
-            ResultSet rs = stmt.executeQuery();
             
-            // checking if ResultSet is empty
-            if (rs.next()) {
-                genre = rs.getString("Genre");
-            } else {
-                throw new SQLException("Datensatz mit genreId = " + genreId + " nicht vorhanden");
+            try (ResultSet rs = stmt.executeQuery()) {
+                // checking if ResultSet is empty
+                if (rs.next()) {
+                    genre = rs.getString("Genre");
+                } else {
+                    throw new SQLException("Datensatz mit genreId = " + genreId + " nicht vorhanden");
+                }
             }
         }
         return new Genre(genreId, genre);
@@ -45,13 +46,13 @@ public class GenreFactory {
         String SQL = "SELECT GenreId, Genre FROM Genre";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Long genreId = rs.getLong("GenreId");
-                String genre = rs.getString("Genre");
-                genres.add(new Genre(genreId, genre));
-            }            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long genreId = rs.getLong("GenreId");
+                    String genre = rs.getString("Genre");
+                    genres.add(new Genre(genreId, genre));
+                }            
+            }
         } 
         if (genres.size() == 0) {
             System.out.println("Tabelle ist leer");

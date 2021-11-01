@@ -108,9 +108,10 @@ public class Movie {
         if (movieId == null) {
             String getSeq = "SELECT movie_seq.nextval FROM DUAL";
             try (PreparedStatement seq = ConnectionManager.getConnection().prepareStatement(getSeq)) {
-                ResultSet rs = seq.executeQuery();
-                rs.next();
-                movieId = rs.getLong("nextval");
+                try (ResultSet rs = seq.executeQuery()) {
+                    rs.next();
+                    movieId = rs.getLong("nextval");
+                }
             } 
         }
         

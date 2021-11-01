@@ -23,15 +23,15 @@ public class PersonFactory {
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, personId);
-            ResultSet rs = stmt.executeQuery();
-            
-            // checking if ResultSet is empty
-            if (rs.next()) {
-                name = rs.getString("Name");
-                // convert String to char and then to Character object
-                sex = Character.valueOf(rs.getString("Sex").charAt(0));
-            } else {
-                throw new SQLException("Datensatz mit personId = " + personId + " nicht vorhanden");
+            try (ResultSet rs = stmt.executeQuery()) {
+                // checking if ResultSet is empty
+                if (rs.next()) {
+                    name = rs.getString("Name");
+                    // convert String to char and then to Character object
+                    sex = Character.valueOf(rs.getString("Sex").charAt(0));
+                } else {
+                    throw new SQLException("Datensatz mit personId = " + personId + " nicht vorhanden");
+                }
             }
         }
         return new Person(personId, name, sex);
@@ -48,15 +48,15 @@ public class PersonFactory {
         String SQL = "SELECT PersonId, Name, Sex FROM Person";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Long personId = rs.getLong("PersonId");
-                String name = rs.getString("Name");
-                Character sex = Character.valueOf(rs.getString("Sex").charAt(0));
-                persons.add(new Person(personId, name, sex));
-            }            
-        } 
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long personId = rs.getLong("PersonId");
+                    String name = rs.getString("Name");
+                    Character sex = Character.valueOf(rs.getString("Sex").charAt(0));
+                    persons.add(new Person(personId, name, sex));
+                }            
+            }
+        }
         if (persons.size() == 0) {
             System.out.println("Tabelle ist leer");
         }

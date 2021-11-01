@@ -70,9 +70,10 @@ public class Genre {
         if (genreId == null) {
             String getSeq = "SELECT genre_seq.nextval FROM DUAL";
             try (PreparedStatement seq = ConnectionManager.getConnection().prepareStatement(getSeq)) {
-                ResultSet rs = seq.executeQuery();
-                rs.next();
-                genreId = rs.getLong("nextval");
+                try (ResultSet rs = seq.executeQuery()) {
+                    rs.next();
+                    genreId = rs.getLong("nextval");
+                }
             } 
         }
         

@@ -23,12 +23,12 @@ public class MovieGenreFactory {
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, movieId);
             stmt.setLong(2, genreId);
-            ResultSet rs = stmt.executeQuery();
-            
-            // checking if ResultSet is empty
-            if (!rs.next()) {
-                throw new SQLException("Datensatz mit genreId = " + genreId + "  "
-                        + "oder movieId = " + movieId + " nicht vorhanden");
+            try (ResultSet rs = stmt.executeQuery()) {
+                // checking if ResultSet is empty
+                if (!rs.next()) {
+                    throw new SQLException("Datensatz mit genreId = " + genreId + "  "
+                            + "oder movieId = " + movieId + " nicht vorhanden");
+                }
             }
         }
         return new MovieGenre(movieId, genreId);
@@ -45,14 +45,14 @@ public class MovieGenreFactory {
         String SQL = "SELECT GenreId, MovieId FROM MovieGenre";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Long movieId = rs.getLong("MovieId");
-                Long genreId = rs.getLong("GenreId");
-                movieGenres.add(new MovieGenre(movieId, genreId));
-            }            
-        } 
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long movieId = rs.getLong("MovieId");
+                    Long genreId = rs.getLong("GenreId");
+                    movieGenres.add(new MovieGenre(movieId, genreId));
+                }            
+            } 
+        }
         if (movieGenres.size() == 0) {
             System.out.println("Tabelle ist leer");
         }

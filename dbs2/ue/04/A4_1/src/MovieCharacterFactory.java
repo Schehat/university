@@ -26,17 +26,17 @@ public class MovieCharacterFactory {
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, movCharId);
-            ResultSet rs = stmt.executeQuery();
-            
-            // checking if ResultSet is empty
-            if (rs.next()) {
-                character = rs.getString("Character");
-                alias = rs.getString("Alias");
-                position = rs.getInt("Position");
-                movieId = rs.getLong("MovieId");
-                personId = rs.getLong("PersonId");
-            } else {
-                throw new SQLException("Datensatz mit movCharID = " + movCharId + " nicht vorhanden");
+            try (ResultSet rs = stmt.executeQuery()) {
+                // checking if ResultSet is empty
+                if (rs.next()) {
+                    character = rs.getString("Character");
+                    alias = rs.getString("Alias");
+                    position = rs.getInt("Position");
+                    movieId = rs.getLong("MovieId");
+                    personId = rs.getLong("PersonId");
+                } else {
+                    throw new SQLException("Datensatz mit movCharID = " + movCharId + " nicht vorhanden");
+                }
             }
         }
         return new MovieCharacter(movCharId, character, alias, position, movieId, personId);
@@ -53,18 +53,18 @@ public class MovieCharacterFactory {
         String SQL = "SELECT MovCharID, Character, Alias, Position, MovieId, PersonId FROM MovieCharacter";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Long movCharId = rs.getLong("MovCharID");
-                String character = rs.getString("Character");
-                String alias = rs.getString("Alias");
-                Integer position = rs.getInt("Position");
-                Long movieId = rs.getLong("MovieID");
-                Long personId = rs.getLong("PersonID");
-                movChars.add(new MovieCharacter(movCharId, character, alias, position, movieId, personId));
-            }            
-        } 
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long movCharId = rs.getLong("MovCharID");
+                    String character = rs.getString("Character");
+                    String alias = rs.getString("Alias");
+                    Integer position = rs.getInt("Position");
+                    Long movieId = rs.getLong("MovieID");
+                    Long personId = rs.getLong("PersonID");
+                    movChars.add(new MovieCharacter(movCharId, character, alias, position, movieId, personId));
+                }            
+            } 
+        }
         if (movChars.size() == 0) {
             System.out.println("Tabelle ist leer");
         }

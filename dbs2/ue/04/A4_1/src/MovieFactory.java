@@ -24,16 +24,16 @@ public class MovieFactory {
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
             stmt.setLong(1, movieId);
-            ResultSet rs = stmt.executeQuery();
-            
-            // checking if ResultSet is empty
-            if (rs.next()) {
-                title = rs.getString("Title");
-                year = rs.getInt("Year");
-                // convert String to char and then to Character object
-                type = Character.valueOf(rs.getString("Type").charAt(0));
-            } else {
-                throw new SQLException("Datensatz mit movieID = " + movieId + " nicht vorhanden");
+            try (ResultSet rs = stmt.executeQuery()) {
+                // checking if ResultSet is empty
+                if (rs.next()) {
+                    title = rs.getString("Title");
+                    year = rs.getInt("Year");
+                    // convert String to char and then to Character object
+                    type = Character.valueOf(rs.getString("Type").charAt(0));
+                } else {
+                    throw new SQLException("Datensatz mit movieID = " + movieId + " nicht vorhanden");
+                }
             }
         }
         return new Movie(movieId, title, year, type);
@@ -50,16 +50,16 @@ public class MovieFactory {
         String SQL = "SELECT MovieId, Title, Year, Type FROM Movie";
         
         try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Long movieId = rs.getLong("MovieID");
-                String title = rs.getString("Title");
-                Integer year = rs.getInt("Year");
-                Character type = Character.valueOf(rs.getString("Type").charAt(0));
-                movies.add(new Movie(movieId, title, year, type));
-            }            
-        } 
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long movieId = rs.getLong("MovieID");
+                    String title = rs.getString("Title");
+                    Integer year = rs.getInt("Year");
+                    Character type = Character.valueOf(rs.getString("Type").charAt(0));
+                    movies.add(new Movie(movieId, title, year, type));
+                }            
+            }
+        }
         if (movies.size() == 0) {
             System.out.println("Tabelle ist leer");
         }

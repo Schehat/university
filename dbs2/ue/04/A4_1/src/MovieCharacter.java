@@ -144,9 +144,10 @@ public class MovieCharacter {
         if (movCharId == null) {
             String getSeq = "SELECT mov_char_seq.nextval FROM DUAL";
             try (PreparedStatement seq = ConnectionManager.getConnection().prepareStatement(getSeq)) {
-                ResultSet rs = seq.executeQuery();
-                rs.next();
-                movCharId = rs.getLong("nextval");
+               try (ResultSet rs = seq.executeQuery()) {
+                    rs.next();
+                    movCharId = rs.getLong("nextval");
+               }
             } 
         }
         
