@@ -36,7 +36,7 @@
 		</list>
 	</section>
 	<section name="org.eclipse.ui.internal.ide.dialogs.ProjectContentsLocationArea">
-		<item key="OUTSIDE_LOCATION" value="C:\Users\Schehat\university\dbs1\10_ue"/>
+		<item key="OUTSIDE_LOCATION" value="C:\Users\Schehat\university\dbs2\ue\05"/>
 	</section>
 	<section name="NewWizardAction">
 		<item key="NewWizardSelectionPage.STORE_SELECTED_ID" value="org.eclipse.fx.ide.jdt.ui.javafx"/>

@@ -1,7 +1,10 @@
 package de.hsh.dbs2.imdb.logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import records.Genre;
 
 public class GenreManager {
 
@@ -12,9 +15,14 @@ public class GenreManager {
 	 * @throws Exception
 	 */
 	public List<String> getGenres() throws Exception {
-		// TODO
-
-		return new ArrayList<>();
+	    System.out.println("getGenres");
+	    ArrayList<Genre> genres = records.GenreFactory.findByGenreAll();
+	    ArrayList<String> genresS = new ArrayList<String>();
+	    for (Genre gs : genres) {
+	        genresS.add(gs.getGenre());
+	    }
+	    Collections.sort(genresS);
+		return genresS;
 	}
 
 }

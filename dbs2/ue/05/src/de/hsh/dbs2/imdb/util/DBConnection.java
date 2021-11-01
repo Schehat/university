@@ -10,8 +10,8 @@ public class DBConnection {
 	static {
 		conn = null;
 		try {
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:@dboracleserv.inform.hs-hannover.de:1521:db01", "user", "pwd");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:db01", 
+                    "KT0-NGF-U1", "testit2_");
 			conn.setAutoCommit(false);
 			System.out.println("Connect durchgefuehrt ....");
 		} catch (Exception e) {

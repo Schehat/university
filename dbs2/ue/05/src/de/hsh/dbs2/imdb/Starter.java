@@ -25,7 +25,7 @@ public class Starter {
 	public void run() {
 		SearchMovieDialogCallback callback = new SearchMovieDialogCallback();
 		SearchMovieDialog sd = new SearchMovieDialog(callback);
-		sd.setVisible(true);
+		sd.setVisible(true);	
 	}
 
 }

@@ -11,7 +11,7 @@ public class Main {
         boolean ok = false;
         try {
             Person person = new Person();
-            person.setName("Karl Tester");
+            person.setName("Schehat");
             person.setSex('M');
             person.insert();
             
