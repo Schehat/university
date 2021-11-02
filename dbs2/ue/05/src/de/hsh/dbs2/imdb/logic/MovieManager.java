@@ -71,11 +71,18 @@ public class MovieManager {
 	        m.insert();
 	        
 	        for (String genre : movieDTO.getGenres()) {
-	            Genre g = new Genre();
-	            g.setGenre(genre);
-	            g.insert();  // genre id automatically generated if null
+	            // get genreId for this specific genre. In table genre is unique constraint for genre
+	            Long genreId = records.GenreFactory.getGenreIdByGenre(genre);
 	            
-	            MovieGenre mg = new MovieGenre(m.getMovieId(), g.getGenreId());
+	            // genreId null then genre does not exist and need to insert in genre table
+	            if (genreId == null) {
+	                Genre g = new Genre();
+	                g.setGenre(genre);
+	                g.insert();  // genre id automatically generated if null
+	                genreId = g.getGenreId();
+	            }
+	            
+	            MovieGenre mg = new MovieGenre(m.getMovieId(), genreId);
 	            System.out.println(mg.getMovieId());
 	            mg.insert();
 	        }
@@ -85,13 +92,16 @@ public class MovieManager {
 	            mc.setCharacter(cDTO.getCharacter());
 	            mc.setAlias(cDTO.getAlias());
 	            mc.setMovieId(m.getMovieId());
+	            mc.setPersonId(records.PersonFactory.getPersonIdByName(cDTO.getPlayer()));
 	            
-	            Person p = new Person();
-	            p.setName(cDTO.getPlayer());
-	            
-	            p.insert();  // id generated too
-	          
-	            mc.setPersonId(p.getPersonId());
+	            // adding new person but not needed due to program setup. Want to get Person
+	            // from existing person table and not add new Person
+//	            Person p = new Person();
+//	            p.setName(cDTO.getPlayer());
+//	            
+//	            p.insert();  // id generated too
+//	          
+//	            mc.setPersonId(p.getPersonId());
 	            
 	            // mc.position == null, will be inserted as null in database
 	            mc.insert();
@@ -125,19 +135,25 @@ public class MovieManager {
     	            
     	            //order important due to foreign key constraint
     	            mg.delete();
-    	            g.delete();
+    	            
+    	            // skip for now
+    	            // if mg was last entry for this genre then delete corresponding genre tuple in genre table
+//    	            if (!records.MovieGenreFactory.checkIfGenreIdExists(mg.getGenreId())) {
+//    	                g.delete();
+//    	            }
     	        }
     	    }
     	    
     	    ArrayList<MovieCharacter> mcs = records.MovieCharacterFactory.findByMovieCharacterAll();
     	    for (MovieCharacter mc : mcs) {
     	        if (mc.getMovieId().equals(movieId)) {
-    	            Person p = new Person();
-    	            p.setPersonId(mc.getPersonId());
+    	            // skip not deleting person 
+//    	            Person p = new Person();
+//    	            p.setPersonId(mc.getPersonId());
     	            
     	            // order important due to foreign key constraint 
     	            mc.delete();
-    	            p.delete();
+    	            // p.delete();
     	        }
     	    }
     	    

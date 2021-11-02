@@ -31,7 +31,11 @@ public class MovieFactory {
                     title = rs.getString("Title");
                     year = rs.getInt("Year");
                     // convert String to char and then to Character object
-                    type = Character.valueOf(rs.getString("Type").charAt(0));
+                    if (rs.getString("Type") != null) {
+                        type = Character.valueOf(rs.getString("Type").charAt(0));
+                    } else {
+                        type = null;
+                    }
                 } else {
                     throw new SQLException("Datensatz mit movieID = " + movieId + " nicht vorhanden");
                 }
@@ -56,7 +60,12 @@ public class MovieFactory {
                     Long movieId = rs.getLong("MovieID");
                     String title = rs.getString("Title");
                     Integer year = rs.getInt("Year");
-                    Character type = Character.valueOf(rs.getString("Type").charAt(0));
+                    Character type;
+                    if (rs.getString("Type") != null) {
+                        type = Character.valueOf(rs.getString("Type").charAt(0));
+                    } else {
+                        type = null;
+                    }
                     movies.add(new Movie(movieId, title, year, type));
                 }            
             }

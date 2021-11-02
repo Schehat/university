@@ -29,7 +29,11 @@ public class PersonFactory {
                 if (rs.next()) {
                     name = rs.getString("Name");
                     // convert String to char and then to Character object
-                    sex = Character.valueOf(rs.getString("Sex").charAt(0));
+                    if (rs.getString("Sex") != null) {
+                        sex = Character.valueOf(rs.getString("Sex").charAt(0));
+                    } else {
+                        sex = null;
+                    }
                 } else {
                     throw new SQLException("Datensatz mit personId = " + personId + " nicht vorhanden");
                 }
@@ -53,7 +57,12 @@ public class PersonFactory {
                 while (rs.next()) {
                     Long personId = rs.getLong("PersonId");
                     String name = rs.getString("Name");
-                    Character sex = Character.valueOf(rs.getString("Sex").charAt(0));
+                    Character sex;
+                    if (rs.getString("Sex") != null) {
+                        sex = Character.valueOf(rs.getString("Sex").charAt(0));
+                    } else {
+                        sex = null;
+                    }
                     persons.add(new Person(personId, name, sex));
                 }            
             }
@@ -62,5 +71,20 @@ public class PersonFactory {
             System.out.println("Tabelle ist leer");
         }
         return persons;
+    }
+    
+    public static Long getPersonIdByName(String name) throws SQLException {
+        String SQL = "SELECT PersonId FROM Person WHERE Name = ?";
+        
+        try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
+            stmt.setString(1, name);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("PersonId");
+                } else {
+                    return null;
+                }
+            }
+        }
     }
 }

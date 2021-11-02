@@ -59,4 +59,19 @@ public class MovieGenreFactory {
         }
         return movieGenres;
     }
+    
+    public static boolean checkIfGenreIdExists(Long genreId) throws SQLException {
+        String SQL = "SELECT GenreId FROM MovieGenre WHERE GenreId = ?";
+        
+        try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
+            stmt.setLong(1, genreId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
 }

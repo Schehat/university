@@ -12,7 +12,8 @@ DROP SEQUENCE mov_char_seq;
 CREATE TABLE Genre (
     GenreID INTEGER,
     Genre VARCHAR(100),
-    CONSTRAINT pk_genre PRIMARY KEY (GenreID)
+    CONSTRAINT pk_genre PRIMARY KEY (GenreID),
+    CONSTRAINT g_name UNIQUE(Genre)
 );
 
 CREATE TABLE Movie (
@@ -40,7 +41,7 @@ CREATE TABLE Person (
 );
 
 CREATE TABLE MovieCharacter (
-   MovCharID INTEGER,
+    MovCharID INTEGER,
     Character VARCHAR(100),
     Alias VARCHAR(100),
     Position INTEGER,
@@ -55,6 +56,16 @@ CREATE SEQUENCE genre_seq;
 CREATE SEQUENCE movie_seq;
 CREATE SEQUENCE person_seq;
 CREATE SEQUENCE mov_char_seq;
+
+INSERT INTO PERSON VALUES (person_seq.nextval, 'Schehat', 'M');
+INSERT INTO PERSON VALUES (person_seq.nextval, 'Deti', 'M');
+INSERT INTO PERSON VALUES (person_seq.nextval, 'Furkan', 'M');
+INSERT INTO PERSON VALUES (person_seq.nextval, 'Aland', 'M');
+
+INSERT INTO GENRE VALUES (genre_seq.nextval, 'Action');
+INSERT INTO GENRE VALUES (genre_seq.nextval, 'Romantik');
+INSERT INTO GENRE VALUES (genre_seq.nextval, 'Comedy');
+INSERT INTO GENRE VALUES (genre_seq.nextval, 'Drama');
 
 commit;
 

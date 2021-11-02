@@ -60,4 +60,25 @@ public class GenreFactory {
         }
         return genres;
     }
+    
+    /**
+     * find genreId by genre which is unique in this table
+     * @param genre
+     * @return
+     * @throws SQLException
+     */
+    public static Long getGenreIdByGenre(String genre) throws SQLException {
+        String SQL = "SELECT GenreId FROM Genre WHERE Genre = ?";
+        
+        try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
+            stmt.setString(1, genre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("GenreId");
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
 }
