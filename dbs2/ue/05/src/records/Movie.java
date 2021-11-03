@@ -138,6 +138,10 @@ public class Movie {
             }
             
             int n = stmt.executeUpdate();
+            if (n != 1) {
+                throw new SQLException("Insert failure with movieId = " + movieId);
+                }
+            
             System.out.println("Inserts made: " + n);
         }
     }
@@ -168,7 +172,11 @@ public class Movie {
             
             stmt.setLong(4, movieId);
             
-            int n = stmt.executeUpdate();           
+            int n = stmt.executeUpdate();        
+            if (n != 1) {
+                throw new SQLException("Update failure with movieId = " + movieId);
+                }
+            
             System.out.println("Updates made: " + n);
         }
     }
@@ -184,6 +192,10 @@ public class Movie {
             stmt.setLong(1, movieId);
             
             int n = stmt.executeUpdate();
+            if (n != 1) {
+                throw new SQLException("Delete failure with movieId = " + movieId);
+                }
+            
             System.out.println("Deletions made: " + n);
         } 
     }

@@ -90,6 +90,10 @@ public class Genre {
             }
             
             int n = stmt.executeUpdate();
+            if (n != 1) {
+                throw new SQLException("Inserts failure with genreId = " + genreId);
+                }
+            
             System.out.println("Inserts made: " + n);
         }
     }
@@ -111,6 +115,10 @@ public class Genre {
             stmt.setLong(2, genreId);
             
             int n = stmt.executeUpdate();           
+            if (n != 1) {
+                throw new SQLException("Update failure with genreId = " + genreId);
+                }
+            
             System.out.println("Updates made: " + n);
         }
     }
@@ -126,6 +134,10 @@ public class Genre {
             stmt.setLong(1, genreId);
             
             int n = stmt.executeUpdate();
+            if (n != 1) {
+                throw new SQLException("Delete failure with genreId = " + genreId);
+                }
+            
             System.out.println("Deletions made: " + n);
         } 
     }

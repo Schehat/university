@@ -184,6 +184,10 @@ public class MovieCharacter {
             }
             
             int n = stmt.executeUpdate();
+            if (n != 1) {
+                throw new SQLException("Insert failure with movCharId = " + movCharId);
+                }
+            
             System.out.println("Inserts made: " + n);
         }
     }
@@ -224,7 +228,11 @@ public class MovieCharacter {
             
             stmt.setLong(6, movCharId);
             
-            int n = stmt.executeUpdate();           
+            int n = stmt.executeUpdate();       
+            if (n != 1) {
+                throw new SQLException("Update failure with movCharId = " + movCharId);
+                }
+            
             System.out.println("Updates made: " + n);
         }
     }
@@ -240,6 +248,10 @@ public class MovieCharacter {
             stmt.setLong(1, movCharId);
             
             int n = stmt.executeUpdate();
+            if (n != 1) {
+                throw new SQLException("Delete failure with movCharId = " + movCharId);
+                }
+            
             System.out.println("Deletions made: " + n);
         } 
     }
