@@ -18,7 +18,7 @@ CREATE TABLE Genre (
 
 CREATE TABLE Movie (
     MovieID INTEGER,
-    Title VARCHAR(100),
+    Title VARCHAR(100) NOT NULL,
     Year INTEGER,
     Type CHAR(1),
     CONSTRAINT pk_movie PRIMARY KEY (MovieID)

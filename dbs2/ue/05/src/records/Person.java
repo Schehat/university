@@ -114,7 +114,9 @@ public class Person {
             }
             
             int n = stmt.executeUpdate();
-            System.out.println("Inserts made: " + n);
+            if (n != 1) {
+                throw new SQLException("Insert failure with personId = " + personId);
+            }
         }
     }
     
@@ -139,8 +141,10 @@ public class Person {
             
             stmt.setLong(3, personId);
             
-            int n = stmt.executeUpdate();           
-            System.out.println("Updates made: " + n);
+            int n = stmt.executeUpdate();    
+            if (n != 1) {
+                throw new SQLException("Update failure with personId = " + personId);
+            }
         }
     }
     
@@ -155,7 +159,9 @@ public class Person {
             stmt.setLong(1, personId);
             
             int n = stmt.executeUpdate();
-            System.out.println("Deletions made: " + n);
+            if (n != 1) {
+                throw new SQLException("Delete failure with personId = " + personId);
+            }
         } 
     }
 }

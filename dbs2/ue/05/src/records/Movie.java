@@ -141,8 +141,6 @@ public class Movie {
             if (n != 1) {
                 throw new SQLException("Insert failure with movieId = " + movieId);
                 }
-            
-            System.out.println("Inserts made: " + n);
         }
     }
     
@@ -176,8 +174,6 @@ public class Movie {
             if (n != 1) {
                 throw new SQLException("Update failure with movieId = " + movieId);
                 }
-            
-            System.out.println("Updates made: " + n);
         }
     }
     
@@ -195,8 +191,6 @@ public class Movie {
             if (n != 1) {
                 throw new SQLException("Delete failure with movieId = " + movieId);
                 }
-            
-            System.out.println("Deletions made: " + n);
         } 
     }
 }
