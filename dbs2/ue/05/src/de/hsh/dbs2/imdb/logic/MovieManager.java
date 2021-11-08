@@ -64,7 +64,6 @@ public class MovieManager {
 	        
 	        // if movieDTO exists in database delete all dependencies
 	        if (movieDTO.getId() != null) {
-	            m.setMovieId(movieDTO.getId());
 	            deleteMovie(movieDTO.getId());
 	        }
 	        
@@ -83,15 +82,17 @@ public class MovieManager {
 	            }
 	            
 	            MovieGenre mg = new MovieGenre(m.getMovieId(), genreId);
-	            System.out.println(mg.getMovieId());
 	            mg.insert();
 	        }
 	        
+	        int position = 1;
 	        for (CharacterDTO cDTO : movieDTO.getCharacters()) {
 	            MovieCharacter mc = new MovieCharacter();
 	            mc.setCharacter(cDTO.getCharacter());
 	            mc.setAlias(cDTO.getAlias());
 	            mc.setMovieId(m.getMovieId());
+	            mc.setPosition(position);
+	            ++position;
 	            mc.setPersonId(records.PersonFactory.getPersonIdByName(cDTO.getPlayer()));
 	            
 	            // adding new person but not needed due to program setup. Want to get Person
@@ -130,8 +131,8 @@ public class MovieManager {
     	    ArrayList<MovieGenre> mgs = records.MovieGenreFactory.findByMovieGenreAll();
     	    for (MovieGenre mg : mgs) {
     	        if (mg.getMovieId().equals(movieId)) {
-    	            Genre g = new Genre();
-    	            g.setGenreId(mg.getGenreId());
+    	            // Genre g = new Genre();
+    	            // g.setGenreId(mg.getGenreId());
     	            
     	            //order important due to foreign key constraint
     	            mg.delete();
@@ -197,7 +198,7 @@ public class MovieManager {
     		    }
     		}
     		
-    		ArrayList<MovieCharacter> mcs = records.MovieCharacterFactory.findByMovieCharacterAll();
+    		ArrayList<MovieCharacter> mcs = records.MovieCharacterFactory.findByMovieCharacterAllOrdered();
     		for (MovieCharacter mc : mcs) {
     		    if (mc.getMovieId().equals(movie.getMovieId())) {
     		        CharacterDTO cDTO = new CharacterDTO();

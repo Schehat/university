@@ -71,4 +71,34 @@ public class MovieCharacterFactory {
         }
         return movChars;
     }
+    
+    /**
+     * 
+     * @return ArrayList containing MovieCharacter objects sorted by position. 
+     * If table is empty then returning empty ArrayList
+     * @throws SQLException
+     */
+    public static ArrayList<MovieCharacter> findByMovieCharacterAllOrdered() throws SQLException {
+        ArrayList<MovieCharacter> movChars = new ArrayList<MovieCharacter>(); 
+        
+        String SQL = "SELECT MovCharID, Character, Alias, Position, MovieId, PersonId FROM MovieCharacter ORDER BY Position";
+        
+        try (PreparedStatement stmt = ConnectionManager.getConnection().prepareStatement(SQL)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long movCharId = rs.getLong("MovCharID");
+                    String character = rs.getString("Character");
+                    String alias = rs.getString("Alias");
+                    Integer position = rs.getInt("Position");
+                    Long movieId = rs.getLong("MovieID");
+                    Long personId = rs.getLong("PersonID");
+                    movChars.add(new MovieCharacter(movCharId, character, alias, position, movieId, personId));
+                }            
+            } 
+        }
+        if (movChars.size() == 0) {
+            System.out.println("Tabelle ist leer");
+        }
+        return movChars;
+    }
 }
