@@ -63,7 +63,7 @@
 	<section name="JarPackageWizard">
 		<item key="JarPackageWizardPage.EXPORT_CLASS_FILES" value="true"/>
 		<item key="JarPackageWizardPage.EXPORT_OUTPUT_FOLDER" value="false"/>
-		<item key="JarPackageWizardPage.EXPORT_JAVA_FILES" value="false"/>
+		<item key="JarPackageWizardPage.EXPORT_JAVA_FILES" value="true"/>
 		<item key="JarPackageWizardPage.REFACTORINGS" value="false"/>
 		<item key="JarPackageWizardPage.COMPRESS" value="true"/>
 		<item key="JarPackageWizardPage.INCLUDE_DIRECTORY_ENTRIES" value="true"/>
@@ -78,7 +78,7 @@
 		<item key="JarManifestWizardPage.SAVE_MANIFEST" value="false"/>
 		<item key="JarManifestWizardPage.REUSE_MANIFEST" value="false"/>
 		<item key="JarManifestWizardPage.MANIFEST_LOCATION" value=""/>
-		<item key="JarManifestWizardPage.SEAL_JAR" value="false"/>
+		<item key="JarManifestWizardPage.SEAL_JAR" value="true"/>
 		<list key="JarPackageWizardPage.DESTINATION_NAMES_ID">
 			<item value="C:\Users\Schehat\Desktop\CONSTRUCT.jar"/>
 			<item value="C:\Users\Schehat\Desktop\test.jar"/>
