@@ -61,12 +61,14 @@
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1634302420423_9" label="prog_proj3" name="prog_proj3">
 <item elementID="=prog_proj3" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
-<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1634302631018_11" label="dbs2" name="dbs2">
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1637935145583_11" label="dbs2" name="dbs2">
 <item elementID="=A3" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=A4_1" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=uebung5-vorlage" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=08" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1616335840979_2" label="Window Working Set" name="Aggregate for window 1616335840979"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1616407828666_3" label="Window Working Set" name="Aggregate for window 1616407828666"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1631955037540_7" label="Window Working Set" name="Aggregate for window 1631954506355"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1637935228259_13" label="Window Working Set" name="Aggregate for window 1637935228259"/>
 </workingSetManager>
