@@ -1,6 +1,7 @@
 package entities;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +28,7 @@ public class Person {
     private String sex;
     
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
-    private ArrayList<MovieCharacter> movChars = new ArrayList<MovieCharacter>();
+    private Set<MovieCharacter> movChars = new HashSet<MovieCharacter>();
     
     /**
      * constructor with parameters
@@ -35,7 +36,7 @@ public class Person {
      * @param name
      * @param sex
      */
-    public Person (Long personId, String name, String sex, ArrayList<MovieCharacter> movChars) {
+    public Person (Long personId, String name, String sex, Set<MovieCharacter> movChars) {
         setPersonId(personId);
         setName(name);
         setSex(sex);
@@ -77,8 +78,8 @@ public class Person {
      * 
      * @param movChars
      */
-    public void setMovChars(ArrayList<MovieCharacter> movChars) {
-        this.movChars = (ArrayList<MovieCharacter>) movChars.clone();
+    public void setMovChars(Set<MovieCharacter> movChars) {
+        this.movChars = new HashSet<MovieCharacter>(movChars);
     }
     
     /**
@@ -109,7 +110,7 @@ public class Person {
      * 
      * @return movChars
      */
-    public ArrayList<MovieCharacter> getMovChars() {
+    public Set<MovieCharacter> getMovChars() {
         return movChars;
     }
 }

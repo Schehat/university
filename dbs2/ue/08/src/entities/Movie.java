@@ -1,12 +1,14 @@
 package entities;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -31,10 +33,11 @@ public class Movie {
     private String type;
     
     @ManyToMany(mappedBy = "movies", cascade = CascadeType.PERSIST)
-    private ArrayList<Genre> genres = new ArrayList<Genre>();
+    @JoinTable(name = "movieGenre")
+    private Set<Genre> genres = new HashSet<Genre>();
     
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
-    private ArrayList<MovieCharacter> movChars = new ArrayList<MovieCharacter>();
+    private Set<MovieCharacter> movChars = new HashSet<MovieCharacter>();
     
     /**
      * constructor with parameters
@@ -43,8 +46,8 @@ public class Movie {
      * @param year
      * @param type
      */
-    public Movie (Long movieId, String title, Integer year, String type, ArrayList<Genre> genres, 
-            ArrayList<MovieCharacter> movChars) {
+    public Movie (Long movieId, String title, Integer year, String type, Set<Genre> genres, 
+            Set<MovieCharacter> movChars) {
         setMovieId(movieId);
         setTitle(title);
         setYear(year);
@@ -93,16 +96,16 @@ public class Movie {
     }
     
     /**
-     * 
+     * Note: flat copy
      * @param genres
      */
-    public void setGenres(ArrayList<Genre> genres) {
-        this.genres = (ArrayList<Genre>) genres.clone();
+    public void setGenres(Set<Genre> genres) {
+        this.genres = new HashSet<Genre>(genres);
     }
     
     
-    public void setMovChars(ArrayList<MovieCharacter> movChars) {
-        this.movChars = (ArrayList<MovieCharacter>) movChars.clone();
+    public void setMovChars(Set<MovieCharacter> movChars) {
+        this.movChars = new HashSet<MovieCharacter>(movChars);
     }
     
     /**
@@ -141,7 +144,7 @@ public class Movie {
      * 
      * @return genres
      */
-    public ArrayList<Genre> getGenres() {
+    public Set<Genre> getGenres() {
         return genres;
     }
     
@@ -149,7 +152,7 @@ public class Movie {
      * 
      * @return movChars
      */
-    public ArrayList<MovieCharacter> getMovChars() {
+    public Set<MovieCharacter> getMovChars() {
         return movChars;
     }
 }

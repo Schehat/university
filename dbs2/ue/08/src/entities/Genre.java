@@ -1,13 +1,9 @@
 package entities;
 
-import java.util.ArrayList;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -23,19 +19,14 @@ public class Genre {
     @Column(name = "genre", unique = true)
     private String genre;
     
-    @ManyToMany
-    @JoinTable(name = "movieGenre")
-    private ArrayList<Movie> movies = new ArrayList<Movie>();
-    
     /**
      * constructor with parameters
      * @param genreId
      * @param genre
      */
-    public Genre (Long genreId, String genre, ArrayList<Movie> movies) {
+    public Genre (Long genreId, String genre) {
         setGenreId(genreId);
         setGenre(genre);
-        setMovies(movies);
     }
     
     /*
@@ -63,14 +54,6 @@ public class Genre {
     
     /**
      * 
-     * @param movies
-     */
-    public void setMovies(ArrayList<Movie> movies) {
-        this.movies = (ArrayList<Movie>) movies.clone();
-    }
-    
-    /**
-     * 
      * @return genreId
      */
     public Long getGenreId() {
@@ -83,14 +66,6 @@ public class Genre {
      */
     public String getGenre() {
         return genre;
-    }
-    
-    /**
-     * 
-     * @return movies
-     */
-    public ArrayList<Movie> getMovies() {
-        return movies;
     }
    
 }
