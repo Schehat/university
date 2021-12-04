@@ -1,14 +1,9 @@
 package entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity @Table(name = "ue08Person")
@@ -23,20 +18,16 @@ public class Person {
     @Column(name = "sex")
     private String sex;
     
-    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
-    private Set<MovieCharacter> movChars = new HashSet<MovieCharacter>();
-    
     /**
      * constructor with parameters
      * @param personId
      * @param name
      * @param sex
      */
-    public Person (Long personId, String name, String sex, Set<MovieCharacter> movChars) {
+    public Person (Long personId, String name, String sex) {
         setPersonId(personId);
         setName(name);
         setSex(sex);
-        setMovChars(movChars);
     }
     
     /**
@@ -64,14 +55,6 @@ public class Person {
     
     /**
      * 
-     * @param movChars
-     */
-    public void setMovChars(Set<MovieCharacter> movChars) {
-        this.movChars = new HashSet<MovieCharacter>(movChars);
-    }
-    
-    /**
-     * 
      * @return personId
      */
     public Long getPersonId() {return personId;}
@@ -87,10 +70,4 @@ public class Person {
      * @return sex
      */
     public String getSex() {return sex;}
-    
-    /**
-     * 
-     * @return movChars
-     */
-    public Set<MovieCharacter> getMovChars() {return movChars;}
 }

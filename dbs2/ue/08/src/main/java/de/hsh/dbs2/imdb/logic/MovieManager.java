@@ -69,6 +69,7 @@ public class MovieManager {
 	    EntityManager em = EMFactory.getEntitymManager().createEntityManager();
         EntityTransaction tx = em.getTransaction();
 	    
+        boolean alreadyPersist = false;
         try {
             tx.begin();
             
@@ -76,6 +77,7 @@ public class MovieManager {
             
             // if movieDTO exists in database delete all dependencies
             if (movieDTO.getId() != null) {
+                alreadyPersist = true;
                 deleteMovie(movieDTO.getId());
             }
             
@@ -93,12 +95,18 @@ public class MovieManager {
                 mc.setMovCharId(movie.getMovieId());
                 mc.setPosition(position);
                 ++position;
+                mc.setMovie(movie);
                 mc.setPerson(PersonFactory.getPersonIdByName(em, cDTO.getPlayer()));
                 
                 movie.getMovChars().add(mc);
             }
             
-            em.persist(movie);
+            if (alreadyPersist) {
+                em.merge(movie);
+                em.flush();
+            } else {
+                em.persist(movie);
+            }
             tx.commit();
         } finally {
             if (tx.isActive()) {
@@ -124,6 +132,9 @@ public class MovieManager {
             tx.begin();
                        
             Movie movie = MovieFactory.findByMovieId(em, movieId);
+            for (MovieCharacter mc: movie.getMovChars()) {
+                em.remove(mc);
+            }
             em.remove(movie);
             
             tx.commit();

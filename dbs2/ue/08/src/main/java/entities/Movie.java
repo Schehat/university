@@ -28,11 +28,11 @@ public class Movie {
     @Column(name = "type")
     private String type;
     
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "ue08movieGenre")
     private Set<Genre> genres = new HashSet<Genre>();
     
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE)
     private Set<MovieCharacter> movChars = new HashSet<MovieCharacter>();
     
     /**
