@@ -14,6 +14,7 @@ public class Main {
 	private static EntityManager em;
 	
 	public static void main(String[] args) throws IOException {
+	    // testing
 		emf = Persistence.createEntityManagerFactory("movie");
 		em = emf.createEntityManager();
 		try {

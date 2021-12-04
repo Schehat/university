@@ -42,14 +42,11 @@ public class Movie {
      * @param year
      * @param type
      */
-    public Movie (Long movieId, String title, Integer year, String type, Set<Genre> genres, 
-            Set<MovieCharacter> movChars) {
+    public Movie (Long movieId, String title, Integer year, String type) {
         setMovieId(movieId);
         setTitle(title);
         setYear(year);
         setType(type);
-        setGenres(genres);
-        setMovChars(movChars);
     }
     
     /**

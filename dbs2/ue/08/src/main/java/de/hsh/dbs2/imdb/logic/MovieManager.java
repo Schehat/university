@@ -1,9 +1,21 @@
 package de.hsh.dbs2.imdb.logic;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+
+import de.hsh.dbs2.imdb.factories.GenreFactory;
+import de.hsh.dbs2.imdb.factories.MovieFactory;
+import de.hsh.dbs2.imdb.factories.PersonFactory;
 import de.hsh.dbs2.imdb.logic.dto.*;
+import de.hsh.dbs2.imdb.util.EMFactory;
+import entities.Genre;
+import entities.Movie;
+import entities.MovieCharacter;
 
 public class MovieManager {
 
@@ -17,7 +29,29 @@ public class MovieManager {
 	 */
 	public List<MovieDTO> getMovieList(String search) throws Exception {
 	    System.out.println("getMovieList");
-		return null;
+	    
+	    EntityManager em = EMFactory.getEntitymManager().createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        
+        ArrayList<MovieDTO> mDTO  = new ArrayList<MovieDTO>();
+        try {
+            tx.begin();
+            
+            ArrayList<Movie> movies = (ArrayList<Movie>) MovieFactory.findByMovieAll(em);
+            for (Movie m: movies) {
+                if (m.getTitle().contains(search) || search.equals("")) {
+                    mDTO.add(getMovie(m.getMovieId()));
+                }
+            }
+            
+            tx.commit();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            em.close();
+        }
+        return mDTO;
 	}
 
 	/**
@@ -31,6 +65,47 @@ public class MovieManager {
 	 */
 	public void insertUpdateMovie(MovieDTO movieDTO) throws Exception {
 	    System.out.println("insertUpdateMovie");
+	    
+	    EntityManager em = EMFactory.getEntitymManager().createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+	    
+        try {
+            tx.begin();
+            
+            Movie movie = new Movie(movieDTO.getId(), movieDTO.getTitle(), movieDTO.getYear(), movieDTO.getType());
+            
+            // if movieDTO exists in database delete all dependencies
+            if (movieDTO.getId() != null) {
+                deleteMovie(movieDTO.getId());
+            }
+            
+            for (String gS : movieDTO.getGenres()) {
+                // get genreId for this specific genre. In table genre is unique constraint for genre
+                Genre genre = GenreFactory.getGenreIdByGenre(em, gS);
+                movie.getGenres().add(genre);
+            }
+            
+            int position = 1;
+            for (CharacterDTO cDTO : movieDTO.getCharacters()) {
+                MovieCharacter mc = new MovieCharacter();
+                mc.setCharacter(cDTO.getCharacter());
+                mc.setAlias(cDTO.getAlias());
+                mc.setMovCharId(movie.getMovieId());
+                mc.setPosition(position);
+                ++position;
+                mc.setPerson(PersonFactory.getPersonIdByName(em, cDTO.getPlayer()));
+                
+                movie.getMovChars().add(mc);
+            }
+            
+            em.persist(movie);
+            tx.commit();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            em.close();
+        }
 	}
 
 	/**
@@ -41,6 +116,23 @@ public class MovieManager {
 	 */
 	public void deleteMovie(long movieId) throws Exception {
 	    System.out.println("deleteMovie");
+	    
+	    EntityManager em = EMFactory.getEntitymManager().createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        
+        try {
+            tx.begin();
+                       
+            Movie movie = MovieFactory.findByMovieId(em, movieId);
+            em.remove(movie);
+            
+            tx.commit();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            em.close();
+        }
 	}
 
 	/**
@@ -51,6 +143,41 @@ public class MovieManager {
 	 */
 	public MovieDTO getMovie(long movieId) throws Exception {
 	    System.out.println("getMovie");
-		return null;
+	    
+	    // nested transaction 
+	    EntityManager em = EMFactory.getEntitymManager().createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+	    
+	    MovieDTO mDTO = new MovieDTO();
+	    Movie movie = MovieFactory.findByMovieId(em, movieId);
+	    
+	    try {
+            tx.begin();
+	    
+    	    mDTO.setId(movie.getMovieId());
+            mDTO.setTitle(movie.getTitle());
+            mDTO.setType(String.valueOf(movie.getType()));
+            mDTO.setYear(movie.getYear());
+            
+            for (Genre g: movie.getGenres()) {
+                mDTO.addGenre(g.getGenre());
+            }
+            
+            for (MovieCharacter mc: movie.getMovChars()) {
+                CharacterDTO cDTO = new CharacterDTO();
+                cDTO.setCharacter(mc.getCharacter());
+                cDTO.setAlias(mc.getAlias());
+                cDTO.setPlayer(mc.getPerson().getName());
+                
+                mDTO.addCharacter(cDTO);
+            }
+            tx.commit();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            em.close();
+        }
+		return mDTO;
 	}
 }
