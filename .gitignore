@@ -3,4 +3,5 @@
 bin
 *.class
 .metadata/
+.metadata
 hibernate-release-5.6.0.Final
