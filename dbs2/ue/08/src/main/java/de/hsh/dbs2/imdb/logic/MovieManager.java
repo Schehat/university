@@ -160,11 +160,11 @@ public class MovieManager {
         EntityTransaction tx = em.getTransaction();
 	    
 	    MovieDTO mDTO = new MovieDTO();
-	    Movie movie = MovieFactory.findByMovieId(em, movieId);
-	    
+	   
 	    try {
             tx.begin();
 	    
+            Movie movie = MovieFactory.findByMovieId(em, movieId);
     	    mDTO.setId(movie.getMovieId());
             mDTO.setTitle(movie.getTitle());
             mDTO.setType(String.valueOf(movie.getType()));
