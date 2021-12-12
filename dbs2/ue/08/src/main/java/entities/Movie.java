@@ -29,7 +29,7 @@ public class Movie {
     private String type;
     
     @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "ue08movieGenre")
+    @JoinTable(name = "movieGenre")
     private Set<Genre> genres = new HashSet<Genre>();
     
     @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE)
