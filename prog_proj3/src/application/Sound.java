@@ -17,13 +17,13 @@ import javafx.scene.media.MediaPlayer;
  * sound management
  */
 public class Sound {
-    private static Media mButtonClicked = new Media(new File("src/buttonClicked.mp3").toURI().toString());
+    private static Media mButtonClicked = new Media(new File("sounds/buttonClicked.wav").toURI().toString());
     private static MediaPlayer mPButtonClicked = new MediaPlayer(mButtonClicked);
-    private static Media mPunch = new Media(new File("src/punch.mp3").toURI().toString());
+    private static Media mPunch = new Media(new File("sounds/punch.wav").toURI().toString());
     private static MediaPlayer mPPunch = new MediaPlayer(mPunch);
-    private static Media mCollect = new Media(new File("src/collect.mp3").toURI().toString());
+    private static Media mCollect = new Media(new File("sounds/collect.wav").toURI().toString());
     private static MediaPlayer mPCollect = new MediaPlayer(mCollect);
-    private static Media mSuccess = new Media(new File("src/success.mp3").toURI().toString());
+    private static Media mSuccess = new Media(new File("sounds/success.wav").toURI().toString());
     private static MediaPlayer mPSuccess = new MediaPlayer(mSuccess);
     
     /**

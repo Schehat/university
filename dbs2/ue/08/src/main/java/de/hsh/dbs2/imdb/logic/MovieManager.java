@@ -1,12 +1,10 @@
 package de.hsh.dbs2.imdb.logic;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
 
 import de.hsh.dbs2.imdb.factories.GenreFactory;
 import de.hsh.dbs2.imdb.factories.MovieFactory;

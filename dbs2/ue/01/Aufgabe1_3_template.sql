@@ -14,6 +14,7 @@ SELECT person.id, person.name
 FROM moviedb.person 
 JOIN moviedb.directs d ON person.id = d.director
 JOIN moviedb.plays plays ON person.id = plays.player
+-- damit distinct
 GROUP BY person.id, person.name;
 
 -- DBS2.A1.3.c::
