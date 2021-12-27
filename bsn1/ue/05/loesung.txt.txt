@@ -26,7 +26,7 @@ v = c = 300.000 km/s = 3*10^8 m/s
 t = s/v = 8 / 30 s = 4/15 s
 
 a7
-Datenmenge = 30TB = 3*10^13B = 24*10^13 Bits
+Datenmenge = 30TB = 3*10^13 Byte = 24*10^13 Bits
 Datenrate = 100 MBits/s = 10^8 Bit/s
 
 a)
