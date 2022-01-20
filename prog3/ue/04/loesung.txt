@@ -1,0 +1,3 @@
+a1
+a) es kann zu padding je nach dem wo der struct im RAM anfängt
+b) größter Datentyp zuerst, also char, int, short 

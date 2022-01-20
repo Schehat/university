@@ -1,0 +1,4 @@
+a) ja, die referenzierte Adresse von p liegt jedoch im Heap, aber p selbst liegt im Stack
+b) nein
+c) ja
+d) ja, wie in a) erklärt

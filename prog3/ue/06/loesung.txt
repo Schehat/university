@@ -1,0 +1,12 @@
+3)
+a)
+1. gibt Zeiger auf eine lokale Variable zurück, welche nach dem Beenden der Funktion keine Gültigkeit mehr hat
+2. versucht null zeiger zu dereferenzieren
+3. kein free. Aufrufer muss sich darum kümmern 
+
+b)
+call by value hat func gemacht. Um Wert von a zu ändern ist call by reference notwendig
+
+c) 0 2
+
+5) i im Datensegment, j & k im Stack, wobei k auf einen Bereich im Heap zeigt
