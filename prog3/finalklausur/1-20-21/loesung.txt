@@ -1,0 +1,6 @@
+a1: 1. .h, 2. .c, 3. .h, 4. .h 
+a2: 
+- a) Definitionen
+- b) Basisklasse physisch im eigenen Speicherbereich
+a3: 1. falsch, 2. richtig
+a5: 4. 

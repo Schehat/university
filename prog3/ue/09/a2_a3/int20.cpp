@@ -2,16 +2,13 @@
 #include <string>
 #include "int20.h"
 
-Int20::Int20()
-{
-    number = {"00000000000000000000"};
-}
+Int20::Int20() : number{"00000000000000000000"} {}
 
 Int20::Int20(const std::string val)
 {
     number = {"00000000000000000000"};
     int cnt = 0;
-    while (cnt <= val.length() - 1)
+    while (cnt <= (int)val.length() - 1)
     {
         number[LEN - val.length() + cnt] = val[cnt];
         cnt++;
@@ -89,7 +86,7 @@ bool Int20::operator<(const Int20 &other)
     }
     else if ((this->number).length() == other.number.length())
     {
-        for (int i = 0; i < other.number.length(); i++)
+        for (int i = 0; i < (int)other.number.length(); i++)
         {
             if (this->number[i] > other.number[i])
             {

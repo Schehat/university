@@ -1,0 +1,2 @@
+a7: a) Attribute & Methoden
+    b) Die Basisklasse physisch im eigenen Speicherbereich

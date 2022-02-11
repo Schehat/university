@@ -5,13 +5,6 @@
 
 int CartItem::lastId{0};
 
-// CartItem::CartItem(const std::string &name, int number, double price)
-// {
-//     this->name = name;
-//     this->number = number;
-//     this->price = price;
-//     itemId = ++lastId;
-// }
 CartItem::CartItem(const std::string &name, int number, double price) : itemId{++lastId}, name{name}, number{number}, price{price} {}
 // CartItem::CartItem(const CartItem &old) : itemId{++lastId}, name{old.name}, number{old.number}, price{old.price} {}
 

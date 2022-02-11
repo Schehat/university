@@ -5,8 +5,7 @@
 SELECT sum(b.budget) as summe, min(b.budget) as min, max(b.budget) as max
 FROM moviedb.movie m
 JOIN moviedb.budget b ON m.id = b.movie
-WHERE m.year = 1989 and b.currency_symbol like '%USD%'
-GROUP BY m.year;
+WHERE m.year = 1989 and b.currency_symbol like '%USD%';
 
 -- DBS2.A1.3.b::
 -- Finden Sie die ID und Namen aller Personen, die sowohl Darsteller und als auch Regisseur sind.

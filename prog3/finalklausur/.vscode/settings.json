@@ -1,0 +1,9 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "*.sql": "sql",
+        "new": "cpp",
+        "iostream": "cpp",
+        "string": "cpp"
+    }
+}

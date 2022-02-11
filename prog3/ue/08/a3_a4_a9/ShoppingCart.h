@@ -7,7 +7,6 @@
 class ShoppingCart
 {
 public:
-    ShoppingCart();
     void add(const CartItem &item);
     double getTotalCost();
     int getNumberOfItems();

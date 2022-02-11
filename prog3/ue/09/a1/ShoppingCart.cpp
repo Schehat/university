@@ -3,8 +3,6 @@
 #include <sstream>
 #include "ShoppingCart.h"
 
-ShoppingCart::ShoppingCart() { items = std::vector<CartItem *>{}; }
-
 void ShoppingCart::add(CartItem *const &item) { items.push_back(item); }
 
 double ShoppingCart::getTotalCost() const

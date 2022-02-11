@@ -1,16 +1,18 @@
 #include "Person.h"
+#include <iostream>
 #define SIZE 2
 
 using namespace std;
 
 int main(void)
 {
-    Person arr[SIZE];
-    arr[0] = Person("Schehat", 2000);
-    arr[1] = Person("Deti", 1999);
+    Person arr[SIZE]{Person("Schehat", 2000), Person("Deti", 1999)};
 
-    for (auto &i : arr)
+    for (const auto &i : arr)
     {
         i.print();
     }
+
+    Person non{};
+    non.print();
 }

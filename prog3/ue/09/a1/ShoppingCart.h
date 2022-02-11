@@ -7,8 +7,7 @@
 class ShoppingCart
 {
 public:
-    ShoppingCart();
-    void add(CartItem *const &item); // kein const, da auf Adresse zugreifen notwendig, aber geht nicht
+    void add(CartItem *const &item); // kein const CartItem
     double getTotalCost() const;
     int getNumberOfItems() const;
     CartItem &getItem(int index); // const geht nicht
