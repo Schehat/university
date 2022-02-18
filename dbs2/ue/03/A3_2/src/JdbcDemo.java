@@ -7,15 +7,15 @@ public class JdbcDemo {
     static int i = 0;
 
     public static void main(String[] args) throws SQLException {
-        // insertEmployee("Meyer", "IT");
-        // insertEmployee("Schulze", "IT");
+        insertEmployee("Meyer", "IT");
+        insertEmployee("Schulze", "IT");
         // deleteEmployee(2);
         // setDeparment(1, "Trash");
         
         // maximale Anzahl offener Cursor überschritten, nämlich 299
-        for (int i = 0; i < 300; i++) {
-            showEmployees("IT");
-        }
+//        for (int i = 0; i < 300; i++) {
+//            showEmployees("IT");
+//        }
     }
 
     public static void insertEmployee(String name, String dep) throws SQLException {
@@ -24,9 +24,10 @@ public class JdbcDemo {
         
         String getSeq = "SELECT employee_seq.nextval FROM DUAL";
         try (PreparedStatement seq = conn.prepareStatement(getSeq)) {
-            ResultSet rs = seq.executeQuery();
-            rs.next();
-            id = rs.getInt("nextval");
+            try (ResultSet rs = seq.executeQuery()) {
+            	rs.next();
+            	id = rs.getInt("nextval");
+            }
         }
         
         String SQL = "INSERT INTO EMPLOYEE(employee_id, name, dept) VALUES(?, ?, ?)";
@@ -42,7 +43,7 @@ public class JdbcDemo {
     public static void showEmployees(String dep) throws SQLException {
         System.out.println(i);
         i++;
-        // Achtung: in dieser Methode fehlt die Ressourcen-Freigabe
+        // Achtung: in dieser Methode fehlt(e) die Ressourcen-Freigabe
         // Siehe Aufgabe 1.2
         Connection conn = ConnectionManager.getConnection();
         String SQL =
@@ -52,11 +53,12 @@ public class JdbcDemo {
         try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
             stmt.setString(1, dep);
     
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                long emp_id = rs.getLong("employee_id");
+            try (ResultSet rs = stmt.executeQuery()) {
+	            while (rs.next()) {
+	                long emp_id = rs.getLong("employee_id");
                     String name = rs.getString("name");
                     System.out.println("ID=" + emp_id + ", Name=" + name);
+	            }
             }
         }
     }
@@ -86,5 +88,4 @@ public class JdbcDemo {
             e.printStackTrace();
         }
     }
-    
 }

@@ -35,3 +35,5 @@ SELECT spoofed as spoofed_id, m2.title as spoofed_title, spoofer as spoofer_id, 
 FROM SQ
 JOIN moviedb.movie m1 ON spoofer = m1.id
 JOIN moviedb.movie m2 ON spoofed = m2.id;
+
+SELECT rownum FROM DUAUL;
