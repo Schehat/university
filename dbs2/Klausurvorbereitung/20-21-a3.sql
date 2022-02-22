@@ -20,6 +20,3 @@ INSERT INTO fahrrad VALUES(1, 1);
 INSERT INTO fahrrad VALUES(2, NULL);
 
 commit;
-
-SELECT * FROM kunde;
-SELECT * FROM fahrrad;

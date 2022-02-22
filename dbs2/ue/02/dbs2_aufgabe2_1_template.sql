@@ -23,6 +23,22 @@ OR z.ar <= ALL(
     FROM SQ
 );
 
+-- oder 
+/*
+WITH SQ AS (
+    SELECT d.director, AVG(r.rating) as ar, MAX(r.rating) OVER (PARTITION BY d.director) as r_max, MIN(r.rating) OVER (PARTITION BY d.director) as r_min
+    FROM moviedb.directs d 
+    JOIN moviedb.rating r ON d.movie = r.movie
+    JOIN moviedb.movie m ON d.movie = m.id
+    WHERE m.type = 'C'
+    GROUP BY d.director
+) 
+SELECT p.name, z.ar
+FROM SQ z 
+JOIN moviedb.person p ON z.director = p.id
+WHERE r_max = 1 OR r_min = 1;
+*/
+
 -- DBS2.A2.1.b::
 -- Wiederholen Sie a) und verwenden Sie dabei zusätzlich Analytische Funktionen. Formulieren sie dieses
 -- Mal nur eine Anfrage, die sowohl die besten als auch schlechtesten Regisseure auflistet.

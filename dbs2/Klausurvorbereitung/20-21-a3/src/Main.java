@@ -24,18 +24,18 @@ public class Main {
 				stmt.setInt(1, fahrrad_id);
 				try (ResultSet rs = stmt.executeQuery()) {
 					rs.next();
-						rs.getInt("kunde_id");
-						if (rs.wasNull()) {
-							query = "UPDATE Fahrrad SET kunde_id = ? WHERE fahrrad_id = ?";
-							try (PreparedStatement ustmt = conn.prepareStatement(query)) {
-								ustmt.setInt(1, kunde_id);
-								ustmt.setInt(2, fahrrad_id);
-								int n = ustmt.executeUpdate();
-								if (n != 1 ) throw new SQLException();
-							}
-						} else {
-							throw new SQLException();
+					rs.getInt("kunde_id");
+					if (rs.wasNull()) {
+						query = "UPDATE Fahrrad SET kunde_id = ? WHERE fahrrad_id = ?";
+						try (PreparedStatement ustmt = conn.prepareStatement(query)) {
+							ustmt.setInt(1, kunde_id);
+							ustmt.setInt(2, fahrrad_id);
+							int n = ustmt.executeUpdate();
+							if (n != 1 ) throw new SQLException();
 						}
+					} else {
+						throw new SQLException();
+					}
 				}
 			}
 			conn.commit();
