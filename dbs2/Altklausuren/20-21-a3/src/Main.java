@@ -31,10 +31,10 @@ public class Main {
 							ustmt.setInt(1, kunde_id);
 							ustmt.setInt(2, fahrrad_id);
 							int n = ustmt.executeUpdate();
-							if (n != 1 ) throw new SQLException();
+							if (n != 1 ) throw new SQLException("Ein Fehler ist aufgetreten");
 						}
 					} else {
-						throw new SQLException();
+						throw new SQLException("Fahrrad bereits verliehen");
 					}
 				}
 			}
@@ -43,7 +43,6 @@ public class Main {
 		} finally {
 			if (!ok) {
 				conn.rollback();
-				throw new SQLException("Ein Fehler ist aufgetreten");
 			}
 		}
 	}
