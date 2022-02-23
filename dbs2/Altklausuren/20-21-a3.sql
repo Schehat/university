@@ -1,6 +1,6 @@
 -- 20/21 a3
-DROP TABLE kunde;
 DROP TABLE fahrrad;
+DROP TABLE kunde;
 
 CREATE TABLE kunde(
     kunde_id NUMBER,
@@ -20,3 +20,6 @@ INSERT INTO fahrrad VALUES(1, 1);
 INSERT INTO fahrrad VALUES(2, NULL);
 
 commit;
+
+SELECT * FROM fahrrad;
+SELECT * FROM kunde;
