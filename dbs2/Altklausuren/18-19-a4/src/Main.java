@@ -24,15 +24,17 @@ public class Main {
 				stmt.setInt(1, rad_id);
 				try (ResultSet rs = stmt.executeQuery()) {
 					if(rs.next()) throw new SQLException("Fahrrad bereits vergeben");
-					query = "INSERT INTO Ausleihungen VALUES (?, ?)";
-					try (PreparedStatement i_stmt = conn.prepareStatement(query)) {
-						i_stmt.setInt(1, kunde_id);
-						i_stmt.setInt(2, rad_id);
-						int n = i_stmt.executeUpdate();
-						if (n != 1 ) throw new SQLException("Fehler beim Einfügen");
-					}
 				}
 			}
+			
+			query = "INSERT INTO Ausleihungen VALUES (?, ?)";
+			try (PreparedStatement i_stmt = conn.prepareStatement(query)) {
+				i_stmt.setInt(1, kunde_id);
+				i_stmt.setInt(2, rad_id);
+				int n = i_stmt.executeUpdate();
+				if (n != 1 ) throw new SQLException("Fehler beim Einfügen");
+			}
+			
 			conn.commit();
 			ok = true;
 		} finally {

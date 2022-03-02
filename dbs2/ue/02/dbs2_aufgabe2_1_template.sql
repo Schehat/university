@@ -14,11 +14,11 @@ WITH SQ AS (
 SELECT p.name, z.ar
 FROM SQ z 
 JOIN moviedb.person p ON z.director = p.id
-WHERE z.ar >= ALL(
+WHERE z.ar = (
     SELECT MAX(ar)
     FROM SQ
 ) 
-OR z.ar <= ALL(
+OR z.ar = (
     SELECT MIN(ar)
     FROM SQ
 );

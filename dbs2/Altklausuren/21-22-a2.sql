@@ -25,3 +25,11 @@ WHERE Punkte > 40;
 SELECT COUNT(*), liga_name
 FROM teams
 GROUP BY liga_name;
+
+--c
+SELECT * 
+FROM teams;
+
+--d
+SELECT team_name, liga_name, punkte, AVG(punkte) OVER (PARTITION BY liga_name)
+FROM teams;
