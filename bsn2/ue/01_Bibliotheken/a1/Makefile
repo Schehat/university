@@ -1,11 +1,9 @@
-<<<<<<< HEAD
 # Bedeutung der Compiler−Optionen
 # −c : kompiliert Quellen ohne Binder
 # −Wall : a l l e Warnungen anzeigen
 # −ansi : ANSI C Standard pruefen
 # −fPIC: positionsunabhaengiger Code, noetig zum Erstellen von shared libraries 
 # −g : Standard Debug−Informationen hinzufuegen
-# .a: archive 
 
 GCC_ARGS = -g -std=c99 -Wall -pedantic-errors -fPIC
 
@@ -15,13 +13,7 @@ GCC_ARGS = -g -std=c99 -Wall -pedantic-errors -fPIC
 # s: object−file index in das Archiv schreiben. Damit die Bibliothek gegliedert ist und einzelne .o-Dateien angesprochen werden können 
 AROPTS = rcs
 
-default: testprog_s libaddnumber.a libaddnumber.so
-
-testprog_s: testprog.o libaddnumber.a
-	gcc $(GCC_ARGS) -static -L testprog.c -o testprog_s -laddnumber
-
-# testprog_d: testprog.o libaddnumber.so
-# 	gcc $(GCC_ARGS) -o $@ -L. -laddnumber 
+default: testprog_s testprog_d
 
 file1.o: file1.c file1.h
 	gcc $(GCC_ARGS) -c $<
@@ -29,30 +21,24 @@ file1.o: file1.c file1.h
 file2.o: file2.c file2.h
 	gcc $(GCC_ARGS) -c $<
 
-testprog.o: testprog.c file1.h file2.o
-	gcc $(GCC_ARGS) -c testprog.c
+# statisch verlinkte Bibliothek bauen
+libaddnumber_s.a: file1.o file2.o
+	ar $(AROPTS) libaddnumber_s.a file1.o file2.o
 
-libaddnumber.a: file1.o file2.o
-	ar $(rcs) my_library.a file1.o file2.o
+# dynamisch verlinkte Bibliothek bauen
+libaddnumber_d.so: file1.o file2.o
+	gcc $(GCC_ARGS) -shared -o libaddnumber_d.so file1.o file2.o
 
-# libaddnumber.so: file1.o file2.o
-# 	gcc $(GCC_ARGS) -shared -o $@ file1.o file2.o
+# statische verlinkte test_prog
+testprog_s: testprog.c file1.h file2.h libaddnumber_s.a
+	gcc $(GCC_ARGS) --static -L. testprog.c -o testprog_s -laddnumber_s
 
-clean:
-=======
-GCC_ARGS = -g -std=c99 -Wall -pedantic-errors
+# dynamisch verlinkte test_prog
+testprog_d: testprog.c file1.h file2.h libaddnumber_d.so
+	gcc $(GCC_ARGS) -L. testprog.c -o testprog_d -laddnumber_d
 
-default: file1.o file2.o my_library
-
-file1.o: file1.c file1.h
-	gcc $(GCC_ARGS) -c $<
-
-file2.o: file2.c file2.h
-	gcc $(GCC_ARGS) -c $<
-
-my_library: file1.o file2.o
-	ar rcs my_library.a file1.o file2.o
+# testprog.o: testprog.c file1.h file2.o
+# 	gcc $(GCC_ARGS) -c testprog.c
 
 clean:
->>>>>>> 2d9e4322f853d07aff91b5ffe196acaed53f5f41
-	rm file1.o file2.o
+	rm *.o && rm *.a && rm *.so
