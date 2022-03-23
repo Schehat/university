@@ -82,8 +82,6 @@ void CgSceneControl::renderObjects()
 void CgSceneControl::handleEvent(CgBaseEvent* e)
 {
     // die Enums sind so gebaut, dass man alle Arten von MausEvents über CgEvent::CgMouseEvent abprüfen kann,
-    // siehe dazu die CgEvent enums im CgEnums.h
-
 
     if(e->getType() & Cg::CgMouseEvent)
     {

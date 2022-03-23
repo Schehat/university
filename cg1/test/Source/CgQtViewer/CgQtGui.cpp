@@ -53,7 +53,7 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     createOptionPanelExample2(otheropt);
 
     QTabWidget* m_tabs = new QTabWidget();
-    m_tabs->addTab(opt,"&My Tab1");
+    m_tabs->addTab(opt,"Farbe auswählen");
     m_tabs->addTab(otheropt,"&My Tab2");
     container->addWidget(m_tabs);
 
@@ -134,12 +134,6 @@ QSlider *CgQtGui::createSlider()
     return slider;
 }
 
-
-
-
-
-
-
 void CgQtGui::createOptionPanelExample1(QWidget* parent)
 {
     QVBoxLayout *tab1_control = new QVBoxLayout();
@@ -160,24 +154,26 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     mySpinBox1->setMinimum(0);
     mySpinBox1->setMaximum(255);
     mySpinBox1->setValue(0);
-    mySpinBox1->setPrefix("R:  ");
+    mySpinBox1->setPrefix("R: ");
 
-    mySpinBox1 = new QSpinBox();
-    tab1_control->addWidget(mySpinBox1);
-    mySpinBox1->setMinimum(0);
-    mySpinBox1->setMaximum(255);
-    mySpinBox1->setValue(255);
-    mySpinBox1->setPrefix("G:  ");
+    mySpinBox2 = new QSpinBox();
+    tab1_control->addWidget(mySpinBox2);
+    mySpinBox2->setMinimum(0);
+    mySpinBox2->setMaximum(255);
+    mySpinBox2->setValue(255);
+    mySpinBox2->setPrefix("G: ");
 
-    mySpinBox1 = new QSpinBox();
-    tab1_control->addWidget(mySpinBox1);
-    mySpinBox1->setMinimum(0);
-    mySpinBox1->setMaximum(255);
-    mySpinBox1->setValue(0);
-    mySpinBox1->setPrefix("B:  ");
+    mySpinBox3 = new QSpinBox();
+    tab1_control->addWidget(mySpinBox3);
+    mySpinBox3->setMinimum(0);
+    mySpinBox3->setMaximum(255);
+    mySpinBox3->setValue(0);
+    mySpinBox3->setPrefix("B: ");
 
     connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
     tab1_control->addWidget(mySpinBox1);
+    tab1_control->addWidget(mySpinBox2);
+    tab1_control->addWidget(mySpinBox3);
 
 
     /*Example for using a checkbox */
@@ -191,11 +187,10 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
 
     /*Example for using a button */
 
-    QPushButton* myButton1 = new QPushButton("&drueck mich");
+    QPushButton* myButton1 = new QPushButton("Farbe bestätigen");
     tab1_control->addWidget(myButton1);
 
     connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed()) );
-
 
 
     parent->setLayout(tab1_control);
@@ -245,6 +240,7 @@ void CgQtGui::createOptionPanelExample2(QWidget* parent)
     tab2_control->addLayout(subBox);
 
     connect(myButtonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( slotButtonGroupSelectionChanged() ) );
+
     parent->setLayout(tab2_control);
 
 }

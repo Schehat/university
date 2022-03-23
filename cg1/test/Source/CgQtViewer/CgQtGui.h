@@ -102,6 +102,8 @@ private:
     QButtonGroup* myButtonGroup;
     QCheckBox* myCheckBox1;
     QSpinBox* mySpinBox1;
+    QSpinBox* mySpinBox2;
+    QSpinBox* mySpinBox3;
 
 
 private slots:
