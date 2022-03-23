@@ -29,14 +29,14 @@ int main(void)
     close(fd);
 
     printf("%s %s\n", "Öffne Datei in read-mode", file);
-    fd = open(file, O_RDWR);
+    fd = open(file, O_RDONLY);
     if (fd <= 0)
     {
         printf("%s\n", "Öffnen der Datei ist fehlgeschlagen");
         return -1;
     }
 
-    printf("%s %s", "Schreibe in Datei:", text);
+    printf("%s %s\n", "Schreibe in Datei:", text);
     writtenBytes = write(fd, text, countBytes);
     if (writtenBytes != countBytes)
     {

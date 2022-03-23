@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -14,7 +15,7 @@ int main(void)
         printf("%s\n", "Öffnen der Datei ist fehlgeschlagen");
         return -1;
     }
-    // new line important due to terminal line buffered
+    // new line important due to terminal is line buffered
     printf("%s %d\n", "file descriptor: ", fd);
     // alternative if not line buffered e.g. file then this
     // fflush(STDOUT_FILENO)
@@ -25,5 +26,5 @@ int main(void)
 
     close(fd);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -147,20 +147,35 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
 
     /*Example for using a label */
 
-    QLabel *options_label = new QLabel("Options");
+    QLabel *options_label = new QLabel("Farbe auswählen in RGB");
     tab1_control->addWidget(options_label);
     options_label->setAlignment(Qt::AlignCenter);
 
 
     /*Example for using a spinbox */
 
+    //mySpinBox1->setSuffix("   suffix");
     mySpinBox1 = new QSpinBox();
     tab1_control->addWidget(mySpinBox1);
-    mySpinBox1->setMinimum(1);
-    mySpinBox1->setMaximum(50);
-    mySpinBox1->setValue(3);
-   // mySpinBox1->setSuffix("   suffix");
-   // mySpinBox1->setPrefix("Prefix:  ");
+    mySpinBox1->setMinimum(0);
+    mySpinBox1->setMaximum(255);
+    mySpinBox1->setValue(0);
+    mySpinBox1->setPrefix("R:  ");
+
+    mySpinBox1 = new QSpinBox();
+    tab1_control->addWidget(mySpinBox1);
+    mySpinBox1->setMinimum(0);
+    mySpinBox1->setMaximum(255);
+    mySpinBox1->setValue(255);
+    mySpinBox1->setPrefix("G:  ");
+
+    mySpinBox1 = new QSpinBox();
+    tab1_control->addWidget(mySpinBox1);
+    mySpinBox1->setMinimum(0);
+    mySpinBox1->setMaximum(255);
+    mySpinBox1->setValue(0);
+    mySpinBox1->setPrefix("B:  ");
+
     connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
     tab1_control->addWidget(mySpinBox1);
 
