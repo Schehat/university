@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="script.js" defer></script>
+    <body>
+        <head>
+            <h1>Pizza Online</h1>
+        </head>
+        <form id="form" name="form">
+            <label>Wählen Sie die Größe aus: </label>
+            <select id="select_pizza">
+                <option value="Mini (15 cm)">Mini (15 cm)</option>
+                <option value="Maxi (30 cm)">Maxi (30 cm)</option>
+                <option value="Party (45 cm)">Party (45 cm)</option>
+            </select>
+            <br>
+            <span>Wählen Sie weitere Zutaten aus:</span>
+            <br>
+            <input type="checkbox" id="salami">
+            <label>Salami</label>
+            <br>
+            <input type="checkbox" id="schinken">
+            <label>Schinken</label>
+            <br>
+            <input type="checkbox" id="ananas">
+            <label>Ananas</label>
+            <br>
+            <input type="checkbox" id="pilze">
+            <label>Pilze</label>
+            <br>
+            <input type="button" id="bestellen" value="bestellen">
+        </form>
+        <table id="table">
+            <head> 
+                <tr>
+                    <td>Größe</td>
+                    <td>Zutaten</td>
+                    <td>Preis</td>
+                    <td>Kalorien</td>
+                </tr>
+            </head>
+        </table>
+        <br>
+        <label id="price_span">Gesamtpreis: </label>
+        <span id="price">0</span>
+    </body>
+</html>
