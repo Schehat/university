@@ -150,31 +150,31 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     /*Example for using a spinbox */
 
     //mySpinBox1->setSuffix("   suffix");
-    mySpinBox1 = new QSpinBox();
-    tab1_control->addWidget(mySpinBox1);
-    mySpinBox1->setMinimum(0);
-    mySpinBox1->setMaximum(255);
-    mySpinBox1->setValue(0);
-    mySpinBox1->setPrefix("R: ");
+    mySpinBoxRed = new QSpinBox();
+    tab1_control->addWidget(mySpinBoxRed);
+    mySpinBoxRed->setMinimum(0);
+    mySpinBoxRed->setMaximum(255);
+    mySpinBoxRed->setValue(0);
+    mySpinBoxRed->setPrefix("R: ");
 
-    mySpinBox2 = new QSpinBox();
-    tab1_control->addWidget(mySpinBox2);
-    mySpinBox2->setMinimum(0);
-    mySpinBox2->setMaximum(255);
-    mySpinBox2->setValue(255);
-    mySpinBox2->setPrefix("G: ");
+    mySpinBoxGreen = new QSpinBox();
+    tab1_control->addWidget(mySpinBoxGreen);
+    mySpinBoxGreen->setMinimum(0);
+    mySpinBoxGreen->setMaximum(255);
+    mySpinBoxGreen->setValue(255);
+    mySpinBoxGreen->setPrefix("G: ");
 
-    mySpinBox3 = new QSpinBox();
-    tab1_control->addWidget(mySpinBox3);
-    mySpinBox3->setMinimum(0);
-    mySpinBox3->setMaximum(255);
-    mySpinBox3->setValue(0);
-    mySpinBox3->setPrefix("B: ");
+    mySpinBoxBlue = new QSpinBox();
+    tab1_control->addWidget(mySpinBoxBlue);
+    mySpinBoxBlue->setMinimum(0);
+    mySpinBoxBlue->setMaximum(255);
+    mySpinBoxBlue->setValue(0);
+    mySpinBoxBlue->setPrefix("B: ");
 
-    connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
-    tab1_control->addWidget(mySpinBox1);
-    tab1_control->addWidget(mySpinBox2);
-    tab1_control->addWidget(mySpinBox3);
+    connect(mySpinBoxRed, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
+    tab1_control->addWidget(mySpinBoxRed);
+    tab1_control->addWidget(mySpinBoxGreen);
+    tab1_control->addWidget(mySpinBoxBlue);
 
 
     /*Example for using a checkbox */
@@ -188,10 +188,10 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
 
     /*Example for using a button */
 
-    QPushButton* myButton1 = new QPushButton("Farbe bestätigen");
-    tab1_control->addWidget(myButton1);
+    QPushButton* ButtonChangeColor = new QPushButton("Farbe bestätigen");
+    tab1_control->addWidget(ButtonChangeColor);
 
-    connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed()));
+    connect(ButtonChangeColor, SIGNAL( clicked() ), this, SLOT(slotButtonChangeColorPressed()));
 
     parent->setLayout(tab1_control);
 
@@ -283,10 +283,9 @@ void CgQtGui::slotTrackballChanged()
     notifyObserver(e);
 }
 
-void CgQtGui::slotMyButton1Pressed()
+void CgQtGui::slotButtonChangeColorPressed()
 {
-   std::cout << "button 1 pressed " << std::endl;
-   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButton1Pressed, mySpinBox1->value(), mySpinBox2->value(), mySpinBox3->value());
+   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButtonColorChangePressed, mySpinBoxRed->value(), mySpinBoxGreen->value(), mySpinBoxBlue->value());
    notifyObserver(e);
 }
 

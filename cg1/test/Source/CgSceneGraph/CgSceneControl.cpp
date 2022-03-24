@@ -166,10 +166,10 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         m_renderer->redraw();
     }
 
-    if(e->getType() & Cg::CgButton1Pressed)
+    if(e->getType() & Cg::CgButtonColorChangePressed)
     {
         CgColorChangeEvent* ev = (CgColorChangeEvent*)e;
-        std::cout << *ev << std::endl;;
+        std::cout << *ev << std::endl;
     }
 
     // an der Stelle an der ein Event abgearbeitet ist wird es auch gelöscht.
