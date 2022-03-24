@@ -9,6 +9,7 @@
 #include "../CgEvents/CgWindowResizeEvent.h"
 #include "../CgEvents/CgLoadObjFileEvent.h"
 #include "../CgEvents/CgTrackballEvent.h"
+#include "../CgEvents/CgColorChangeEvent.h"
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -170,7 +171,7 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     mySpinBox3->setValue(0);
     mySpinBox3->setPrefix("B: ");
 
-    connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
+    connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()));
     tab1_control->addWidget(mySpinBox1);
     tab1_control->addWidget(mySpinBox2);
     tab1_control->addWidget(mySpinBox3);
@@ -190,7 +191,7 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     QPushButton* myButton1 = new QPushButton("Farbe bestätigen");
     tab1_control->addWidget(myButton1);
 
-    connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed()) );
+    connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed(mySpinBox1->value(), mySpinBox2->value(), mySpinBox3->value())));
 
 
     parent->setLayout(tab1_control);
@@ -283,10 +284,11 @@ void CgQtGui::slotTrackballChanged()
     notifyObserver(e);
 }
 
-void CgQtGui::slotMyButton1Pressed()
+void CgQtGui::slotMyButton1Pressed(int red, int green, int blue)
 {
    std::cout << "button 1 pressed " << std::endl;
-
+   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButton1Pressed, "event->text().toStdString()", red, green, blue);
+   notifyObserver(e);
 }
 
 
