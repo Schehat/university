@@ -171,7 +171,7 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     mySpinBox3->setValue(0);
     mySpinBox3->setPrefix("B: ");
 
-    connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()));
+    connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed(int mySpinBox1>value())));
     tab1_control->addWidget(mySpinBox1);
     tab1_control->addWidget(mySpinBox2);
     tab1_control->addWidget(mySpinBox3);
@@ -191,8 +191,7 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     QPushButton* myButton1 = new QPushButton("Farbe bestätigen");
     tab1_control->addWidget(myButton1);
 
-    connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed(mySpinBox1->value(), mySpinBox2->value(), mySpinBox3->value())));
-
+    //connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed(1, 2, 3));
 
     parent->setLayout(tab1_control);
 
@@ -253,9 +252,9 @@ void CgQtGui::slotButtonGroupSelectionChanged()
 
 }
 
-void CgQtGui::slotMySpinBox1Changed()
+void CgQtGui::slotMySpinBox1Changed(int red)
 {
-
+    std::cout << "red color" << std::endl;
 }
 
 void CgQtGui::slotMyCheckBox1Changed()
@@ -284,13 +283,12 @@ void CgQtGui::slotTrackballChanged()
     notifyObserver(e);
 }
 
-void CgQtGui::slotMyButton1Pressed(int red, int green, int blue)
+void CgQtGui::slotMyButton1Pressed()
 {
    std::cout << "button 1 pressed " << std::endl;
    CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButton1Pressed, "event->text().toStdString()", red, green, blue);
    notifyObserver(e);
 }
-
 
 void CgQtGui::mouseEvent(QMouseEvent* event)
 {
