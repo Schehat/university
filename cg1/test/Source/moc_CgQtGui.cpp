@@ -73,9 +73,9 @@ static const uint qt_meta_data_CgQtGui[] = {
        6,    0,   62,    2, 0x08 /* Private */,
        7,    0,   63,    2, 0x08 /* Private */,
        8,    0,   64,    2, 0x08 /* Private */,
-       9,    3,   65,    2, 0x08 /* Private */,
-      10,    0,   72,    2, 0x08 /* Private */,
-      11,    0,   73,    2, 0x08 /* Private */,
+       9,    0,   65,    2, 0x08 /* Private */,
+      10,    0,   66,    2, 0x08 /* Private */,
+      11,    0,   67,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
@@ -83,7 +83,7 @@ static const uint qt_meta_data_CgQtGui[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int,    2,    2,    2,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -101,7 +101,7 @@ void CgQtGui::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 2: _t->slotTrackballChanged(); break;
         case 3: _t->slotMySpinBox1Changed(); break;
         case 4: _t->slotMyCheckBox1Changed(); break;
-        case 5: _t->slotMyButton1Pressed((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 5: _t->slotMyButton1Pressed(); break;
         case 6: _t->slotButtonGroupSelectionChanged(); break;
         case 7: _t->slotLoadMeshFile(); break;
         default: ;

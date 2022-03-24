@@ -10,7 +10,7 @@ class CgColorChangeEvent : public CgBaseEvent
 {
 public:
     CgColorChangeEvent();
-    CgColorChangeEvent(Cg::EventType type, std::string text, int red, int green, int blue);
+    CgColorChangeEvent(Cg::EventType type, int red, int green, int blue);
     ~CgColorChangeEvent();
 
     //inherited
@@ -18,14 +18,15 @@ public:
     CgBaseEvent* clone();
 
     //own specific methods
-    std::string text() const;
+    int getRed() const;
+    int getGreen() const;
+    int getBlue() const;
 
     friend std::ostream& operator <<(std::ostream& os, const CgColorChangeEvent& e);
 
 private:
 
     Cg::EventType m_type;
-    std::string m_text;
     int m_red;
     int m_green;
     int m_blue;

@@ -5,6 +5,7 @@
 #include "CgEvents/CgWindowResizeEvent.h"
 #include "CgEvents/CgLoadObjFileEvent.h"
 #include "CgEvents/CgTrackballEvent.h"
+#include "CgEvents/CgColorChangeEvent.h"
 #include "CgBase/CgBaseRenderer.h"
 #include "CgExampleTriangle.h"
 #include <iostream>
@@ -163,6 +164,12 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         m_triangle->init(pos,norm,indx);
         m_renderer->init(m_triangle);
         m_renderer->redraw();
+    }
+
+    if(e->getType() & Cg::CgButton1Pressed)
+    {
+        CgColorChangeEvent* ev = (CgColorChangeEvent*)e;
+        std::cout << *ev << std::endl;;
     }
 
     // an der Stelle an der ein Event abgearbeitet ist wird es auch gelöscht.

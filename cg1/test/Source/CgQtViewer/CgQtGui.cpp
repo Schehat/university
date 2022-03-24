@@ -67,7 +67,7 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     mainLayout->addWidget(w);
 
     setLayout(mainLayout);
-    setWindowTitle(tr("Übung Computergrafik 1 -  SoSe 2021"));
+    setWindowTitle(tr("Übung Computergrafik 1 -  SoSe 2022"));
 
 
     /* create Menu Bar */
@@ -171,7 +171,7 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     mySpinBox3->setValue(0);
     mySpinBox3->setPrefix("B: ");
 
-    connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed(int mySpinBox1>value())));
+    connect(mySpinBox1, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
     tab1_control->addWidget(mySpinBox1);
     tab1_control->addWidget(mySpinBox2);
     tab1_control->addWidget(mySpinBox3);
@@ -191,7 +191,7 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     QPushButton* myButton1 = new QPushButton("Farbe bestätigen");
     tab1_control->addWidget(myButton1);
 
-    //connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed(1, 2, 3));
+    connect(myButton1, SIGNAL( clicked() ), this, SLOT(slotMyButton1Pressed()));
 
     parent->setLayout(tab1_control);
 
@@ -252,9 +252,9 @@ void CgQtGui::slotButtonGroupSelectionChanged()
 
 }
 
-void CgQtGui::slotMySpinBox1Changed(int red)
+void CgQtGui::slotMySpinBox1Changed()
 {
-    std::cout << "red color" << std::endl;
+
 }
 
 void CgQtGui::slotMyCheckBox1Changed()
@@ -286,7 +286,7 @@ void CgQtGui::slotTrackballChanged()
 void CgQtGui::slotMyButton1Pressed()
 {
    std::cout << "button 1 pressed " << std::endl;
-   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButton1Pressed, "event->text().toStdString()", red, green, blue);
+   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButton1Pressed, mySpinBox1->value(), mySpinBox2->value(), mySpinBox3->value());
    notifyObserver(e);
 }
 
