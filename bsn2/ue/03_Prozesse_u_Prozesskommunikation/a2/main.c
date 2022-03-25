@@ -3,12 +3,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#define SIZE 50
 
 int createChild(int counter)
 {
     int wait_status;
     pid_t pid;
-    if (counter < 3)
+    if (counter < SIZE)
     {
         pid = fork();
         if (pid == -1)
@@ -22,6 +23,12 @@ int createChild(int counter)
             tmp_pid = createChild(++counter);
             waitpid(tmp_pid, &wait_status, 0);
             printf("%s %i\t %s %i\t %s %i\n", "Kind: fork() =", pid, "PID =", getpid(), " PPID =", getppid());
+            if (counter >= SIZE - 1)
+            {
+                char c;
+                scanf("%c", &c);
+            }
+            return pid;
         }
         else
         {
@@ -37,7 +44,6 @@ int createChild(int counter)
 
 int main(void)
 {
-    int counter = 0;
-    createChild(counter);
+    createChild(0);
     return EXIT_SUCCESS;
 }
