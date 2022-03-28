@@ -1,6 +1,0 @@
-a) wc schausteller.txt
-b) grep "Müller" schausteller.txt
-c) grep "Müller " schausteller.txt
-d) grep -i "müller" schausteller.txt
-e) grep "^Sch[[:lower:]]*r\b" schausteller.txt  # /b means word boundary
-f) grep --color "^Sch[[:lower:]]*r\b" schausteller.txt

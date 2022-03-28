@@ -1,0 +1,31 @@
+a3
+a)
+echo "Hällo" | sed "s/a/=E4/g"
+echo "hallö" | sed -e "s/a/=E4/g" -e "s/ö/=F6/g"
+b) einfach andersherum kodieren wieder
+
+a4
+s = 2 * 100m
+v = 200.000 km/s = 200.000.000 m/s
+a)
+t = s/v = 200 / 20.000.000 = 10^-6 s
+b)
+Die Ubertragung beim Absender darf erst nach RTT zu Ende sein
+Menge = 10^9 Bit/s * 10^-6*s = 1000 Bit = 125 Byte
+
+a5
+frames in Hexadezimal, da Speicherplatsparender
+
+a6
+Die Datenubertragungsrate halbiert sich, da die Daten nun zwei Mal übertragen werden müssen. 
+Einmal vom Absender zum Repeater und danach vom Repeater zum Empfänger
+
+a7
+a) linux: ip, windows: ipconfig
+b) 
+Ein MAC-Filter dient dazu, Stationen mit definierten MAC-Adressen den Zugriff
+auf ein Netzwerk zu erlauben oder zu verbieten. Es kontrolliert den Zugriff auf das Medium auf
+Basis der MAC-Adresse
+c) 
+Eine MAC-Adresse wird vom Hersteller der Netzwerkkarte vergeben. 
+Eine MACAdresse lässt sich ändern. Damit ist die Verwendung von MAC-Filtern potentiell fragwürdig
