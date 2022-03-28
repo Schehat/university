@@ -2,7 +2,9 @@
 
 CgColorChangeEvent::CgColorChangeEvent()
 {
-
+    m_red = 0;
+    m_green = 255;
+    m_blue = 0;
 }
 
 CgColorChangeEvent::CgColorChangeEvent(Cg::EventType type, int red, int green, int blue)

@@ -39,6 +39,8 @@ void CgSceneControl::setRenderer(CgBaseRenderer* r)
 
     if(m_triangle!=NULL)
     m_renderer->init(m_triangle);
+
+    m_renderer->setUniformValue("mycolor",glm::vec4(0.0,1.0,0.0,1.0));
 }
 
 
@@ -47,9 +49,6 @@ void CgSceneControl::renderObjects()
 
     // Materialeigenschaften setzen
     // sollte ja eigentlich pro Objekt unterschiedlich sein können, naja bekommen sie schon hin....
-
-    //m_renderer->setUniformValue("mycolor",glm::vec4(0.0,1.0,0.0,1.0));
-
 
     m_renderer->setUniformValue("matDiffuseColor",glm::vec4(0.35,0.31,0.09,1.0));
     m_renderer->setUniformValue("lightDiffuseColor",glm::vec4(1.0,1.0,1.0,1.0));
@@ -170,7 +169,13 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
     {
         CgColorChangeEvent* ev = (CgColorChangeEvent*)e;
         std::cout << *ev << std::endl;
-        m_renderer->setUniformValue("mycolor",glm::vec4(0.0,1.0,1.0,1.0));
+
+        double red = ev->getRed() / 255;
+        double green = ev->getGreen() / 255;
+        double blue = ev->getBlue() / 255;
+
+        m_renderer->setUniformValue("mycolor",glm::vec4(red, green, blue, 1.0));
+        m_renderer->redraw();
     }
 
     // an der Stelle an der ein Event abgearbeitet ist wird es auch gelöscht.
