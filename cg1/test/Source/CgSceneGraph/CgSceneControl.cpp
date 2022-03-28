@@ -170,9 +170,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         CgColorChangeEvent* ev = (CgColorChangeEvent*)e;
         std::cout << *ev << std::endl;
 
-        double red = ev->getRed() / 255;
-        double green = ev->getGreen() / 255;
-        double blue = ev->getBlue() / 255;
+        double red = ev->getRed() / 255.0;
+        double green = ev->getGreen() / 255.0;
+        double blue = ev->getBlue() / 255.0;
 
         m_renderer->setUniformValue("mycolor",glm::vec4(red, green, blue, 1.0));
         m_renderer->redraw();
