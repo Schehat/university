@@ -1,0 +1,11 @@
+import java.util.*;
+public class LesAufb {
+    public static void main(String[] args) {
+        Scanner console = new Scanner(System.out);
+        System.out.print("Bitte geben Sie ein Wort ein: ");
+        wort = console.next();
+        System.out.print("Bitte geben Sie einen Index des Wortes ein: ");
+        i = console.nextInt();
+        System.out.print("Der Index " + i + "des Wortes " + wort + " ist: " + wort[i]);
+    }
+}

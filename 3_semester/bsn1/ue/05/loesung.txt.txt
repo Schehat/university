@@ -1,0 +1,35 @@
+a5:
+1983
+OSi-Modell ist Referenzmodell & TCP/IP ist konkrete Implementierung.
+Layers:
+7. Application
+6. Presentation
+5. Session
+4. Transport
+3. Network
+2. Data Link
+1. Phsical
+
+1974
+TCP/IP:
+7, 6, 5 zusammengefasst zu Application
+4 Transport
+3 Internet
+2, 1 zusammengefasst zu Link
+
+1969
+ARPANET - Vorläufer des Internets
+
+a6
+s = 40.000 * 2 km = 80.000 km = 8*10^7 m
+v = c = 300.000 km/s = 3*10^8 m/s
+t = s/v = 8 / 30 s = 4/15 s
+
+a7
+Datenmenge = 30TB = 3*10^13 Byte = 24*10^13 Bits
+Datenrate = 100 MBits/s = 10^8 Bit/s
+
+a)
+t = Datenmenge / Datensatz = 24*10^5 s = 2.400.000 s = 40.000 min ~= 667 h ~= 28 Tage
+b)
+Datenrate = Datenmenge / t = 24*10^13 / 259200 s = 2400 * 10^9 Bit / 2592  ~= 10^9 Bit/s = 1 GBit/s
