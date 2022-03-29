@@ -8,6 +8,7 @@
 #include "CgEvents/CgColorChangeEvent.h"
 #include "CgBase/CgBaseRenderer.h"
 #include "CgExampleTriangle.h"
+#include "CgUnityCube.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include "CgUtils/ObjLoader.h"
@@ -16,11 +17,12 @@
 CgSceneControl::CgSceneControl()
 {
     m_triangle=nullptr;
-     m_current_transformation=glm::mat4(1.);
-      m_lookAt_matrix= glm::lookAt(glm::vec3(0.0,0.0,1.0),glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,1.0,0.0));
-     m_proj_matrix= glm::mat4x4(glm::vec4(1.792591, 0.0, 0.0, 0.0), glm::vec4(0.0, 1.792591, 0.0, 0.0), glm::vec4(0.0, 0.0, -1.0002, -1.0), glm::vec4(0.0, 0.0, -0.020002, 0.0));
-   m_trackball_rotation=glm::mat4(1.);
-     m_triangle= new CgExampleTriangle(21);
+    m_current_transformation=glm::mat4(1.);
+    m_lookAt_matrix= glm::lookAt(glm::vec3(0.0,0.0,1.0),glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,1.0,0.0));
+    m_proj_matrix= glm::mat4x4(glm::vec4(1.792591, 0.0, 0.0, 0.0), glm::vec4(0.0, 1.792591, 0.0, 0.0), glm::vec4(0.0, 0.0, -1.0002, -1.0), glm::vec4(0.0, 0.0, -0.020002, 0.0));
+    m_trackball_rotation=glm::mat4(1.);
+    //m_triangle= new CgExampleTriangle(21);
+    m_triangle= new CgUnityCube(21);
 
 
 }
@@ -60,9 +62,6 @@ void CgSceneControl::renderObjects()
 
     m_renderer->setUniformValue("matSpecularColor",glm::vec4(0.8,0.72,0.21,1.0));
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
-
-
-
 
 
     glm::mat4 mv_matrix = m_lookAt_matrix * m_trackball_rotation* m_current_transformation ;
