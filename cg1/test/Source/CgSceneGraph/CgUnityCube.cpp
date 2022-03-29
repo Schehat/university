@@ -1,7 +1,7 @@
 #include "CgUnityCube.h"
 #include "CgBase/CgEnums.h"
 #include "CgUtils/ObjLoader.h"
-
+#include <iostream>
 CgUnityCube::CgUnityCube():
 m_type(Cg::TriangleMesh),
 m_id(42)
@@ -97,6 +97,10 @@ m_id(id)
     m_triangle_indices.push_back(7);
     m_triangle_indices.push_back(6);
     m_triangle_indices.push_back(2);
+
+    for (int i = 0; i < m_triangle_indices.size(); i+=3) {
+        //std::cout << m_vertices[m_triangle_indices[i]] << " " << m_vertices[m_triangle_indices[i+1]] << " " << m_vertices[m_triangle_indices[i+2]] << std::endl;
+    }
 
     m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
     m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
