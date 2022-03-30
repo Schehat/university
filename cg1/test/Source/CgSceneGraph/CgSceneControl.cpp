@@ -9,6 +9,7 @@
 #include "CgBase/CgBaseRenderer.h"
 #include "CgExampleTriangle.h"
 #include "CgUnityCube.h"
+#include "CgPolyline.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include "CgUtils/ObjLoader.h"
@@ -23,8 +24,7 @@ CgSceneControl::CgSceneControl()
     m_trackball_rotation=glm::mat4(1.);
     //m_triangle= new CgExampleTriangle(21);
     m_triangle= new CgUnityCube(21);
-
-
+    m_polyline.push_back(new CgPolyline(1, m_triangle->getFaceCentroid()[0], m_triangle->getFaceCentroid()[0] + m_triangle->getFaceNormals()[0]));
 }
 
 
