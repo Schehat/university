@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
-#define SIZE 50
+#define SIZE 80
 
 int createChildRecursive(int counter)
 {
@@ -20,7 +20,7 @@ int createChildRecursive(int counter)
         else if (pid == 0)
         {
             pid_t tmp_pid;
-            tmp_pid = createChild(++counter);
+            tmp_pid = createChildRecursive(++counter);
             waitpid(tmp_pid, &wait_status, 0);
             printf("%s %i\t %s %i\t %s %i\n", "Kind: fork() =", pid, "PID =", getpid(), " PPID =", getppid());
             if (counter >= SIZE - 1)
