@@ -1,13 +1,13 @@
-#ifndef CGUNITICUBE_H
-#define CGUNITICUBE_H
-
 #include <vector>
 #include <glm/glm.hpp>
 #include <string>
 #include "CgBase/CgBaseTriangleMesh.h"
 
+#ifndef CGUNITYCUBE_H
+#define CGUNITYCUBE_H
 
-class CgUnityCube : public CgBaseTriangleMesh
+
+class CgUnityCube: public CgBaseTriangleMesh
 {
 
 public:
@@ -35,9 +35,6 @@ public:
     const std::vector<glm::vec3>& getFaceColors() const;
     const std::vector<glm::vec3>& getFaceCentroid() const;
 
-
-
-
 private:
 
     std::vector<glm::vec3> m_vertices;
@@ -60,4 +57,4 @@ private:
 inline Cg::ObjectType  CgUnityCube::getType() const {return m_type;}
 inline unsigned int CgUnityCube::getID() const {return m_id;}
 
-#endif // CGUNITICUBE_H
+#endif // CGUNITYCUBE_H

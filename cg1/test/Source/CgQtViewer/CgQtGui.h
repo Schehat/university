@@ -79,7 +79,7 @@ private:
 
     // parts of the view
     CgQtGLRenderWidget*    m_glRenderWidget;
-    CgQtMainApplication*        m_mainWindow;
+    CgQtMainApplication*   m_mainWindow;
     QTabWidget*            m_exercises_tabWidget;
     QWidget*			   m_scene_tree_view;
     QTextEdit*             m_log_browser;
@@ -100,10 +100,10 @@ private:
     void createOptionPanelExample1(QWidget* panel);
     void createOptionPanelExample2(QWidget* panel);
     QButtonGroup* myButtonGroup;
-    QCheckBox* myCheckBox1;
-    QSpinBox* mySpinBoxRed;
-    QSpinBox* mySpinBoxGreen;
-    QSpinBox* mySpinBoxBlue;
+    QCheckBox*  myCheckBox1;
+    QSpinBox*   SpinBoxRed;
+    QSpinBox*   SpinBoxGreen;
+    QSpinBox*   SpinBoxBlue;
 
 
 private slots:
@@ -119,12 +119,8 @@ private slots:
     void slotMySpinBox1Changed();
     void slotMyCheckBox1Changed();
     void slotButtonChangeColorPressed();
-    //void slotMyButton1Pressed();
     void slotButtonGroupSelectionChanged();
     void slotLoadMeshFile();
-
-
-
 
 
 

@@ -9,7 +9,7 @@
 #include "../CgEvents/CgWindowResizeEvent.h"
 #include "../CgEvents/CgLoadObjFileEvent.h"
 #include "../CgEvents/CgTrackballEvent.h"
-#include "../CgEvents/CgColorChangeEvent.h"
+#include "../CgEvents/CgColorChangeEvent.h"         //change Color
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -54,8 +54,8 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     createOptionPanelExample2(otheropt);
 
     QTabWidget* m_tabs = new QTabWidget();
-    m_tabs->addTab(opt,"Farbe auswählen");
-    m_tabs->addTab(otheropt,"&My Tab2");
+    m_tabs->addTab(opt,"&Color");        //tab name
+    m_tabs->addTab(otheropt,"&Tab2");
     container->addWidget(m_tabs);
 
     m_tabs->setMaximumWidth(400);
@@ -67,7 +67,7 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     mainLayout->addWidget(w);
 
     setLayout(mainLayout);
-    setWindowTitle(tr("Übung Computergrafik 1 -  SoSe 2022"));
+    setWindowTitle(tr("Übung Computergrafik 1 -  SoSe 2022"));      //windows name dont work
 
 
     /* create Menu Bar */
@@ -135,66 +135,98 @@ QSlider *CgQtGui::createSlider()
     return slider;
 }
 
+
+
+
+
+
+
 void CgQtGui::createOptionPanelExample1(QWidget* parent)
 {
-    QVBoxLayout *tab1_control = new QVBoxLayout();
+    QVBoxLayout *tab_ColorChange = new QVBoxLayout();
 
 
     /*Example for using a label */
 
     QLabel *options_label = new QLabel("Farbe auswählen in RGB");
-    tab1_control->addWidget(options_label);
+    tab_ColorChange->addWidget(options_label);
     options_label->setAlignment(Qt::AlignCenter);
 
 
-    /*Example for using a spinbox */
+    /*Spinboxes for RGB Color Change  */
 
     //mySpinBox1->setSuffix("   suffix");
-    mySpinBoxRed = new QSpinBox();
-    tab1_control->addWidget(mySpinBoxRed);
-    mySpinBoxRed->setMinimum(0);
-    mySpinBoxRed->setMaximum(255);
-    mySpinBoxRed->setValue(0);
-    mySpinBoxRed->setPrefix("R: ");
+    SpinBoxRed = new QSpinBox();
+    tab_ColorChange->addWidget(SpinBoxRed);
+    SpinBoxRed->setMinimum(0);
+    SpinBoxRed->setMaximum(255);
+    SpinBoxRed->setValue(255);
+    SpinBoxRed->setPrefix("R: ");
 
-    mySpinBoxGreen = new QSpinBox();
-    tab1_control->addWidget(mySpinBoxGreen);
-    mySpinBoxGreen->setMinimum(0);
-    mySpinBoxGreen->setMaximum(255);
-    mySpinBoxGreen->setValue(255);
-    mySpinBoxGreen->setPrefix("G: ");
+    SpinBoxGreen = new QSpinBox();
+    tab_ColorChange->addWidget(SpinBoxGreen);
+    SpinBoxGreen->setMinimum(0);
+    SpinBoxGreen->setMaximum(255);
+    SpinBoxGreen->setValue(255);
+    SpinBoxGreen->setPrefix("G: ");
 
-    mySpinBoxBlue = new QSpinBox();
-    tab1_control->addWidget(mySpinBoxBlue);
-    mySpinBoxBlue->setMinimum(0);
-    mySpinBoxBlue->setMaximum(255);
-    mySpinBoxBlue->setValue(0);
-    mySpinBoxBlue->setPrefix("B: ");
+    SpinBoxBlue = new QSpinBox();
+    tab_ColorChange->addWidget(SpinBoxBlue);
+    SpinBoxBlue->setMinimum(0);
+    SpinBoxBlue->setMaximum(255);
+    SpinBoxBlue->setValue(255);
+    SpinBoxBlue->setPrefix("B: ");
 
-    connect(mySpinBoxRed, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
-    tab1_control->addWidget(mySpinBoxRed);
-    tab1_control->addWidget(mySpinBoxGreen);
-    tab1_control->addWidget(mySpinBoxBlue);
+//    connect(SpinBoxRed, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
+
+    //change value by chaning the value of the spinbox
+    connect(SpinBoxRed, SIGNAL( valueChanged(int)  ), this, SLOT(slotButtonChangeColorPressed()));
+    connect(SpinBoxGreen, SIGNAL( valueChanged(int)  ), this, SLOT(slotButtonChangeColorPressed()));
+    connect(SpinBoxBlue, SIGNAL( valueChanged(int)  ), this, SLOT(slotButtonChangeColorPressed()));
+
+    tab_ColorChange->addWidget(SpinBoxRed);
+    tab_ColorChange->addWidget(SpinBoxGreen);
+    tab_ColorChange->addWidget(SpinBoxBlue);
 
 
     /*Example for using a checkbox */
 
-    myCheckBox1 = new QCheckBox("enable Option 1");
-    myCheckBox1->setCheckable(true);
-    myCheckBox1->setChecked(false);
-    connect(myCheckBox1, SIGNAL( clicked() ), this, SLOT(slotMyCheckBox1Changed()) );
-    tab1_control->addWidget(myCheckBox1);
+//    myCheckBox1 = new QCheckBox("enable Option 1");
+//    myCheckBox1->setCheckable(true);
+//    myCheckBox1->setChecked(false);
+//    connect(myCheckBox1, SIGNAL( clicked() ), this, SLOT(slotMyCheckBox1Changed()) );
+//    tab1_control->addWidget(myCheckBox1);
 
 
-    /*Example for using a button */
+    /*Button for RBG Color change */
 
     QPushButton* ButtonChangeColor = new QPushButton("Farbe bestätigen");
-    tab1_control->addWidget(ButtonChangeColor);
+    tab_ColorChange->addWidget(ButtonChangeColor);
+
+    /*
+    Signale:
+    Signale sind öffentlich zugängliche Funktionen und können von überall ausgegeben werden,
+    aber wir empfehlen, sie nur von der Klasse zu senden, die das Signal und seine
+    Unterklassen definiert.
+    Wenn ein Signal ausgegeben wird, werden die damit verbundenen Slots normalerweise
+    sofort ausgeführt, genau wie ein normaler Funktionsaufruf.
+    Wenn mehrere Slots mit einem Signal verbunden sind, werden die Slots nacheinander in der
+    Reihenfolge ausgeführt, in der sie verbunden wurden, wenn das Signal ausgegeben wird.
+    Signale werden vom moc automatisch generiert und müssen nicht in die .cpp-Datei
+    implementiert werden. Sie können niemals Rückgabetypen haben (d. h. void verwenden).
+    Schlüssel:
+    Ein Slot wird aufgerufen, wenn ein damit verbundenes Signal ausgegeben wird.
+    Slots sind normale C++-Funktionen und können normal aufgerufen werden; ihre einzige
+    Besonderheit ist, dass Signale an sie angeschlossen werden können.
+    Sie können Slots auch als virtuell definieren, was wir in der Praxis als sehr nützlich
+    empfunden haben.
+    */
+
+    //use function pointers
 
     connect(ButtonChangeColor, SIGNAL( clicked() ), this, SLOT(slotButtonChangeColorPressed()));
 
-    parent->setLayout(tab1_control);
-
+    parent->setLayout(tab_ColorChange);
 }
 
 void CgQtGui::createOptionPanelExample2(QWidget* parent)
@@ -240,7 +272,6 @@ void CgQtGui::createOptionPanelExample2(QWidget* parent)
     tab2_control->addLayout(subBox);
 
     connect(myButtonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( slotButtonGroupSelectionChanged() ) );
-
     parent->setLayout(tab2_control);
 
 }
@@ -285,9 +316,12 @@ void CgQtGui::slotTrackballChanged()
 
 void CgQtGui::slotButtonChangeColorPressed()
 {
-   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButtonColorChangePressed, mySpinBoxRed->value(), mySpinBoxGreen->value(), mySpinBoxBlue->value());
+   std::cout << "button 1 pressed to change the color" << std::endl;
+   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButtonColorChangePressed, SpinBoxRed->value(), SpinBoxGreen->value(), SpinBoxBlue->value());
    notifyObserver(e);
+
 }
+
 
 void CgQtGui::mouseEvent(QMouseEvent* event)
 {
@@ -341,7 +375,6 @@ CgBaseRenderer* CgQtGui::getRenderer()
 {
     return m_glRenderWidget;
 }
-
 
 
 

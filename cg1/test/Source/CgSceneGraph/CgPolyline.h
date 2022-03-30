@@ -23,7 +23,7 @@ public:
     unsigned int getLineWidth() const;
 
 private:
-    std::vector<glm::vec2> m_vertices;
+    std::vector<glm::vec3> m_vertices;
     glm::vec3 m_face_colors;
     int m_line_width;
     const Cg::ObjectType m_type;

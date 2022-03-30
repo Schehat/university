@@ -2,27 +2,9 @@
 #include "CgBase/CgEnums.h"
 #include "CgUtils/ObjLoader.h"
 #include <iostream>
-CgUnityCube::CgUnityCube():
-m_type(Cg::TriangleMesh),
-m_id(42)
-{
-    m_vertices.push_back(glm::vec3(-sqrt(2)/2,0.0,0.0));
-    m_vertices.push_back(glm::vec3(sqrt(2)/2,-sqrt(2)/2,0.0));
-    m_vertices.push_back(glm::vec3(0.0,sqrt(2)/2,0.0));
 
-    m_triangle_indices.push_back(0);
-    m_triangle_indices.push_back(1);
-    m_triangle_indices.push_back(2);
 
-    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-
-}
-
-CgUnityCube::CgUnityCube(int id):
-m_type(Cg::TriangleMesh),
-m_id(id)
+CgUnityCube::CgUnityCube(int id): m_type(Cg::TriangleMesh), m_id(id)
 {
 
     // Vorderseite
@@ -93,24 +75,32 @@ m_id(id)
     m_triangle_indices.push_back(3);
     m_triangle_indices.push_back(7);
     m_triangle_indices.push_back(2);
+
     // rechts hinten, oben hinten, oben vorne
     m_triangle_indices.push_back(7);
     m_triangle_indices.push_back(6);
     m_triangle_indices.push_back(2);
 
     // Normalen & Schwerpunkt berechnen
-    for (std::vector<unsigned int>::size_type i = 0; i < m_triangle_indices.size(); i+=3) {
+    for (int i = 0; i < m_triangle_indices.size(); i+=3) {
         glm::vec3 vec1 = m_vertices[m_triangle_indices[i+1]] - m_vertices[m_triangle_indices[i]];
         glm::vec3 vec2 = m_vertices[m_triangle_indices[i+2]] - m_vertices[m_triangle_indices[i]];
         glm::vec3 normal = glm::cross(vec1, vec2);
-//        glm::vec3 normal = glm::vec3(vec1[1]*vec2[2]-vec1[2]*vec2[1], vec1[3]*vec2[1]-vec1[1]*vec2[3], vec1[0]*vec2[1]-vec1[1]*vec2[0]);
-//        std::cout << vec1[1]*vec2[2]-vec1[2]*vec2[1] << " " << vec1[3]*vec2[1]-vec1[1]*vec2[3] << " " << vec1[0]*vec2[1]-vec1[1]*vec2[0];
+        normal=glm::normalize(normal);
+
+      // glm::vec3 normal = (glm::vec3)glm::cross(vec1, vec2);
+//        glm::vec3 normal = glm::vec3(vec1[1]vec2[2]-vec1[2]vec2[1], vec1[3]vec2[1]-vec1[1]vec2[3], vec1[0]vec2[1]-vec1[1]vec2[0]);
+//        std::cout << vec1[1]vec2[2]-vec1[2]vec2[1] << " " << vec1[3]vec2[1]-vec1[1]vec2[3] << " " << vec1[0]vec2[1]-vec1[1]vec2[0];
 //        std::cout << normal[0] << " " << normal[1] << " "<< normal[2] << std::endl;
-        m_vertex_normals.push_back(glm::vec3(normal[0], normal[1], normal[2]));
+
+        std::cout << normal[0] << " " << normal[1] << " "<< normal[2] << std::endl;
+        m_vertex_normals.push_back(normal);
+
         // vec3 besteht aus floats nicht doubles
-        glm::vec3 vec_centroid = (m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+2]]) / (3.0f);
+        glm::vec3 vec_centroid = (m_vertices[m_triangle_indices[i]] + m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+2]]) / (3.0f);
         m_face_centroid.push_back(vec_centroid);
     }
+
 }
 
 
@@ -165,7 +155,7 @@ const std::vector<glm::vec3>& CgUnityCube::getVertexColors() const
      return m_vertex_colors;
 }
 
-const std::vector<glm::vec2>& CgUnityCube:: getVertexTexCoords() const
+const std::vector<glm::vec2>& CgUnityCube::getVertexTexCoords() const
 {
     return m_tex_coords;
 }
