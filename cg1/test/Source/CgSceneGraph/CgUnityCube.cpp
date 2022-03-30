@@ -105,7 +105,7 @@ m_id(id)
         glm::vec3 normal = glm::cross(vec1, vec2);
 //        glm::vec3 normal = glm::vec3(vec1[1]*vec2[2]-vec1[2]*vec2[1], vec1[3]*vec2[1]-vec1[1]*vec2[3], vec1[0]*vec2[1]-vec1[1]*vec2[0]);
 //        std::cout << vec1[1]*vec2[2]-vec1[2]*vec2[1] << " " << vec1[3]*vec2[1]-vec1[1]*vec2[3] << " " << vec1[0]*vec2[1]-vec1[1]*vec2[0];
-        std::cout << normal[0] << " " << normal[1] << " "<< normal[2] << std::endl;
+//        std::cout << normal[0] << " " << normal[1] << " "<< normal[2] << std::endl;
         m_vertex_normals.push_back(glm::vec3(normal[0], normal[1], normal[2]));
         // vec3 besteht aus floats nicht doubles
         glm::vec3 vec_centroid = (m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+2]]) / (3.0f);
