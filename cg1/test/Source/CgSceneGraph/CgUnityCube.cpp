@@ -98,15 +98,16 @@ m_id(id)
     m_triangle_indices.push_back(6);
     m_triangle_indices.push_back(2);
 
-    for (int i = 0; i < m_triangle_indices.size(); i+=3) {
-        //std::cout << m_vertices[m_triangle_indices[i]] << " " << m_vertices[m_triangle_indices[i+1]] << " " << m_vertices[m_triangle_indices[i+2]] << std::endl;
+    // Normalen & Schwerpunkt berechnen
+    for (std::vector<unsigned int>::size_type i = 0; i < m_triangle_indices.size(); i+=3) {
+        glm::vec3 vec1 = m_vertices[m_triangle_indices[i+1]] - m_vertices[m_triangle_indices[i]];
+        glm::vec3 vec2 = m_vertices[m_triangle_indices[i+2]] - m_vertices[m_triangle_indices[i]];
+        glm::vec3 normal = glm::cross(vec1, vec2);
+        m_vertex_normals.push_back(normal);
+        // vec3 besteht aus floats nicht doubles
+        glm::vec3 vec_centroid = (m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+2]]) / (3.0f);
+        m_face_centroid.push_back(vec_centroid);
     }
-
-    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-
 }
 
 
@@ -179,4 +180,9 @@ const std::vector<glm::vec3>& CgUnityCube::getFaceNormals() const
 const std::vector<glm::vec3>& CgUnityCube::getFaceColors() const
 {
     return m_face_colors;
+}
+
+const std::vector<glm::vec3>& CgUnityCube::getFaceCentroid() const
+{
+    return m_face_centroid;
 }

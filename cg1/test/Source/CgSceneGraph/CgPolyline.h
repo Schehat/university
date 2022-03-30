@@ -10,7 +10,7 @@ class CgPolyline : public CgBasePolyline
 {
 public:
     CgPolyline();
-    CgPolyline(int id);
+    CgPolyline(int id, glm::vec3, glm::vec3);
 
     virtual ~CgPolyline();
 
@@ -18,12 +18,11 @@ public:
     Cg::ObjectType getType() const;
     unsigned int getID() const;
 
-    const std::vector<glm::vec3>& getVertices();
+    const std::vector<glm::vec3>& getVertices() const;
     glm::vec3 getColor() const;
     unsigned int getLineWidth() const;
 
 private:
-    std::vector<glm::vec3> m_normal;
     std::vector<glm::vec2> m_vertices;
     glm::vec3 m_face_colors;
     int m_line_width;
