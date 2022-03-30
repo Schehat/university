@@ -16,7 +16,6 @@ m_id(id)
 {
     m_vertices.push_back(p1);
     m_vertices.push_back(p2);
-    //std::cout << m_vertices[0] << " " << m_vertices[1] << std::endl;
 }
 
 CgPolyline::~CgPolyline(){

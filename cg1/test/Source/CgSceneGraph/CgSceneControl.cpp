@@ -24,7 +24,7 @@ CgSceneControl::CgSceneControl()
     m_trackball_rotation=glm::mat4(1.);
     //m_triangle= new CgExampleTriangle(21);
     m_triangle= new CgUnityCube(21);
-    m_polyline.push_back(new CgPolyline(1, m_triangle->getFaceCentroid()[0], m_triangle->getFaceCentroid()[0] + m_triangle->getFaceNormals()[0]));
+    m_polyline.push_back(new CgPolyline(1, m_triangle->getFaceCentroid()[0], m_triangle->getFaceCentroid()[0]));
 }
 
 
