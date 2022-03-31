@@ -28,7 +28,7 @@ CgSceneControl::CgSceneControl()
 
     m_cube= new CgUnityCube(21);
 
-    for(int i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
         m_polyline.push_back(new CgPolyline(i, m_cube->getFaceCentroid()[i], (m_cube->getFaceCentroid()[i]) + (m_cube->getFaceNormals()[i])));
     }
 }
@@ -40,7 +40,7 @@ CgSceneControl::~CgSceneControl()
         delete m_cube;
     }
 
-    for(int i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
         if(m_polyline[i] != NULL) {
             delete m_polyline[i];
         }
@@ -58,7 +58,7 @@ void CgSceneControl::setRenderer(CgBaseRenderer* r)
     if(m_cube!=NULL)
         m_renderer->init(m_cube);
 
-    for(int i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
         if(m_polyline[i] != NULL) {
             m_renderer->init(m_polyline[i]);
         }
@@ -92,7 +92,7 @@ void CgSceneControl::renderObjects()
         m_renderer->render(m_cube);
     }
 
-    for(int i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
         if(m_polyline[i] != NULL) {
             m_renderer->render(m_polyline[i]);
         }
