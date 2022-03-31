@@ -15,12 +15,12 @@ public:
     virtual ~CgPolyline();
 
     //inherited from CgBaseRenderableObject
-    Cg::ObjectType getType() const;
-    unsigned int getID() const;
+    Cg::ObjectType getType() const override;
+    unsigned int getID() const override;
 
-    const std::vector<glm::vec3>& getVertices() const;
-    glm::vec3 getColor() const;
-    unsigned int getLineWidth() const;
+    const std::vector<glm::vec3>& getVertices() const override;
+    glm::vec3 getColor() const override;
+    unsigned int getLineWidth() const override;
 
 private:
     std::vector<glm::vec3> m_vertices;

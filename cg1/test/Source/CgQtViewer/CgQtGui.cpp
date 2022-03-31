@@ -145,13 +145,11 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
 {
     QVBoxLayout *tab_ColorChange = new QVBoxLayout();
 
-
     /*Example for using a label */
 
     QLabel *options_label = new QLabel("Farbe auswählen in RGB");
     tab_ColorChange->addWidget(options_label);
     options_label->setAlignment(Qt::AlignCenter);
-
 
     /*Spinboxes for RGB Color Change  */
 
@@ -160,7 +158,7 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     tab_ColorChange->addWidget(SpinBoxRed);
     SpinBoxRed->setMinimum(0);
     SpinBoxRed->setMaximum(255);
-    SpinBoxRed->setValue(255);
+    SpinBoxRed->setValue(0);
     SpinBoxRed->setPrefix("R: ");
 
     SpinBoxGreen = new QSpinBox();
@@ -174,15 +172,13 @@ void CgQtGui::createOptionPanelExample1(QWidget* parent)
     tab_ColorChange->addWidget(SpinBoxBlue);
     SpinBoxBlue->setMinimum(0);
     SpinBoxBlue->setMaximum(255);
-    SpinBoxBlue->setValue(255);
+    SpinBoxBlue->setValue(0);
     SpinBoxBlue->setPrefix("B: ");
 
-//    connect(SpinBoxRed, SIGNAL(valueChanged(int) ), this, SLOT(slotMySpinBox1Changed()) );
-
     //change value by chaning the value of the spinbox
-    connect(SpinBoxRed, SIGNAL( valueChanged(int)  ), this, SLOT(slotButtonChangeColorPressed()));
-    connect(SpinBoxGreen, SIGNAL( valueChanged(int)  ), this, SLOT(slotButtonChangeColorPressed()));
-    connect(SpinBoxBlue, SIGNAL( valueChanged(int)  ), this, SLOT(slotButtonChangeColorPressed()));
+    connect(SpinBoxRed, SIGNAL(valueChanged(int)), this, SLOT(slotButtonChangeColorPressed()));
+    connect(SpinBoxGreen, SIGNAL(valueChanged(int)), this, SLOT(slotButtonChangeColorPressed()));
+    connect(SpinBoxBlue, SIGNAL(valueChanged(int)), this, SLOT(slotButtonChangeColorPressed()));
 
     tab_ColorChange->addWidget(SpinBoxRed);
     tab_ColorChange->addWidget(SpinBoxGreen);
@@ -317,7 +313,7 @@ void CgQtGui::slotTrackballChanged()
 void CgQtGui::slotButtonChangeColorPressed()
 {
    std::cout << "button 1 pressed to change the color" << std::endl;
-   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButtonColorChangePressed, SpinBoxRed->value(), SpinBoxGreen->value(), SpinBoxBlue->value());
+   CgBaseEvent* e= new CgColorChangeEvent(Cg::CgButtonColorChangePress, SpinBoxRed->value(), SpinBoxGreen->value(), SpinBoxBlue->value());
    notifyObserver(e);
 
 }
@@ -350,9 +346,6 @@ void CgQtGui::mouseEvent(QMouseEvent* event)
                                         (Cg::MouseButtons)event->button());
        notifyObserver(e);
    }
-
-
-
 }
 
 void CgQtGui::keyPressEvent(QKeyEvent *event)
@@ -368,14 +361,7 @@ void CgQtGui::viewportChanged(int w, int h)
      notifyObserver(e);
 }
 
-
-
-
 CgBaseRenderer* CgQtGui::getRenderer()
 {
     return m_glRenderWidget;
 }
-
-
-
-
