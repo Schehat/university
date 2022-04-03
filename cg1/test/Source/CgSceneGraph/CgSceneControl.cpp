@@ -9,6 +9,7 @@
 #include "CgEvents/CgTrackballEvent.h"
 #include "CgBase/CgBaseRenderer.h"
 #include "CgEvents/CgColorChangeEvent.h"
+#include "CgEvents/CgLaneRiesenfeldEvent.h"
 #include "CgExampleTriangle.h"
 #include "CgUnityCube.h"
 #include "CgPolyline.h"
@@ -191,13 +192,22 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         CgColorChangeEvent* ev = (CgColorChangeEvent*)e;
         std::cout << *ev << std::endl;
 
-
         double red = ev->getRed() / 255.0;
         double blue = ev->getBlue() / 255.0;
         double green = ev->getGreen() / 255.0;
 
         m_renderer->setUniformValue("mycolor",glm::vec4(red,green,blue,1.0));
         m_renderer->redraw();
+    }
+
+    if(e->getType() & Cg::CgButton_LR_UA_start) {
+        CgLaneRiesenfeldEvent* ev = (CgLaneRiesenfeldEvent*)e;
+        std::cout << *ev << std::endl;
+    }
+
+    if(e->getType() & Cg::CgButton_LR_UA_reset) {
+        CgLaneRiesenfeldEvent* ev = (CgLaneRiesenfeldEvent*)e;
+        std::cout << *ev << std::endl;
     }
 
     // an der Stelle an der ein Event abgearbeitet ist wird es auch gelöscht.

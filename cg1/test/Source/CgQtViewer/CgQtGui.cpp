@@ -1,5 +1,3 @@
-
-
 #include "CgQtGLRenderWidget.h"
 #include "CgQtGui.h"
 #include "CgQtMainApplication.h"
@@ -9,7 +7,8 @@
 #include "../CgEvents/CgWindowResizeEvent.h"
 #include "../CgEvents/CgLoadObjFileEvent.h"
 #include "../CgEvents/CgTrackballEvent.h"
-#include "../CgEvents/CgColorChangeEvent.h"         //change Color
+#include "../CgEvents/CgColorChangeEvent.h"         //change Color#
+#include "../CgEvents/CgLaneRiesenfeldEvent.h"
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -29,7 +28,6 @@
 #include <QActionGroup>
 #include <QFileDialog>
 #include <iostream>
-
 
 
 CgQtGui::CgQtGui(CgQtMainApplication *mw)
@@ -121,7 +119,6 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     m_menuBar->addMenu( polygon_mode_menu );
 
     m_mainWindow->setMenuBar(m_menuBar);
-
 }
 
 QSlider *CgQtGui::createSlider()
@@ -181,23 +178,6 @@ void CgQtGui::OptionPanelColorChange(QWidget* parent)
     QPushButton* ButtonChangeColor = new QPushButton("Farbe bestätigen");
     tab_ColorChange->addWidget(ButtonChangeColor);
 
-    /*  Signale:
-    Signale sind öffentlich zugängliche Funktionen und können von überall ausgegeben werden,
-    aber wir empfehlen, sie nur von der Klasse zu senden, die das Signal und seine
-    Unterklassen definiert.
-    Wenn ein Signal ausgegeben wird, werden die damit verbundenen Slots normalerweise
-    sofort ausgeführt, genau wie ein normaler Funktionsaufruf.
-    Wenn mehrere Slots mit einem Signal verbunden sind, werden die Slots nacheinander in der
-    Reihenfolge ausgeführt, in der sie verbunden wurden, wenn das Signal ausgegeben wird.
-    Signale werden vom moc automatisch generiert und müssen nicht in die .cpp-Datei
-    implementiert werden. Sie können niemals Rückgabetypen haben (d. h. void verwenden).
-        Schlüssel:
-    Ein Slot wird aufgerufen, wenn ein damit verbundenes Signal ausgegeben wird.
-    Slots sind normale C++-Funktionen und können normal aufgerufen werden; ihre einzige
-    Besonderheit ist, dass Signale an sie angeschlossen werden können.
-    Sie können Slots auch als virtuell definieren, was wir in der Praxis als sehr nützlich
-    empfunden haben.
-    */
     //use function pointers
     connect(ButtonChangeColor, SIGNAL( clicked() ), this, SLOT(slotButtonChangeColorPressed()));
 
@@ -221,7 +201,6 @@ void CgQtGui::createOptionPaneLaneRiesenfeld_UA(QWidget* parent)
     SpinBox_LR_UA->setValue(0);
     SpinBox_LR_UA->setPrefix("Unterteilungsschritte: ");
     tab_LR_UA->addWidget(SpinBox_LR_UA);
-//    connect(SpinBox_LR_UA, SIGNAL( valueChanged(int)  ), this, SLOT(fnk()));
 
     //set spacing
     tab_LR_UA->addSpacing(50);
@@ -232,28 +211,22 @@ void CgQtGui::createOptionPaneLaneRiesenfeld_UA(QWidget* parent)
     CheckBox_shownormals->setCheckable(true);
     CheckBox_shownormals->setChecked(false);
     tab_LR_UA->addWidget(CheckBox_shownormals);
-//    connect(CheckBox_shownormals, SIGNAL( clicked() ), this, SLOT(slotMyCheckBox1Changed()) );
 
 
-    /*Button for RBG Color change */
     QPushButton* Button_LR_UA = new QPushButton("click");
     tab_LR_UA->addWidget(Button_LR_UA);
-//    connect(Button_LR_UA, SIGNAL( clicked() ), this, SLOT(slotButtonChangeColorPressed()));
+    connect(Button_LR_UA, SIGNAL( clicked() ), this, SLOT(slotButton_LR_UA_Pressed()));
 
     QPushButton* Button_LR_UA_reset = new QPushButton("reset");
     tab_LR_UA->addWidget(Button_LR_UA_reset);
-//    connect(Button_LR_UA_reset, SIGNAL( clicked() ), this, SLOT(slotButtonChangeColorPressed()));
+    connect(Button_LR_UA_reset, SIGNAL( clicked() ), this, SLOT(slotButton_LR_UA_reset_Pressed()));
 
     parent->setLayout(tab_LR_UA);
-
-
 }
 
 void CgQtGui::createOptionPanelExample(QWidget* parent)
 {
-
-
-    /*Example for using a checkbox */
+   /*Example for using a checkbox */
 
 //    myCheckBox1 = new QCheckBox("enable Option 1");
 //    myCheckBox1->setCheckable(true);
@@ -302,10 +275,7 @@ void CgQtGui::createOptionPanelExample(QWidget* parent)
 
     connect(myButtonGroup, SIGNAL( buttonClicked(int) ), this, SLOT( slotButtonGroupSelectionChanged() ) );
     parent->setLayout(tab_control);
-
 }
-
-
 
 void CgQtGui::slotButtonGroupSelectionChanged()
 {
@@ -322,18 +292,11 @@ void CgQtGui::slotMyCheckBox1Changed()
 
 }
 
-
 void CgQtGui::slotLoadMeshFile()
 {
-
-
-
    QString file=  QFileDialog::getOpenFileName(this, tr("Open Obj-File"),"",tr("Model Files (*.obj)"));
-
-
-    CgBaseEvent* e = new CgLoadObjFileEvent(Cg::LoadObjFileEvent, file.toStdString());
-
-    notifyObserver(e);
+   CgBaseEvent* e = new CgLoadObjFileEvent(Cg::LoadObjFileEvent, file.toStdString());
+   notifyObserver(e);
 }
 
 
@@ -351,6 +314,19 @@ void CgQtGui::slotButtonChangeColorPressed()
 
 }
 
+void CgQtGui::slotButton_LR_UA_Pressed()
+{
+   std::cout << "button pressed for the algorithm" << std::endl;
+   CgBaseEvent* e= new CgLaneRiesenfeldEvent(Cg::CgButton_LR_UA_start, SpinBox_LR_UA->value(),CheckBox_shownormals->isChecked() );
+   notifyObserver(e);
+}
+
+void CgQtGui::slotButton_LR_UA_reset_Pressed()
+{
+   std::cout << "button pressed to reset the algorithm" << std::endl;
+   //CgBaseEvent* e= new CgLaneRiesenfeldEvent(Cg::CgButton_LR_UA_reset);
+   //notifyObserver(e);
+}
 
 void CgQtGui::mouseEvent(QMouseEvent* event)
 {
@@ -379,9 +355,6 @@ void CgQtGui::mouseEvent(QMouseEvent* event)
                                         (Cg::MouseButtons)event->button());
        notifyObserver(e);
    }
-
-
-
 }
 
 void CgQtGui::keyPressEvent(QKeyEvent *event)
@@ -390,21 +363,13 @@ void CgQtGui::keyPressEvent(QKeyEvent *event)
    notifyObserver(e);
 }
 
-
 void CgQtGui::viewportChanged(int w, int h)
 {
      CgBaseEvent* e = new CgWindowResizeEvent(Cg::WindowResizeEvent,w,h);
      notifyObserver(e);
 }
 
-
-
-
 CgBaseRenderer* CgQtGui::getRenderer()
 {
     return m_glRenderWidget;
 }
-
-
-
-

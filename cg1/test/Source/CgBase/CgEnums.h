@@ -28,7 +28,7 @@ namespace Cg{
 
     // unused, may be changed to whatever
     CgButtonColorChangePress        = 0x0001000,
-    CgButton_LR_UA                  = 0x0002000,
+    CgButton_LR_UA_start            = 0x0002000,
     CgButton_LR_UA_reset            = 0x0004000,
     CgSomeSpecialEvent4             = 0x0008000,
     CgEventGroup1                   = 0x000f000,

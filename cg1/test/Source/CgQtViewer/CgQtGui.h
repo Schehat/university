@@ -125,11 +125,10 @@ private slots:
     void slotMySpinBox1Changed();
     void slotMyCheckBox1Changed();
     void slotButtonChangeColorPressed();
+    void slotButton_LR_UA_Pressed();
+    void slotButton_LR_UA_reset_Pressed();
     void slotButtonGroupSelectionChanged();
     void slotLoadMeshFile();
-
-
-
 };
 
 #endif
