@@ -11,7 +11,7 @@ class CgLaneRiesenfeldEvent : public CgBaseEvent
 
 public:
     CgLaneRiesenfeldEvent();
-    CgLaneRiesenfeldEvent(Cg::EventType type, int n, bool shownormals, bool m_reset);
+    CgLaneRiesenfeldEvent(Cg::EventType type, int n, bool shownormals);
     ~CgLaneRiesenfeldEvent();
 
     //inherited
@@ -21,7 +21,6 @@ public:
     //own specific methods
     int getSubdivisionStep() const;
     int getShowNormals() const;
-    int getReset() const;
 
     friend std::ostream& operator <<(std::ostream& os, const CgLaneRiesenfeldEvent& e);
 
@@ -29,7 +28,6 @@ private:
     Cg::EventType m_type;
     int SubdivisionStep;
     bool m_showNormals;
-    bool m_reset;
 };
 
 #endif // CGLANERIESENFELDEVENT_H
