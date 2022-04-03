@@ -29,7 +29,10 @@ CgSceneControl::CgSceneControl()
     m_cube= new CgUnityCube(21);
 
     for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
-        m_polyline.push_back(new CgPolyline(i, m_cube->getFaceCentroid()[i], (m_cube->getFaceCentroid()[i]) + (m_cube->getFaceNormals()[i])));
+        std::vector<glm::vec3> vertices;
+        vertices.push_back(m_cube->getFaceCentroid()[i]);
+        vertices.push_back(m_cube->getFaceCentroid()[i] + m_cube->getFaceNormals()[i]);
+        m_polyline.push_back(new CgPolyline(i, vertices));
     }
 }
 

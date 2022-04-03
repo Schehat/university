@@ -3,14 +3,15 @@
 #include "CgUtils/ObjLoader.h"
 #include <iostream>
 
-CgPolyline::CgPolyline(int id, glm::vec3 p1, glm::vec3 p2):
+CgPolyline::CgPolyline(int id, std::vector<glm::vec3> vertices):
 m_type(Cg::Polyline),
 m_id(id),
 m_line_width{1},
-m_face_colors{1}
+m_face_colors{glm::vec3(0, 255.0, 0)}
 {
-    m_vertices.push_back(p1);
-    m_vertices.push_back(p2);
+    for(int i = 0; i< vertices.size(); i++) {
+        m_vertices.push_back(vertices.at(i));
+    }
 }
 
 CgPolyline::~CgPolyline(){
