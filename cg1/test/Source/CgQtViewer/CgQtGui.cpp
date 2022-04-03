@@ -317,15 +317,16 @@ void CgQtGui::slotButtonChangeColorPressed()
 void CgQtGui::slotButton_LR_UA_Pressed()
 {
    std::cout << "button pressed for the algorithm" << std::endl;
-   CgBaseEvent* e= new CgLaneRiesenfeldEvent(Cg::CgButton_LR_UA_start, SpinBox_LR_UA->value(),CheckBox_shownormals->isChecked() );
+   CgBaseEvent* e= new CgLaneRiesenfeldEvent(Cg::CgButton_LR_UA_start, SpinBox_LR_UA->value(),CheckBox_shownormals->isChecked(), false);
    notifyObserver(e);
 }
 
 void CgQtGui::slotButton_LR_UA_reset_Pressed()
 {
    std::cout << "button pressed to reset the algorithm" << std::endl;
-   //CgBaseEvent* e= new CgLaneRiesenfeldEvent(Cg::CgButton_LR_UA_reset);
-   //notifyObserver(e);
+   SpinBox_LR_UA->setValue(0);
+   CgBaseEvent* e= new CgLaneRiesenfeldEvent(Cg::CgButton_LR_UA_reset, SpinBox_LR_UA->value(),CheckBox_shownormals->isChecked(), true);
+   notifyObserver(e);
 }
 
 void CgQtGui::mouseEvent(QMouseEvent* event)

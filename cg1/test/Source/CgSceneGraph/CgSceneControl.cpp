@@ -13,6 +13,7 @@
 #include "CgExampleTriangle.h"
 #include "CgUnityCube.h"
 #include "CgPolyline.h"
+#include "../CgUtils/Functions.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include "CgUtils/ObjLoader.h"
@@ -27,14 +28,21 @@ CgSceneControl::CgSceneControl()
     m_proj_matrix= glm::mat4x4(glm::vec4(1.792591, 0.0, 0.0, 0.0), glm::vec4(0.0, 1.792591, 0.0, 0.0), glm::vec4(0.0, 0.0, -1.0002, -1.0), glm::vec4(0.0, 0.0, -0.020002, 0.0));
     m_trackball_rotation=glm::mat4(1.);
 
-    m_cube= new CgUnityCube(21);
+    // Würfel zeichnen
+//    m_cube= new CgUnityCube(21);
+//    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+//        std::vector<glm::vec3> vertices;
+//        vertices.push_back(m_cube->getFaceCentroid()[i]);
+//        vertices.push_back(m_cube->getFaceCentroid()[i] + m_cube->getFaceNormals()[i]);
+//        m_polylines.push_back(new CgPolyline(i, vertices));
+//    }
 
-    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
-        std::vector<glm::vec3> vertices;
-        vertices.push_back(m_cube->getFaceCentroid()[i]);
-        vertices.push_back(m_cube->getFaceCentroid()[i] + m_cube->getFaceNormals()[i]);
-        m_polyline.push_back(new CgPolyline(i, vertices));
-    }
+    // Linien erstellen
+    curve.push_back( glm::vec3(0.0  , 1.5  , 0.0) );
+    curve.push_back( glm::vec3(1.0  , 0.5  , 0.0) );
+    curve.push_back( glm::vec3(1.0  ,-0.5  , 0.0) );
+    curve.push_back( glm::vec3(0.0  ,-1.5  , 0.0) );
+    m_polyline = new CgPolyline(21, curve);
 }
 
 
@@ -45,10 +53,13 @@ CgSceneControl::~CgSceneControl()
     }
 
     for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
-        if(m_polyline[i] != NULL) {
-            delete m_polyline[i];
+        if(m_polylines[i] != NULL) {
+            delete m_polylines[i];
         }
     }
+
+    if (m_polyline != NULL)
+            delete m_polyline;
 }
 
 void CgSceneControl::setRenderer(CgBaseRenderer* r)
@@ -59,14 +70,17 @@ void CgSceneControl::setRenderer(CgBaseRenderer* r)
     //set Color in the beginn of the Rendering - removed form rederObjects()!
     m_renderer->setUniformValue("mycolor",glm::vec4(0.0,1.0,0.0,1.0));
 
-    if(m_cube!=NULL)
-        m_renderer->init(m_cube);
+//    if(m_cube!=NULL)
+//        m_renderer->init(m_cube);
 
-    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
-        if(m_polyline[i] != NULL) {
-            m_renderer->init(m_polyline[i]);
-        }
-    }
+//    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+//        if(m_polylines[i] != NULL) {
+//            m_renderer->init(m_polylines[i]);
+//        }
+//    }
+
+    if(m_polyline!=NULL)
+            m_renderer->init(m_polyline);
 }
 
 
@@ -92,15 +106,18 @@ void CgSceneControl::renderObjects()
     m_renderer->setUniformValue("modelviewMatrix",mv_matrix);
     m_renderer->setUniformValue("normalMatrix",normal_matrix);
 
-    if(m_cube!=NULL){
-        m_renderer->render(m_cube);
-    }
+//    if(m_cube!=NULL){
+//        m_renderer->render(m_cube);
+//    }
 
-    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
-        if(m_polyline[i] != NULL) {
-            m_renderer->render(m_polyline[i]);
-        }
-    }
+//    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+//        if(m_polylines[i] != NULL) {
+//            m_renderer->render(m_polylines[i]);
+//        }
+//    }
+
+    if(m_polyline!=NULL)
+            m_renderer->render(m_polyline);
 }
 
 void CgSceneControl::handleEvent(CgBaseEvent* e)
@@ -203,6 +220,16 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
     if(e->getType() & Cg::CgButton_LR_UA_start) {
         CgLaneRiesenfeldEvent* ev = (CgLaneRiesenfeldEvent*)e;
         std::cout << *ev << std::endl;
+
+
+        int n = ev->getSubdivisionStep();
+//        bool showNormals = ev->getShowNormals();
+
+//        Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(m_polyline->getVertices(),n);
+
+
+//        std::cout << (m_polyline->getVertices().at(0)[1]) << std::endl;
+
     }
 
     if(e->getType() & Cg::CgButton_LR_UA_reset) {

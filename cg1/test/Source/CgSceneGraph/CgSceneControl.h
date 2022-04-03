@@ -28,7 +28,9 @@ private:
     CgBaseRenderer* m_renderer;
 
     CgUnityCube* m_cube;
-    std::vector<CgPolyline*> m_polyline;
+    std::vector<CgPolyline*> m_polylines;
+    CgPolyline* m_polyline;
+    std::vector<glm::vec3> curve;
 
     glm::mat4 m_current_transformation;
     glm::mat4 m_trackball_rotation;
