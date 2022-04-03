@@ -7,7 +7,7 @@
 class Functions
 {
 public:
-    static std::vector<glm::vec3> Lane_Riesenfeld_Unterteilungs_Algorithmus(std::vector<glm::vec3> vertices, int n)() const;
+    static std::vector<glm::vec3> Lane_Riesenfeld_Unterteilungs_Algorithmus(std::vector<glm::vec3> vertices, int n);
 };
 
 #endif // FUNCTIONS_H
