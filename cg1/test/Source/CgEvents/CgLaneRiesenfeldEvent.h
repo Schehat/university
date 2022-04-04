@@ -10,7 +10,7 @@ class CgLaneRiesenfeldEvent : public CgBaseEvent
 {
 
 public:
-    CgLaneRiesenfeldEvent();
+    CgLaneRiesenfeldEvent(Cg::EventType type);
     CgLaneRiesenfeldEvent(Cg::EventType type, int n, bool shownormals);
     ~CgLaneRiesenfeldEvent();
 

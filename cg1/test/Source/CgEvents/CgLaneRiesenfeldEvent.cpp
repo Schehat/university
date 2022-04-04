@@ -1,6 +1,7 @@
 #include "CgLaneRiesenfeldEvent.h"
 
-CgLaneRiesenfeldEvent::CgLaneRiesenfeldEvent()
+CgLaneRiesenfeldEvent::CgLaneRiesenfeldEvent(Cg::EventType type)
+    : m_type{type}
 {
 }
 
