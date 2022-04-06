@@ -42,6 +42,8 @@ CgSceneControl::CgSceneControl()
     curve.push_back( glm::vec3(1.0  , 0.5  , 0.0) );
     curve.push_back( glm::vec3(1.0  ,-0.5  , 0.0) );
     curve.push_back( glm::vec3(0.0  ,-1.5  , 0.0) );
+    curve.push_back( glm::vec3(-1.5  ,-1.5  , 0.0) );
+    curve.push_back( glm::vec3(-3.0  ,0.0  , 0.0) );
     m_polyline = new CgPolyline(21, curve);
 }
 
@@ -224,10 +226,15 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 //        bool showNormals = ev->getShowNormals();
 
         m_polyline->setVertices(Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(m_polyline->getVertices(), ev->getSubdivisionStep()));
+        std::cout << "m_polyline:\n";
+        for (int i = 0; i < m_polyline->getVertices().size(); i++) {
+            std::cout << i << " " << m_polyline->getVertices().at(i)[0] << " " << m_polyline->getVertices().at(i)[1] << " " << m_polyline->getVertices().at(i)[2] << std::endl;
+        }
+        std::cout << "curve:\n";
+        for (int i = 0; i < curve.size(); i++) {
+            std::cout << i << " " << curve.at(i)[0] << " " << curve.at(i)[1] << " " << curve.at(i)[2] << std::endl;
+        }
         m_renderer->redraw();
-
-//        std::cout << (m_polyline->getVertices().at(0)[1]) << std::endl;
-
     }
 
     if(e->getType() & Cg::CgButton_LR_UA_reset) {
