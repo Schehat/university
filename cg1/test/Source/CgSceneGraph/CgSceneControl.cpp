@@ -223,7 +223,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
 //        bool showNormals = ev->getShowNormals();
 
-        Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(m_polyline->getVertices(), ev->getSubdivisionStep());
+        m_polyline->setVertices(Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(m_polyline->getVertices(), ev->getSubdivisionStep()));
         m_renderer->redraw();
 
 //        std::cout << (m_polyline->getVertices().at(0)[1]) << std::endl;
@@ -233,6 +233,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
     if(e->getType() & Cg::CgButton_LR_UA_reset) {
         CgLaneRiesenfeldEvent* ev = (CgLaneRiesenfeldEvent*)e;
         std::cout << *ev << std::endl;
+        m_polyline->setVertices(curve);
+        m_renderer->redraw();
     }
 
     // an der Stelle an der ein Event abgearbeitet ist wird es auch gelöscht.
