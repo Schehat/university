@@ -33,21 +33,21 @@ unsigned int CgPolyline::getLineWidth() const {
 }
 
 void CgPolyline::setVertices(std::vector<glm::vec3> newvertices){
-    std::cout << "m_polyline vor Clear:\n";
-    for (int i = 0; i < getVertices().size(); i++) {
-        std::cout << i << " " << getVertices().at(i)[0] << " " << getVertices().at(i)[1] << " " << getVertices().at(i)[2] << std::endl;
-    }
+//    std::cout << "m_polyline vor Clear:\n";
+//    for (int i = 0; i < getVertices().size(); i++) {
+//        std::cout << i << " " << getVertices().at(i)[0] << " " << getVertices().at(i)[1] << " " << getVertices().at(i)[2] << std::endl;
+//    }
     m_vertices.clear();
-    std::cout << "m_polyline nach Clear:\n";
-        for (int i = 0; i < getVertices().size(); i++) {
-            std::cout << i << " " << getVertices().at(i)[0] << " " << getVertices().at(i)[1] << " " << getVertices().at(i)[2] << std::endl;
-        }
+//    std::cout << "m_polyline nach Clear:\n";
+//        for (int i = 0; i < getVertices().size(); i++) {
+//            std::cout << i << " " << getVertices().at(i)[0] << " " << getVertices().at(i)[1] << " " << getVertices().at(i)[2] << std::endl;
+//        }
 
     for(std::vector<unsigned int>::size_type i = 0; i< newvertices.size(); i++) {
         m_vertices.push_back(glm::vec3(newvertices.at(i)[0], newvertices.at(i)[1], newvertices.at(i)[2]));
     }
-    std::cout << "m_polyline nach Zuweisung:\n";
-        for (int i = 0; i < getVertices().size(); i++) {
-            std::cout << i << " " << getVertices().at(i)[0] << " " << getVertices().at(i)[1] << " " << getVertices().at(i)[2] << std::endl;
-        }
+//    std::cout << "m_polyline nach Zuweisung:\n";
+//        for (int i = 0; i < getVertices().size(); i++) {
+//            std::cout << i << " " << getVertices().at(i)[0] << " " << getVertices().at(i)[1] << " " << getVertices().at(i)[2] << std::endl;
+//        }
 }

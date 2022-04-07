@@ -120,6 +120,11 @@ void CgSceneControl::renderObjects()
 
     if(m_polyline!=NULL)
             m_renderer->render(m_polyline);
+
+    std::cout << "m_polyline nach rendern:\n";
+    for (int i = 0; i < m_polyline->getVertices().size(); i++) {
+        std::cout << i << " " << m_polyline->getVertices().at(i)[0] << " " << m_polyline->getVertices().at(i)[1] << " " << m_polyline->getVertices().at(i)[2] << std::endl;
+    }
 }
 
 void CgSceneControl::handleEvent(CgBaseEvent* e)
@@ -225,15 +230,15 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
 //        bool showNormals = ev->getShowNormals();
 
-        std::cout << "m_polyline vor Aufruf:\n";
-        for (int i = 0; i < m_polyline->getVertices().size(); i++) {
-            std::cout << i << " " << m_polyline->getVertices().at(i)[0] << " " << m_polyline->getVertices().at(i)[1] << " " << m_polyline->getVertices().at(i)[2] << std::endl;
-        }
+//        std::cout << "m_polyline vor Aufruf:\n";
+//        for (int i = 0; i < m_polyline->getVertices().size(); i++) {
+//            std::cout << i << " " << m_polyline->getVertices().at(i)[0] << " " << m_polyline->getVertices().at(i)[1] << " " << m_polyline->getVertices().at(i)[2] << std::endl;
+//        }
         m_polyline->setVertices(Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(m_polyline->getVertices(), ev->getSubdivisionStep()));
-        std::cout << "m_polyline nach Aufruf:\n";
-        for (int i = 0; i < m_polyline->getVertices().size(); i++) {
-            std::cout << i << " " << m_polyline->getVertices().at(i)[0] << " " << m_polyline->getVertices().at(i)[1] << " " << m_polyline->getVertices().at(i)[2] << std::endl;
-        }
+//        std::cout << "m_polyline nach Aufruf:\n";
+//        for (int i = 0; i < m_polyline->getVertices().size(); i++) {
+//            std::cout << i << " " << m_polyline->getVertices().at(i)[0] << " " << m_polyline->getVertices().at(i)[1] << " " << m_polyline->getVertices().at(i)[2] << std::endl;
+//        }
 //        std::cout << "curve:\n";
 //        for (int i = 0; i < curve.size(); i++) {
 //            std::cout << i << " " << curve.at(i)[0] << " " << curve.at(i)[1] << " " << curve.at(i)[2] << std::endl;
