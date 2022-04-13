@@ -1,14 +1,13 @@
 #include "CgLaneRiesenfeldEvent.h"
 
-CgLaneRiesenfeldEvent::CgLaneRiesenfeldEvent(Cg::EventType type)
-    : m_type{type}
+CgLaneRiesenfeldEvent::CgLaneRiesenfeldEvent()
 {
 }
 
-CgLaneRiesenfeldEvent::CgLaneRiesenfeldEvent(Cg::EventType type, int n, bool show)
-    : m_type{type}, SubdivisionStep{n}, m_showNormals{show}
+CgLaneRiesenfeldEvent::CgLaneRiesenfeldEvent(Cg::EventType type, int n):
+m_type(type),
+SubdivisionStep(n)
 {
-
 }
 CgLaneRiesenfeldEvent::~CgLaneRiesenfeldEvent(){
 }
@@ -21,19 +20,18 @@ Cg::EventType CgLaneRiesenfeldEvent::getType()
 
 CgBaseEvent* CgLaneRiesenfeldEvent::clone()
 {
-    return new CgLaneRiesenfeldEvent(m_type, SubdivisionStep, m_showNormals);
+    return new CgLaneRiesenfeldEvent(m_type, SubdivisionStep);
 }
+
 
 //own specific methods
 int CgLaneRiesenfeldEvent::getSubdivisionStep() const{
     return SubdivisionStep;
 }
-int CgLaneRiesenfeldEvent::getShowNormals() const{
-    return m_showNormals;
-}
+
 
 std::ostream& operator<<(std::ostream& os,const CgLaneRiesenfeldEvent& e)
 {
-    os << "Type: "<< e.m_type << "\t (SubdivisionStep:" << e.getSubdivisionStep() << "\t normals: " << e.getShowNormals() << ")";
+    os << "Type: "<< e.m_type << "\t (SubdivisionStep:" << e.getSubdivisionStep() <<")";
     return os;
 }

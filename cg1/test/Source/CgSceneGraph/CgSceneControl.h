@@ -12,6 +12,7 @@ class CgBaseEvent;
 class CgBaseRenderer;
 class CgExampleTriangle;
 class CgUnityCube;
+class CgRotation;
 
 class CgSceneControl : public CgObserver, public CgBaseSceneControl
 {
@@ -31,7 +32,7 @@ private:
     std::vector<CgPolyline*> m_polylines;
     CgPolyline* m_polyline;
     std::vector<glm::vec3> curve;
-
+    CgRotation* m_rotation;
     glm::mat4 m_current_transformation;
     glm::mat4 m_trackball_rotation;
     glm::mat4 m_lookAt_matrix;
