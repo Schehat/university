@@ -35,7 +35,7 @@ CgSceneControl::CgSceneControl()
 
     // Würfel zeichnen
 //    m_cube= new CgUnityCube(21);
-//    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+//    for(unsigned int i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
 //        std::vector<glm::vec3> vertices;
 //        vertices.push_back(m_cube->getFaceCentroid()[i]);
 //        vertices.push_back(m_cube->getFaceCentroid()[i] + m_cube->getFaceNormals()[i]);
@@ -58,7 +58,7 @@ CgSceneControl::~CgSceneControl()
         delete m_cube;
     }
 
-    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+    for(unsigned int i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
         if(m_polylines[i] != NULL) {
             delete m_polylines[i];
         }
@@ -83,7 +83,7 @@ void CgSceneControl::setRenderer(CgBaseRenderer* r)
     if(m_cube!=NULL)
         m_renderer->init(m_cube);
 
-//    for(std::vector<unsigned int>::size_type i = 0; i < m_cube->getFaceCentroid().size() ; i++) {
+//    for(unsigned = 0; i < m_cube->getFaceCentroid().size() ; i++) {
 //        if(m_polylines[i] != NULL) {
 //            m_renderer->init(m_polylines[i]);
 //        }
@@ -272,14 +272,15 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         m_polyline = nullptr;
 
         if (ev->getNormals() == true) {
-            for(std::vector<unsigned int>::size_type i = 0; i < m_rotation->getFaceCentroid().size() ; i++) {
+            for(unsigned int i = 0; i < m_rotation->getFaceCentroid().size() ; i++) {
                 std::vector<glm::vec3> vertices;
                 vertices.push_back(m_rotation->getFaceCentroid()[i]);
                 vertices.push_back(m_rotation->getFaceCentroid()[i] + m_rotation->getFaceNormals()[i]);
                 m_polylines.push_back(new CgPolyline(Functions::getId(), vertices));
             }
         }
-        for(std::vector<unsigned int>::size_type i = 0; i < m_polylines.size() ; i++) {
+
+        for(unsigned int i = 0; i < m_polylines.size() ; i++) {
             m_renderer->init(m_polylines[i]);
          }
 
