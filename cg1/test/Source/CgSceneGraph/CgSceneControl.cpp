@@ -94,7 +94,7 @@ void CgSceneControl::setRenderer(CgBaseRenderer* r)
 
     for(unsigned int i = 0; i < m_polylines.size() ; i++) {
         if(m_polylines[i] != NULL)
-            m_renderer->render(m_polylines[i]);
+            m_renderer->init(m_polylines[i]);
     }
 
     if(m_polyline!=NULL)
@@ -288,10 +288,6 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
 //        if(Functions::XOR(m_polyline != nullptr, m_rotation != nullptr)){
         if(m_polyline != nullptr){
-            if(m_rotation != nullptr) {
-                delete m_rotation;
-                m_polyline = new CgPolyline(Functions::getId(),curve);
-            }
             m_polyline->setVertices(curve);
             m_renderer->init(m_polyline);
             m_renderer->redraw();
