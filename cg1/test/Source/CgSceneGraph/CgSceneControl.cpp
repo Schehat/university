@@ -123,11 +123,16 @@ void CgSceneControl::renderObjects()
     m_renderer->setUniformValue("matSpecularColor"  ,glm::vec4(0.8,0.72,0.21,1.0));
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
 
+
+
+    // include a scenegraph into rendering
+    // m_current_transformation = scenegrap
+
     glm::mat4 mv_matrix = m_lookAt_matrix * m_trackball_rotation* m_current_transformation ;
     glm::mat3 normal_matrix = glm::transpose(glm::inverse(glm::mat3(mv_matrix)));
 
     m_renderer->setUniformValue("projMatrix"        ,m_proj_matrix);
-    m_renderer->setUniformValue("modelviewMatrix"   ,mv_matrix);
+    m_renderer->setUniformValue("modelviewMatrix"   ,mv_matrix); //top of stack in case of scenegraph
     m_renderer->setUniformValue("normalMatrix"      ,normal_matrix);
 
     if(m_triangle!=NULL)
@@ -238,7 +243,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         for(unsigned int i = 0; i < m_loadObj->getVertexNormals().size() ; ++i) {
             std::vector<glm::vec3> vertices;
             vertices.push_back(m_loadObj->getVertices()[i]);
-            vertices.push_back(m_loadObj->getVertices()[i] + m_loadObj->getVertexNormals()[i]);
+            vertices.push_back(m_loadObj->getVertices()[i] + (m_loadObj->getVertexNormals()[i] / 100.0f));
             m_polylines.push_back(new CgPolyline(Functions::getId(), vertices));
         }
 
@@ -328,11 +333,19 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
             if (ev->getNormals() == true) {
 
-                for(unsigned int i = 0; i < m_rotation->getFaceCentroid().size() ; ++i) {
-                    std::vector<glm::vec3> vertices;
+//                for(unsigned int i = 0; i < m_rotation->getFaceCentroid().size() ; ++i) {
+//                    std::vector<glm::vec3> vertices;
 
-                    vertices.push_back( m_rotation->getFaceCentroid()[i] );
-                    vertices.push_back(m_rotation->getFaceCentroid()[i] + m_rotation->getFaceNormals()[i]);
+//                    vertices.push_back( m_rotation->getFaceCentroid()[i] );
+//                    vertices.push_back(m_rotation->getFaceCentroid()[i] + m_rotation->getFaceNormals()[i]);
+//                    m_polylines.push_back(new CgPolyline(Functions::getId(), vertices));
+//                }
+
+                for(unsigned int i = 0; i < m_rotation->getVertices().size(); ++i) {
+                    std::vector<glm::vec3> vertices;
+                    vertices.push_back(m_rotation->getVertices()[i]);
+                    glm::vec3 a = m_rotation->getVertices()[i] + m_rotation->getVertexNormals()[i];
+                    vertices.push_back(a);
                     m_polylines.push_back(new CgPolyline(Functions::getId(), vertices));
                 }
 
@@ -341,7 +354,6 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                     m_renderer->init(m_polylines[i]);
                 }
             }
-
 
 
             m_renderer->init(m_rotation);

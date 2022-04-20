@@ -13,6 +13,7 @@ SOURCES += main.cpp \
     CgBase/CgObservable.cpp \
     CgEvents/CgMouseEvent.cpp \
     CgQtViewer/CgQtMainApplication.cpp \
+    CgSceneGraph/CgAppearance.cpp \
     CgSceneGraph/CgExampleTriangle.cpp \
     CgSceneGraph/CgLoadObjFile.cpp \
     CgSceneGraph/CgPolyline.cpp \
@@ -23,7 +24,9 @@ SOURCES += main.cpp \
     CgQtViewer/CgTrackball.cpp \
     CgEvents/CgWindowResizeEvent.cpp \
     CgEvents/CgLoadObjFileEvent.cpp \
+    CgSceneGraph/CgSceneGraphEntity.cpp \
     CgSceneGraph/CgUnityCube.cpp \
+    CgSceneGraph/SceneGraph.cpp \
     CgUtils/Functions.cpp \
     CgUtils/ObjLoader.cpp \
     CgEvents/CgTrackballEvent.cpp
@@ -40,6 +43,7 @@ HEADERS += \
     CgBase/CgEnums.h \
     CgEvents/CgMouseEvent.h \
     CgQtViewer/CgQtMainApplication.h \
+    CgSceneGraph/CgAppearance.h \
     CgSceneGraph/CgExampleTriangle.h \
     CgSceneGraph/CgLoadObjFile.h \
     CgSceneGraph/CgPolyline.h \
@@ -57,7 +61,9 @@ HEADERS += \
     CgQtViewer/CgTrackball.h \
     CgEvents/CgWindowResizeEvent.h \
     CgEvents/CgLoadObjFileEvent.h \
+    CgSceneGraph/CgSceneGraphEntity.h \
     CgSceneGraph/CgUnityCube.h \
+    CgSceneGraph/SceneGraph.h \
     CgUtils/Functions.h \
     CgUtils/ObjLoader.h \
     CgBase/CgBaseImage.h \
