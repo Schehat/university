@@ -24,9 +24,9 @@ SOURCES += main.cpp \
     CgQtViewer/CgTrackball.cpp \
     CgEvents/CgWindowResizeEvent.cpp \
     CgEvents/CgLoadObjFileEvent.cpp \
+    CgSceneGraph/CgSceneGraph.cpp \
     CgSceneGraph/CgSceneGraphEntity.cpp \
     CgSceneGraph/CgUnityCube.cpp \
-    CgSceneGraph/SceneGraph.cpp \
     CgUtils/Functions.cpp \
     CgUtils/ObjLoader.cpp \
     CgEvents/CgTrackballEvent.cpp
@@ -61,9 +61,9 @@ HEADERS += \
     CgQtViewer/CgTrackball.h \
     CgEvents/CgWindowResizeEvent.h \
     CgEvents/CgLoadObjFileEvent.h \
+    CgSceneGraph/CgSceneGraph.h \
     CgSceneGraph/CgSceneGraphEntity.h \
     CgSceneGraph/CgUnityCube.h \
-    CgSceneGraph/SceneGraph.h \
     CgUtils/Functions.h \
     CgUtils/ObjLoader.h \
     CgBase/CgBaseImage.h \
