@@ -1,6 +1,7 @@
 de/hsh/steam/entities/Rating.class
 de/hsh/steam/entities/User.class
 de/hsh/steam/repositories/SeriesRepository.class
+UserResource.class
 de/hsh/steam/repositories/SerializedSeriesRepository.class
 de/hsh/steam/services/SteamService.class
 de/hsh/steam/JAXRSConfiguration.class

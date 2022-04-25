@@ -22,8 +22,7 @@ public class UserResource {
         if (users == null) {
             return Response.status(404).build();
         } else {
-            return Response.ok().entity(users).build();
+            return Response.status(200).entity(users).build();
         }
     }
-
 }
