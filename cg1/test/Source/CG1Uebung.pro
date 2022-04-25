@@ -7,19 +7,25 @@ CONFIG += c++11
 SOURCES += main.cpp \
     CgEvents/CgColorChangeEvent.cpp \
     CgEvents/CgLaneRiesenfeldEvent.cpp \
+    CgEvents/CgRotationEvent.cpp \
     CgQtViewer/CGQtGLRenderWidget.cpp \
     CgQtViewer/CgQtGui.cpp \
     CgBase/CgObservable.cpp \
     CgEvents/CgMouseEvent.cpp \
     CgQtViewer/CgQtMainApplication.cpp \
+    CgSceneGraph/CgAppearance.cpp \
+    CgSceneGraph/CgExampleTriangle.cpp \
+    CgSceneGraph/CgLoadObjFile.cpp \
     CgSceneGraph/CgPolyline.cpp \
+    CgSceneGraph/CgRotation.cpp \
     CgSceneGraph/CgSceneControl.cpp \
     CgEvents/CgKeyEvent.cpp \
-    CgSceneGraph/CgExampleTriangle.cpp \
     CgQtViewer/CgQtGlBufferObject.cpp \
     CgQtViewer/CgTrackball.cpp \
     CgEvents/CgWindowResizeEvent.cpp \
     CgEvents/CgLoadObjFileEvent.cpp \
+    CgSceneGraph/CgSceneGraph.cpp \
+    CgSceneGraph/CgSceneGraphEntity.cpp \
     CgSceneGraph/CgUnityCube.cpp \
     CgUtils/Functions.cpp \
     CgUtils/ObjLoader.cpp \
@@ -28,6 +34,7 @@ SOURCES += main.cpp \
 HEADERS += \
     CgEvents/CgColorChangeEvent.h \
     CgEvents/CgLaneRiesenfeldEvent.h \
+    CgEvents/CgRotationEvent.h \
     CgQtViewer/CgQtGLRenderWidget.h \
     CgQtViewer/CgQtGui.h \
     CgBase/CgObserver.h \
@@ -36,12 +43,15 @@ HEADERS += \
     CgBase/CgEnums.h \
     CgEvents/CgMouseEvent.h \
     CgQtViewer/CgQtMainApplication.h \
+    CgSceneGraph/CgAppearance.h \
+    CgSceneGraph/CgExampleTriangle.h \
+    CgSceneGraph/CgLoadObjFile.h \
     CgSceneGraph/CgPolyline.h \
+    CgSceneGraph/CgRotation.h \
     CgSceneGraph/CgSceneControl.h \
     CgEvents/CgKeyEvent.h \
     CgBase/CgBaseRenderer.h \
     CgBase/CgBaseRenderableObject.h \
-    CgSceneGraph/CgExampleTriangle.h \
     CgBase/CgBasePointCloud.h \
     CgBase/CgBaseTriangleMesh.h \
     CgBase/CgBasePolygonMesh.h \
@@ -51,6 +61,8 @@ HEADERS += \
     CgQtViewer/CgTrackball.h \
     CgEvents/CgWindowResizeEvent.h \
     CgEvents/CgLoadObjFileEvent.h \
+    CgSceneGraph/CgSceneGraph.h \
+    CgSceneGraph/CgSceneGraphEntity.h \
     CgSceneGraph/CgUnityCube.h \
     CgUtils/Functions.h \
     CgUtils/ObjLoader.h \
