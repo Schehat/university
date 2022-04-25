@@ -1,0 +1,11 @@
+de/hsh/steam/entities/Rating.class
+de/hsh/steam/entities/User.class
+de/hsh/steam/repositories/SeriesRepository.class
+de/hsh/steam/repositories/SerializedSeriesRepository.class
+de/hsh/steam/services/SteamService.class
+de/hsh/steam/JAXRSConfiguration.class
+de/hsh/steam/entities/Streamingprovider.class
+de/hsh/steam/entities/Genre.class
+de/hsh/steam/entities/Series.class
+de/hsh/steam/resources/JavaEE8Resource.class
+de/hsh/steam/entities/Score.class
