@@ -7,6 +7,9 @@
 #include "../CgBase/CgBaseRenderableObject.h"
 #include "CgAppearance.h"
 #include "CgSceneGraph.h"
+#include "CgBase/CgBaseRenderer.h"
+
+class CgSceneGraph;
 
 class CgSceneGraphEntity
 {
@@ -26,7 +29,7 @@ public:
     void pushObject(CgBaseRenderableObject* object);
     void pushChildren(CgSceneGraphEntity* child);
 
-    void iterateAllChildren_DFS(CgSceneGraph&);
+    void iterateAllChildren_DFS(CgSceneGraph* sceneGraph, CgBaseRenderer *renderer);
 
 private:
     std::vector<CgBaseRenderableObject*> m_list_of_objects;

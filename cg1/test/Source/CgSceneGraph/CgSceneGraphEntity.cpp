@@ -1,4 +1,5 @@
 #include "CgSceneGraphEntity.h"
+#include "iostream"
 
 CgSceneGraphEntity::CgSceneGraphEntity()
 {
@@ -6,26 +7,38 @@ CgSceneGraphEntity::CgSceneGraphEntity()
 }
 
 
-void CgSceneGraphEntity::iterateAllChildren_DFS(CgSceneGraph&)
+void CgSceneGraphEntity::iterateAllChildren_DFS(CgSceneGraph* sceneGraph, CgBaseRenderer *renderer)
 {
+    // push
+    sceneGraph->pushMatrix(sceneGraph->getCurrent_transformation() * this->getCurrentTransformation());
 
-    //push
-    CgSceneGraph.pushMatrix(this->getCurrentTransformation());
-    // applyTransormation
+    // applyTransormation & include a scenegrah into rendering
+    m_curren_transformation = sceneGraph->getModelviewMatrixStack().top();
+
+    glm::mat4 mv_matrix = sceneGraph->getLookAt_matrix() * sceneGraph->getTrackball_rotation()*  m_curren_transformation;
+    glm::mat3 normal_matrix = glm::transpose(glm::inverse(glm::mat3(mv_matrix)));
+
+    renderer->setUniformValue("projMatrix"        ,sceneGraph->getProj_matrix());
+    renderer->setUniformValue("modelviewMatrix"   ,mv_matrix);    //top of stack in case of scenegraph
+    renderer->setUniformValue("normalMatrix"      ,normal_matrix);
+
+
     // zeichne das aktuelle Entity
-
-    // m_renderer->setCurrentMatrix(stack.top())
-    // m_renderer->render(m_current_object);
+    for (unsigned int i = 0; i < this->getListOfObject().size(); ++i) {
+        renderer->render(this->getListOfObject().at(i));
+    }
 
     for(unsigned int i=0;i<m_children.size();i++)
     {
-        m_children[i]->iterateAllChildren_DFS(CgSceneGraph);
+        m_children[i]->iterateAllChildren_DFS(sceneGraph, renderer);
     }
-   //pop
+
+    // pop
+   sceneGraph->popMatrix();
 }
 
 std::vector<CgBaseRenderableObject*> CgSceneGraphEntity::getListOfObject() {return m_list_of_objects;}
-glm::mat4 CgSceneGraphEntity::getCurrentTransformation() {m_curren_transformation;}
+glm::mat4 CgSceneGraphEntity::getCurrentTransformation() {return m_curren_transformation;}
 CgAppearance CgSceneGraphEntity::getAppearance() {return m_appearance;}
 CgSceneGraphEntity* CgSceneGraphEntity::getParent() {return m_parent;}
 std::vector<CgSceneGraphEntity*> CgSceneGraphEntity::getChildren() {return m_children;}

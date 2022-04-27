@@ -46,11 +46,11 @@ CgSceneControl::CgSceneControl()
 //        m_polylines.push_back(new CgPolyline(i, pp));
 //    }
 
-    curve.push_back( glm::vec3(0.0  , 1.5  , 0.0) );
-    curve.push_back( glm::vec3(1.0  , 0.5  , 0.0) );
-    curve.push_back( glm::vec3(1.0  ,-0.5  , 0.0) );
-    curve.push_back( glm::vec3(0.0  ,-1.5  , 0.0) );
-    m_polyline = new CgPolyline(Functions::getId(), curve);
+//    curve.push_back( glm::vec3(0.0  , 1.5  , 0.0) );
+//    curve.push_back( glm::vec3(1.0  , 0.5  , 0.0) );
+//    curve.push_back( glm::vec3(1.0  ,-0.5  , 0.0) );
+//    curve.push_back( glm::vec3(0.0  ,-1.5  , 0.0) );
+//    m_polyline = new CgPolyline(Functions::getId(), curve);
 
 }
 
@@ -123,8 +123,6 @@ void CgSceneControl::renderObjects()
     m_renderer->setUniformValue("matSpecularColor"  ,glm::vec4(0.8,0.72,0.21,1.0));
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
 
-
-
     // include a scenegraph into rendering
     // m_current_transformation = scenegrap
 
@@ -191,14 +189,14 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         if(ev->text()=="+")
         {
             glm::mat4 scalemat = glm::mat4(1.);
-            scalemat = glm::scale(scalemat,glm::vec3(1.2,1.2,1.2));
+            scalemat = glm::scale(scalemat,glm::vec3(1.1,1.1,1.1));
             m_current_transformation=m_current_transformation*scalemat;
             m_renderer->redraw();
         }
         if(ev->text()=="-")
         {
             glm::mat4 scalemat = glm::mat4(1.);
-            scalemat = glm::scale(scalemat,glm::vec3(0.8,0.8,0.8));
+            scalemat = glm::scale(scalemat,glm::vec3(0.9,0.9,0.9));
 
             m_current_transformation=m_current_transformation*scalemat;
 
@@ -216,7 +214,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
     if(e->getType() & Cg::LoadObjFileEvent)
     {
+
         CgLoadObjFileEvent* ev = (CgLoadObjFileEvent*)e;
+
 
         ObjLoader* loader= new ObjLoader();
         loader->load(ev->FileName());
@@ -242,8 +242,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
         for(unsigned int i = 0; i < m_loadObj->getVertexNormals().size() ; ++i) {
             std::vector<glm::vec3> vertices;
-            vertices.push_back(m_loadObj->getVertices()[i]);
-            vertices.push_back(m_loadObj->getVertices()[i] + (m_loadObj->getVertexNormals()[i] / 100.0f));
+            vertices.push_back( m_loadObj->getVertices()[i] );
+            vertices.push_back( (m_loadObj->getVertices()[i] + (m_loadObj->getVertexNormals()[i]/100.0f) ) );
             m_polylines.push_back(new CgPolyline(Functions::getId(), vertices));
         }
 
@@ -251,13 +251,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             m_renderer->render(m_polylines[i]);
             m_renderer->init(m_polylines[i]);
         }
-
         m_renderer->redraw();
 
-//        int indexx = 1;
-//        std::cout << norm.at(indexx)[0] << " == "  << m_loadObj->getVertexNormals().at(indexx)[0] << std::endl;
-//        std::cout << norm.at(indexx)[1] << " == "  << m_loadObj->getVertexNormals().at(indexx)[1] << std::endl;
-//        std::cout << norm.at(indexx)[2] << " == "  << m_loadObj->getVertexNormals().at(indexx)[2] << std::endl;
     }
 
     //change color event Farber aendern Event
@@ -291,8 +286,12 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         CgLaneRiesenfeldEvent* ev = (CgLaneRiesenfeldEvent*)e;
         std::cout << *ev << std::endl;
 
-//        if(Functions::XOR(m_polyline != nullptr, m_rotation != nullptr)){
         if(m_polyline != nullptr){
+            if(m_rotation != nullptr) {
+                delete m_rotation;
+                m_polylines.clear();
+                m_polyline = new CgPolyline(Functions::getId(),curve);
+            }
             m_polyline->setVertices(curve);
             m_renderer->init(m_polyline);
             m_renderer->redraw();
@@ -332,29 +331,29 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             m_polyline = nullptr;
 
             if (ev->getNormals() == true) {
-
+// dreiecksnormalen
 //                for(unsigned int i = 0; i < m_rotation->getFaceCentroid().size() ; ++i) {
 //                    std::vector<glm::vec3> vertices;
 
 //                    vertices.push_back( m_rotation->getFaceCentroid()[i] );
-//                    vertices.push_back(m_rotation->getFaceCentroid()[i] + m_rotation->getFaceNormals()[i]);
+//                    vertices.push_back( (m_rotation->getFaceCentroid()[i] + (m_rotation->getFaceNormals()[i]) ) );
 //                    m_polylines.push_back(new CgPolyline(Functions::getId(), vertices));
 //                }
 
-                for(unsigned int i = 0; i < m_rotation->getVertices().size(); ++i) {
+                for(unsigned int i = 0; i < m_rotation->getVertexNormals().size() ; ++i) {
                     std::vector<glm::vec3> vertices;
-                    vertices.push_back(m_rotation->getVertices()[i]);
-                    glm::vec3 a = m_rotation->getVertices()[i] + m_rotation->getVertexNormals()[i];
-                    vertices.push_back(a);
+
+                    vertices.push_back( m_rotation->getVertices()[i] );
+                    vertices.push_back( (m_rotation->getVertices()[i] + (m_rotation->getVertexNormals()[i]) ) );
                     m_polylines.push_back(new CgPolyline(Functions::getId(), vertices));
                 }
 
-                for(unsigned int i = 0; i < m_polylines.size() ; ++i) {
-                    m_renderer->render(m_polylines[i]);
-                    m_renderer->init(m_polylines[i]);
-                }
+                 for(unsigned int i = 0; i < m_polylines.size(); ++i) {
+                     m_renderer->render(m_polylines[i]);
+                     m_renderer->init(m_polylines[i]);
+                 }
+                 m_renderer->redraw();
             }
-
 
             m_renderer->init(m_rotation);
             m_renderer->redraw();
