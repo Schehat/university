@@ -6,10 +6,11 @@ CgSceneGraphEntity::CgSceneGraphEntity()
 }
 
 
-void CgSceneGraphEntity::iterateAllChildren_DFS()
+void CgSceneGraphEntity::iterateAllChildren_DFS(CgSceneGraph&)
 {
 
     //push
+    CgSceneGraph.pushMatrix(this->getCurrentTransformation());
     // applyTransormation
     // zeichne das aktuelle Entity
 
@@ -18,7 +19,7 @@ void CgSceneGraphEntity::iterateAllChildren_DFS()
 
     for(unsigned int i=0;i<m_children.size();i++)
     {
-        m_children[i]->iterateAllChildren_DFS();
+        m_children[i]->iterateAllChildren_DFS(CgSceneGraph);
     }
    //pop
 }
