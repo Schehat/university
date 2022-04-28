@@ -10,6 +10,9 @@
 #include "CgQtViewer/CgQtGui.h"
 #include "CgSceneGraph/CgSceneControl.h"
 
+#include "CgSceneGraph/CgSceneGraph.h"
+#include "CgSceneGraph/CgSceneGraphEntity.h"
+
 int main(int argc, char **argv) {
 
 
@@ -22,7 +25,7 @@ int main(int argc, char **argv) {
 
     QApplication app(argc, argv);
 
-       QCoreApplication::setApplicationName("Übung Computergrafik 1 -  SoSe 2021");
+       QCoreApplication::setApplicationName("Übung Computergrafik 1 -  SoSe 2022");
        QCoreApplication::setOrganizationName("QtProject");
        QCoreApplication::setApplicationVersion(QT_VERSION_STR);
        QCommandLineParser parser;
@@ -69,14 +72,14 @@ int main(int argc, char **argv) {
     /*   Control: Scene-Controller erzeugen                                              */
     /*************************************************************************************/
 
-       CgSceneControl* scene_control = new CgSceneControl();
+//       CgSceneControl* scene_control = new CgSceneControl();
 
-       // Controller und View über Observer Pattern verbinden
-       mainApp.getGui()->attachObserver(scene_control);
+//       // Controller und View über Observer Pattern verbinden
+//       mainApp.getGui()->attachObserver(scene_control);
 
 
-       // Renderer über Control ansteuerbar machen
-       scene_control->setRenderer(mainApp.getGui()->getRenderer());
+//       // Renderer über Control ansteuerbar machen
+//       scene_control->setRenderer(mainApp.getGui()->getRenderer());
 
 
    /*************************************************************************************/
@@ -85,6 +88,14 @@ int main(int argc, char **argv) {
 
        //  innerhalbb der SceneControl Klasse,
 
+       CgSceneGraph* scene_graph = new CgSceneGraph();
+
+       // Controller und View über Observer Pattern verbinden
+       mainApp.getGui()->attachObserver(scene_graph);
+
+
+       // Renderer über Control ansteuerbar machen
+       scene_graph->setRenderer(mainApp.getGui()->getRenderer());
 
 
     return app.exec();

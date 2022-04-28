@@ -6,10 +6,10 @@ CgExampleTriangle::CgExampleTriangle(int id):
 m_type(Cg::TriangleMesh),
 m_id(id)
 {
-//    m_vertices.push_back(glm::vec3(-0.5,0.0,0.0));
-//    m_vertices.push_back(glm::vec3(0.0,-0.5,0.0));
-//    m_vertices.push_back(glm::vec3(0.0,0.5,0.0));
-//    m_vertices.push_back(glm::vec3(0.5,0.0,0.0));
+    m_vertices.push_back(glm::vec3(-0.5,0.0,0.0));
+    m_vertices.push_back(glm::vec3(0.0,-0.5,0.0));
+    m_vertices.push_back(glm::vec3(0.0,0.5,0.0));
+    m_vertices.push_back(glm::vec3(0.5,0.0,0.0));
 
     m_triangle_indices.push_back(0);
     m_triangle_indices.push_back(1);
@@ -21,7 +21,7 @@ m_id(id)
 //    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
 //    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
 //    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
-//    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));
+//    m_vertex_normals.push_back(glm::vec3(0.0,0.0,1.0));-
 }
 
 
