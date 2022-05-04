@@ -29,11 +29,9 @@ public:
     void pushObject(CgBaseRenderableObject* object);
     void pushChildren(CgSceneGraphEntity* child);
 
-    void iterateAllChildren_DFS(CgSceneGraph* sceneGraph, CgBaseRenderer *renderer);
-
 private:
     std::vector<CgBaseRenderableObject*> m_list_of_objects;
-    glm::mat4 m_curren_transformation;
+    glm::mat4 m_current_transformation;
     CgAppearance m_appearance;
     CgSceneGraphEntity* m_parent;
     std::vector<CgSceneGraphEntity*> m_children;

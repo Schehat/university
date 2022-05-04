@@ -34,6 +34,8 @@ public:
     void popMatrix();
     void applyTransform(glm::mat4 arg);
 
+    void iterateAllChildren_DFS(CgSceneGraphEntity* node);
+
     glm::mat4 getCurrent_transformation() const;
     void setCurrent_transformation(const glm::mat4 &current_transformation);
     glm::mat4 getTrackball_rotation() const;
@@ -60,8 +62,6 @@ private:
 
     CgExampleTriangle* m_triangle;
     CgUnityCube* m_cube;
-
-
 };
 
 #endif // SCENEGRAPH_H
