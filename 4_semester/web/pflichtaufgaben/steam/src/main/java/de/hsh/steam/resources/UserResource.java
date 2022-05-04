@@ -56,10 +56,4 @@ public class UserResource {
             return Response.created(uriBuilder.build()).entity(user).build();
         }
     }
-
-    @Path("/{name}/ratings")
-    public RatingResource getRatingResource() {
-        return new RatingResource();
-    }
-
 }
