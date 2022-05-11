@@ -1,27 +1,7 @@
 //Objekte und Strukturen anlegen, verwalten resetten und l¨oschen. Dies stellt den Bereich Control“ des MVC Konzeptes dar.
 
 #include "CgSceneControl.h"
-#include "CgBase/CgEnums.h"
-#include "CgEvents/CgMouseEvent.h"
-#include "CgEvents/CgKeyEvent.h"
-#include "CgEvents/CgWindowResizeEvent.h"
-#include "CgEvents/CgLoadObjFileEvent.h"
-#include "CgEvents/CgTrackballEvent.h"
-#include "CgBase/CgBaseRenderer.h"
-#include "CgEvents/CgColorChangeEvent.h"
-#include "CgEvents/CgLaneRiesenfeldEvent.h"
-#include "CgEvents/CgRotationEvent.h"
-#include "CgExampleTriangle.h"
-#include "CgUnityCube.h"
-#include "CgPolyline.h"
-#include "CgRotation.h"
-#include "CgLoadObjFile.h"
-#include "../CgUtils/Functions.h"
-#include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
-#include "CgUtils/ObjLoader.h"
-#include <string>
-#include <cmath>
+
 
 CgSceneControl::CgSceneControl()
 {
@@ -70,10 +50,20 @@ void CgSceneControl::renderObjects()
     m_renderer->setUniformValue("matSpecularColor"  ,glm::vec4(0.8,0.72,0.21,1.0));
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
 
+    // iterate all children
     if (m_scene!=NULL) {
         m_scene->render(this, m_scene->getRootNode());
     }
 
+    // set coordinate system
+    if (entity_selected) {
+        for (int i=0; i<3; ++i) {
+            // verschieben zum selektierten Objekt
+            setCurrentTransformation(selected_entity->getCurrentTransformation());
+            m_renderer->setUniformValue("mycolor", m_scene->getCoordSystem()->getColorSystem()[i]);
+            m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
+        }
+    }
 }
 
 void CgSceneControl::handleEvent(CgBaseEvent* e)
@@ -107,9 +97,11 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
     {
         CgKeyEvent* ev = (CgKeyEvent*)e;
         std::cout << *ev <<std::endl;
-        if (ev->text() == "e") {
+        // unselect object
+        if (ev->text() == "w") {
             if (entity_selected) {
                 entity_selected = false;
+                // restore color of current entity because will be overwritten when selected
                 glm::vec4 old_color = m_scene->getCurrentEntityOldColor();
                 old_color *= 255.0;
                 m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
@@ -117,26 +109,32 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             }
 
         }
-        if(ev->text()=="n")
+        // select object
+        if(ev->text()=="q")
         {
             entity_selected = true;
+            // restore color of current entity
             if (m_scene->getCurrentEntity() != NULL) {
                 glm::vec4 old_color = m_scene->getCurrentEntityOldColor();
                 old_color *= 255.0;
                 m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
             }
+            // select next entity and change its color
             selected_entity = m_scene->getNextEntity();
             selected_entity->getAppearance().setObjectColor(glm::vec4(0.0, 255.0, 0.0, 1.0));
             m_renderer->redraw();
         }
+
+        // zoom if object selected
         if(entity_selected && ev->text()=="+")
         {
-            std::cout<<"hELLO"<<std::endl;
-            glm::mat4 scaled_matrix = glm::scale(selected_entity->getCurrentTransformation(),
-                                                 glm::vec3(1.2,1.2,1.2));
-            selected_entity->setCurrentTransformation(scaled_matrix);
+            // getObjectTransformation due to only want to scale current object and not getCurrentTransformation
+            selected_entity->setObjectTransformation(glm::scale(selected_entity->getObjectTransformation(),
+                                                                   glm::vec3(1.2,1.2,1.2)));
+            //selected_entity->setCurrentTransformation(scaled_matrix);
             m_renderer->redraw();
         }
+
         if((!entity_selected) && ev->text()=="+")
         {
             // glm::mat4 scalemat = glm::mat4(1.);
@@ -144,11 +142,12 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             // m_current_transformation=m_current_transformation*scalemat;
             m_renderer->redraw();
         }
+
         if(entity_selected && ev->text()=="-")
         {
-            selected_entity->setCurrentTransformation(
-                        glm::scale(selected_entity->getCurrentTransformation(),
-                                   glm::vec3(0.8, 0.8, 0.8)));
+            selected_entity->setObjectTransformation(glm::scale(selected_entity->getObjectTransformation(),
+                                                                   glm::vec3(0.8,0.8,0.8)));
+            //selected_entity->setCurrentTransformation(scaled_matrix);
             m_renderer->redraw();
         }
         if((!entity_selected) && ev->text()=="-")
@@ -160,7 +159,6 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         }
         // hier kommt jetzt die Abarbeitung des Events hin...
     }
-
     if(e->getType() & Cg::WindowResizeEvent)
     {
         CgWindowResizeEvent* ev = (CgWindowResizeEvent*)e;
