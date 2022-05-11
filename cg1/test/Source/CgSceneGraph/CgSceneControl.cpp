@@ -109,10 +109,20 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             }
 
         }
+        // select group object
+        if (ev->text() == "e") {
+            if (!entity_group_selected) {
+                entity_group_selected = true;
+
+                selected_entity->getAppearance().setObjectColor(glm::vec4(255.0, 0.0, 0.0, 1.0));
+                m_renderer->redraw();
+            }
+
+        }
         // select object
         if(ev->text()=="q")
         {
-            entity_selected = true;
+            entity_group_selected = false;
             // restore color of current entity
             if (m_scene->getCurrentEntity() != NULL) {
                 glm::vec4 old_color = m_scene->getCurrentEntityOldColor();
@@ -120,18 +130,30 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                 m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
             }
             // select next entity and change its color
-            selected_entity = m_scene->getNextEntity();
+            if (entity_selected==true) {
+                selected_entity = m_scene->getNextEntity();
+            }
+            entity_selected=true;
             selected_entity->getAppearance().setObjectColor(glm::vec4(0.0, 255.0, 0.0, 1.0));
             m_renderer->redraw();
         }
 
         // zoom if object selected
-        if(entity_selected && ev->text()=="+")
+        if(entity_selected && !entity_group_selected && ev->text()=="+")
         {
             // getObjectTransformation due to only want to scale current object and not getCurrentTransformation
             selected_entity->setObjectTransformation(glm::scale(selected_entity->getObjectTransformation(),
                                                                    glm::vec3(1.2,1.2,1.2)));
             //selected_entity->setCurrentTransformation(scaled_matrix);
+            m_renderer->redraw();
+        }
+        // zoom if object group selected
+        if(entity_selected && entity_group_selected && ev->text()=="+")
+        {
+            // getObjectTransformation due to only want to scale current object and not getCurrentTransformation
+            glm::mat4 scaled_matrix = glm::scale(selected_entity->getCurrentTransformation(),
+                                                 glm::vec3(1.2,1.2,1.2));
+            selected_entity->setCurrentTransformation(scaled_matrix);
             m_renderer->redraw();
         }
 
@@ -143,11 +165,20 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             m_renderer->redraw();
         }
 
-        if(entity_selected && ev->text()=="-")
+        if(entity_selected && !entity_group_selected && ev->text()=="-")
         {
             selected_entity->setObjectTransformation(glm::scale(selected_entity->getObjectTransformation(),
                                                                    glm::vec3(0.8,0.8,0.8)));
             //selected_entity->setCurrentTransformation(scaled_matrix);
+            m_renderer->redraw();
+        }
+        // zoom if object group selected
+        if(entity_selected && entity_group_selected && ev->text()=="-")
+        {
+            // getObjectTransformation due to only want to scale current object and not getCurrentTransformation
+            glm::mat4 scaled_matrix = glm::scale(selected_entity->getCurrentTransformation(),
+                                                 glm::vec3(0.8,0.8,0.8));
+            selected_entity->setCurrentTransformation(scaled_matrix);
             m_renderer->redraw();
         }
         if((!entity_selected) && ev->text()=="-")
@@ -157,7 +188,81 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             // m_current_transformation=m_current_transformation*scalemat;
             m_renderer->redraw();
         }
-        // hier kommt jetzt die Abarbeitung des Events hin...
+
+        // x-rotation - red axis
+        if(entity_selected && !entity_group_selected && ev->text()=="x")
+        {
+            glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getObjectTransformation());
+            glm::mat4 rotation_matrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
+                                                 glm::vec4(0.0, cos(M_PI/12) , sin(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, -sin(M_PI/12) , cos(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, 0.0, 0.0, 1.0));
+            glm::mat4 translateBack = glm::inverse(translationToOrigin);
+            selected_entity->setObjectTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getObjectTransformation());
+            m_renderer->redraw();
+        }
+        if(entity_selected && entity_group_selected && ev->text()=="x")
+        {
+            glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getCurrentTransformation());
+            glm::mat4 rotation_matrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
+                                                 glm::vec4(0.0, cos(M_PI/12) , sin(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, -sin(M_PI/12) , cos(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, 0.0, 0.0, 1.0));
+            glm::mat4 translateBack = glm::inverse(translationToOrigin);
+            selected_entity->setCurrentTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getCurrentTransformation());
+            m_renderer->redraw();
+        }
+
+        // y-rotation - green axis
+        if(entity_selected && !entity_group_selected && ev->text()=="y")
+        {
+            glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getObjectTransformation());
+            glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/12), 0.0, sin(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, 1.0, 0.0, 0.0),
+                                                 glm::vec4(-sin(M_PI/12), 0.0, cos(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, 0.0, 0.0, 1.0));
+            glm::mat4 translateBack = glm::inverse(translationToOrigin);
+            selected_entity->setObjectTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getObjectTransformation());
+            m_renderer->redraw();
+        }
+        if(entity_selected && entity_group_selected && ev->text()=="y")
+        {
+            glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getCurrentTransformation());
+            glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/12), 0.0, sin(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, 1.0, 0.0, 0.0),
+                                                 glm::vec4(-sin(M_PI/12), 0.0, cos(M_PI/12), 0.0),
+                                                 glm::vec4(0.0, 0.0, 0.0, 1.0));
+            glm::mat4 translateBack = glm::inverse(translationToOrigin);
+            selected_entity->setCurrentTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getCurrentTransformation());
+            m_renderer->redraw();
+        }
+
+        // z-rotation - blue axis
+        if(entity_selected && !entity_group_selected && ev->text()=="z")
+        {
+            glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getObjectTransformation());
+            glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/12), sin(M_PI/12), 0.0, 0.0),
+                                                 glm::vec4(-sin(M_PI/12), cos(M_PI/12), 0.0, 0.0),
+                                                 glm::vec4(0.0, 0.0, 1.0, 0.0),
+                                                 glm::vec4(0.0, 0.0, 0.0, 1.0));
+            glm::mat4 translateBack = glm::inverse(translationToOrigin);
+            selected_entity->setObjectTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getObjectTransformation());
+            m_renderer->redraw();
+        }
+        if(entity_selected && entity_group_selected && ev->text()=="z")
+        {
+            glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getCurrentTransformation());
+            glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/12), sin(M_PI/12), 0.0, 0.0),
+                                                 glm::vec4(-sin(M_PI/12), cos(M_PI/12), 0.0, 0.0),
+                                                 glm::vec4(0.0, 0.0, 0.0, 0.0),
+                                                 glm::vec4(0.0, 0.0, 0.0, 1.0));
+            glm::mat4 translateBack = glm::inverse(translationToOrigin);
+            selected_entity->setCurrentTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getCurrentTransformation());
+            m_renderer->redraw();
+        }
+
+
+
     }
     if(e->getType() & Cg::WindowResizeEvent)
     {

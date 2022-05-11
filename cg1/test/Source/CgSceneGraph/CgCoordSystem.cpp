@@ -7,8 +7,8 @@ CgCoordSystem::CgCoordSystem() {
 CgCoordSystem::CgCoordSystem(std::vector<CgPolyline*> polylines) {
     coord_system = polylines;
     color_system.push_back(glm::vec4(1.0, 0.0, 0.0, 1.0));
-    color_system.push_back(glm::vec4(0.0, 1.0, 0.0, 1.0));
-    color_system.push_back(glm::vec4(0.0, 0.0, 1.0, 1.0));
+    color_system.push_back(glm::vec4(1.0, 1.0, 0.0, 1.0));
+    color_system.push_back(glm::vec4(0.0, 1.0, 1.0, 1.0));
 }
 
 CgCoordSystem::~CgCoordSystem() {
