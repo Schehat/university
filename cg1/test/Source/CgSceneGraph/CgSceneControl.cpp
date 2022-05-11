@@ -261,9 +261,28 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             m_renderer->redraw();
         }
 
-
-
+        if(entity_selected && !entity_group_selected && ev->text()=="a")
+        {
+            glm::mat4 translationMatrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
+                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
+                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
+                                                  glm::vec4(0.1, 0.1, 0.1, 1.0));
+            selected_entity->setObjectTransformation(translationMatrix*selected_entity->getObjectTransformation());
+            m_renderer->redraw();
+        }
     }
+
+//    if(e->getType() & Cg::CgButtonTranslation) {
+//        glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getCurrentTransformation());
+//        glm::mat4 translation_matrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, e->),
+//                                                 glm::vec4(0.0, 1.0, 0.0, e->),
+//                                                 glm::vec4(0.0, 0.0, 1.0, e->),
+//                                                 glm::vec4(0.0, 0.0, 0.0, 1.0));
+//        glm::mat4 translateBack = glm::inverse(translationToOrigin);
+//        selected_entity->setCurrentTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getCurrentTransformation());
+//        m_renderer->redraw();
+//    }
+
     if(e->getType() & Cg::WindowResizeEvent)
     {
         CgWindowResizeEvent* ev = (CgWindowResizeEvent*)e;
