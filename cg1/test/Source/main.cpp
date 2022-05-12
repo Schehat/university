@@ -13,6 +13,7 @@
 #include "CgSceneGraph/CgSceneGraph.h"
 #include "CgSceneGraph/CgSceneGraphEntity.h"
 
+
 int main(int argc, char **argv) {
 
 
@@ -72,33 +73,24 @@ int main(int argc, char **argv) {
     /*   Control: Scene-Controller erzeugen                                              */
     /*************************************************************************************/
 
-//       CgSceneControl* scene_control = new CgSceneControl();
+       CgSceneControl* scene_control = new CgSceneControl();
 
-//       // Controller und View über Observer Pattern verbinden
-//       mainApp.getGui()->attachObserver(scene_control);
+       // Controller und View über Observer Pattern verbinden
+       mainApp.getGui()->attachObserver(scene_control);
 
 
-//       // Renderer über Control ansteuerbar machen
-//       scene_control->setRenderer(mainApp.getGui()->getRenderer());
+       // Renderer über Control ansteuerbar machen
+       scene_control->setRenderer(mainApp.getGui()->getRenderer());
 
 
    /*************************************************************************************/
    /*   Model: Scene erzeugen                                                           */
    /*************************************************************************************/
 
-       //  innerhalbb der SceneControl Klasse,
-
-       CgSceneGraph* scene_graph = new CgSceneGraph();
-
-       // Controller und View über Observer Pattern verbinden
-       mainApp.getGui()->attachObserver(scene_graph);
-
-
-       // Renderer über Control ansteuerbar machen
-       scene_graph->setRenderer(mainApp.getGui()->getRenderer());
+       //  innerhalb der SceneControl Klasse... depris schieben
+       CgSceneGraph* scene = new CgSceneGraph();
+       scene_control->setScene(scene);
 
 
     return app.exec();
 }
-
-
