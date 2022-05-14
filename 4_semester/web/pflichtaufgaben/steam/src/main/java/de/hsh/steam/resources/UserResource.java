@@ -1,29 +1,43 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/WebServices/GenericResource.java to edit this template
+ */
 package de.hsh.steam.resources;
 
-import java.util.List;
 import de.hsh.steam.entities.User;
 import de.hsh.steam.repositories.SerializedSeriesRepository;
 import de.hsh.steam.services.SteamService;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriBuilder;
-import jakarta.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import jakarta.enterprise.context.RequestScoped;
+import java.util.List;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
+/**
+ * REST Web Service
+ *
+ * @author SAbde
+ */
 @Path("users")
+@RequestScoped
 public class UserResource {
-
     @Inject
     SteamService steamService;
     @Inject
     SerializedSeriesRepository serializedSeriesRepository;
 
     @GET
-    public Response listAllUsers() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response gettAllUsers() {
         List<User> users = serializedSeriesRepository.getAllUsers();
         if (users == null) {
             return Response.status(404).build();
@@ -33,6 +47,7 @@ public class UserResource {
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{name}")
     public Response getUser(@PathParam("name")String name){
         User user = this.serializedSeriesRepository.getUserObject(name);
@@ -45,6 +60,8 @@ public class UserResource {
 
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(User user, @Context UriInfo uriInfo){        
         if( steamService.newUser(user.getUsername(), user.getPassword())){
             return Response.status(409).build();
@@ -57,9 +74,8 @@ public class UserResource {
         }        
     }
 
-    @Path("/{name}/ratings")
-    public RatingResource getRating(){
-        return new RatingResource();
-    }
-
+//    @Path("/{name}/ratings")
+//    public RatingResource getRating(){
+//        return new RatingResource();
+//    }
 }
