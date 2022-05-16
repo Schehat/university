@@ -51,29 +51,15 @@ public class SteamService {
 		}
 	}
 	
-	public Boolean login(String username, String pwd){
-		repository.readData();
-	
-	/** 
+        
+        /** 
 	 * @param username
 	 * @param pwd
 	 * @return Boolean
 	 */
+	public Boolean login(String username, String pwd){
+		repository.readData();
 		User u = repository.getUserObject(username);
-                //ArrayList<User> liste = repository.getAllUsers();
-                //String test = "";
-                
-                //
-                /*
-                test = "Deine mutter";
-                for(int i = 0; i < liste.size(); i++) {
-                    test = test + "   " + liste.get(i).getUsername() + " " + liste.get(i).getPassword();
-                }
-                return test;
-                */
-                //
-                
-                //Der User ist null warum?
                 
 		if (u!= null) {
                     return u.getPassword().equals(pwd);
@@ -165,5 +151,6 @@ public class SteamService {
 	public boolean clear(){
 		return repository.clear();
 	}
+        
 
 }

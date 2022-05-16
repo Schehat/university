@@ -1,107 +1,104 @@
 package de.hsh.steam.entities;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
  * Class Rating
  */
-public class Rating implements Serializable{
+@XmlRootElement(name = "rating")
+public class Rating implements Serializable {
 
-	private static final long serialVersionUID = -7806234457596021877L;
-	
-	private Score score;
-	private String remark;
-	private User ratingUser;
-	private Series ratedSeries;
-	
-	/**
-	 * Constructor
-	 * @param score
-	 * @param remark
-	 * @param ratingUser
-	 * @param ratedSeries
-	 */
-	public Rating(Score score, String remark, User ratingUser, Series ratedSeries) {
-		super();
-		this.score = score;
-		this.remark = remark;
-		this.ratingUser = ratingUser;
-		this.ratedSeries = ratedSeries;
-	}
+    private static final long serialVersionUID = -7806234457596021877L;
 
-	
-	/** 
-	 * @return Score
-	 */
-	public Score getScore() {
-		return score;
-	}
+    private Score score;
+    private String remark;
+    private User ratingUser;
+    private Series ratedSeries;
 
-	
-	/** 
-	 * @param score
-	 */
-	public void setScore(Score score) {
-		this.score = score;
-	}
+    Rating() {
+    }
 
-	
-	/** 
-	 * @return String
-	 */
-	public String getRemark() {
-		return remark;
-	}
+    /**
+     * Constructor
+     *
+     * @param score
+     * @param remark
+     * @param ratingUser
+     * @param ratedSeries
+     */
+    public Rating(Score score, String remark, User ratingUser, Series ratedSeries) {
+        super();
+        this.score = score;
+        this.remark = remark;
+        this.ratingUser = ratingUser;
+        this.ratedSeries = ratedSeries;
+    }
 
-	
-	/** 
-	 * @param remark
-	 */
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    /**
+     * @return Score
+     */
+    public Score getScore() {
+        return score;
+    }
 
-	
-	/** 
-	 * @return User
-	 */
-	public User getRatingUser() {
-		return ratingUser;
-	}
+    /**
+     * @param score
+     */
+    public void setScore(Score score) {
+        this.score = score;
+    }
 
-	
-	/** 
-	 * @param ofUser
-	 */
-	public void setRatingUser(User ofUser) {
-		this.ratingUser = ofUser;
-	}
+    /**
+     * @return String
+     */
+    public String getRemark() {
+        return remark;
+    }
 
-	
-	/** 
-	 * @return Series
-	 */
-	public Series getRatedSeries() {
-		return ratedSeries;
-	}
+    /**
+     * @param remark
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	/** 
-	 * @param ofSeries
-	 */
-	public void setRatedSeries(Series ofSeries) {
-		this.ratedSeries = ofSeries;
-	}
+    /**
+     * @return User
+     */
+    public User getRatingUser() {
+        return ratingUser;
+    }
 
+    /**
+     * @param ofUser
+     */
+    public void setRatingUser(User ofUser) {
+        this.ratingUser = ofUser;
+    }
 
-	@Override
-	public String toString() {
-		return "{" +
-			" score='" + getScore() + "'" +
-			", remark='" + getRemark() + "'" +
-			", ratingUser='" + getRatingUser() + "'" +
-			", ratedSeries='" + getRatedSeries() + "'" +
-			"}";
-	}
+    /**
+     * @return Series
+     */
+    public Series getRatedSeries() {
+        return ratedSeries;
+    }
 
+    /**
+     * @param ofSeries
+     */
+    public void setRatedSeries(Series ofSeries) {
+        this.ratedSeries = ofSeries;
+    }
+
+    @Override
+    public String toString() {
+        return "{"
+                + " score='" + getScore() + "'"
+                + ", remark='" + getRemark() + "'"
+                + ", ratingUser='" + getRatingUser() + "'"
+                + ", ratedSeries='" + getRatedSeries() + "'"
+                + "}";
+    }
 
 }
