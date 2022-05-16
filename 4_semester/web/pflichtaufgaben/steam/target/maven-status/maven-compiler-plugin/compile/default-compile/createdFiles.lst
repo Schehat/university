@@ -1,3 +1,4 @@
+web\event\UserEventNavigator.class
 de\hsh\steam\resources\JakartaEE8Resource.class
 de\hsh\steam\entities\Rating.class
 de\hsh\steam\repositories\SeriesRepository.class
@@ -7,6 +8,7 @@ de\hsh\steam\repositories\SerializedSeriesRepository.class
 de\hsh\steam\resources\ApplicationConfig.class
 de\hsh\steam\entities\Streamingprovider.class
 de\hsh\steam\entities\User.class
+web\data\UserDataBean.class
 de\hsh\steam\JakartaRestConfiguration.class
 de\hsh\steam\resources\SeriesResource.class
 de\hsh\steam\resources\Utils.class
