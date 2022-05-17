@@ -29,12 +29,12 @@ CgSceneGraph::CgSceneGraph()
 
     // Initialize planet 1
     m_planet1 = new CgSceneGraphEntity(objects);
-    m_planet1->setAppearance(new CgAppearance());
-    m_planet1->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
     m_planet1->setCurrentTransformation(glm::mat4(glm::vec4(0.5, 0.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 0.5, 0.0, 0.0),
                                                   glm::vec4(0.0, 0.0, 0.5, 0.0),
                                                   glm::vec4(1.0, 1.0, 0.0, 1.0)));
+    m_planet1->setAppearance(new CgAppearance());
+    m_planet1->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
     m_planet1->setParent(m_sun);
 
     // Initialize planet 2

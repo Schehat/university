@@ -56,6 +56,13 @@ private:
     bool entity_selected;
     bool entity_group_selected;
 
+    bool doTranslate;
+    bool doScale;
+    bool doRotate;
+    bool doX;
+    bool doY;
+    bool doZ;
+
     CgBaseRenderer* m_renderer;
 
     glm::mat4 m_current_transformation;

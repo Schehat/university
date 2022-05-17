@@ -8,7 +8,6 @@ SOURCES += main.cpp \
     CgEvents/CgColorChangeEvent.cpp \
     CgEvents/CgLaneRiesenfeldEvent.cpp \
     CgEvents/CgRotationEvent.cpp \
-    CgEvents/CgTranslationEvent.cpp \
     CgQtViewer/CGQtGLRenderWidget.cpp \
     CgQtViewer/CgQtGui.cpp \
     CgBase/CgObservable.cpp \
