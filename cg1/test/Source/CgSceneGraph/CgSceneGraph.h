@@ -66,9 +66,6 @@ private:
     CgSceneGraphEntity* m_moon2;
 
     CgCoordSystem* coord_system;
-
-
-
 };
 
 #endif // SCENEGRAPH_H

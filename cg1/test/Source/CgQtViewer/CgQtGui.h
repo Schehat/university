@@ -112,6 +112,7 @@ private:
     QSpinBox*   SpinBox_rotatorische_Segmente;
     QCheckBox*  CheckBox_shownormals;
 
+    QCheckBox*  CheckBox_group;
 
 
 private slots:
@@ -134,11 +135,6 @@ private slots:
     void slotButton_LR_UA_reset_Pressed();
 
     void slotButtonRotation();
-
-
-
-
-
 };
 
 #endif
