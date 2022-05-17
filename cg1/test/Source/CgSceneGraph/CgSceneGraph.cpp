@@ -18,8 +18,9 @@ CgSceneGraph::CgSceneGraph()
     m_index_of_selected_gui_elem = -1;
     std::vector<CgBaseRenderableObject*> objects;
 
-    m_cube = new CgUnityCube(Functions::getId());
-    objects.push_back(m_cube);
+   m_human = new CgLoadObjFile(Functions::getId(),"/home/schehat/university/cg1/test/Source/CgData/Man_sitting.obj");
+   m_cube = new CgUnityCube(Functions::getId());
+   objects.push_back(m_human);
 
     // Initialize sun
     m_sun = new CgSceneGraphEntity(objects);
