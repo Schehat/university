@@ -21,12 +21,12 @@ public class Person {
     @NotNull
     @Min(40)
     @Max(140)
-    private int weight;
+    private int weight = 80;
     
     @NotNull
     @Min(120)
     @Max(250)
-    private int height;
+    private int height = 170;
     
 
     double bmi;

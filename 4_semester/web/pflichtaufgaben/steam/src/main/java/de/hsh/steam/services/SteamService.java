@@ -51,8 +51,8 @@ public class SteamService {
 		}
 	}
 	
-	
-	/** 
+        
+        /** 
 	 * @param username
 	 * @param pwd
 	 * @return Boolean
@@ -60,9 +60,12 @@ public class SteamService {
 	public Boolean login(String username, String pwd){
 		repository.readData();
 		User u = repository.getUserObject(username);
-		if (u!= null)
-			return u.getPassword().equals(pwd);
-		return false;
+                
+		if (u!= null) {
+                    return u.getPassword().equals(pwd);
+                }
+                return false;
+                
 	}
 	
 	
@@ -148,5 +151,6 @@ public class SteamService {
 	public boolean clear(){
 		return repository.clear();
 	}
+        
 
 }

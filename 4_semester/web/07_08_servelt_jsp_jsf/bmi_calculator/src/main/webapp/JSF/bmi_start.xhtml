@@ -5,17 +5,18 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="main.css"/> 
         
         <title>BMI Berechnung</title>
     </h:head>
 
     <h:body>
 
-        <h3> BMI Berechnung</h3>
+        <h1> BMI Berechnung</h1>
 
         <h:form>
             Gewicht: <h:inputText value="#{bean_data.weight}"   validatorMessage="Gewicht unrealistisch "/> <br/> 
-            Größe: <h:inputText value="#{bean_data.height}"   validatorMessage="Größe unrealistisch"/> <br/> 
+            Größe:   <h:inputText value="#{bean_data.height}"    validatorMessage="Größe unrealistisch"/> <br/> 
             
             <h:commandButton value="berechne" action="#{bean_handler.calculateBMI(bean_data)}"/>
             

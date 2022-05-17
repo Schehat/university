@@ -35,13 +35,13 @@ public class bmi_calculator {
         bmi = Math.round(bmi * 100.0)/100.0;
 
         if (bmi < 18.5) {
-            return "Ein Wert unter 18,5 wird als Untergewicht eingestuft";
+            return "Ein Wert unter 18,5 wird als Untergewicht eingestuft!";
         } else if (bmi > 25) {
-            return "Ab 25,0 bis 29,9 spricht man von Übergewicht.";
+            return "Ab 25,0 bis 29,9 spricht man von Übergewicht!";
         } else if (bmi > 30){
-            return "Ab einem BMI-Wert über 30 handelt es sich um Adipositas (Fettleibigkeit).";
+            return "Ab einem BMI-Wert über 30 handelt es sich um Adipositas (Fettleibigkeit)!";
         }
-        return "Das Normalgewicht eines Menschen liegt bei einem BMI von 18,5 bis 24,9";
+        return "Das Normalgewicht eines Menschen liegt bei einem BMI von 18,5 bis 24,9!";
     }
 
     public double getMax() {
