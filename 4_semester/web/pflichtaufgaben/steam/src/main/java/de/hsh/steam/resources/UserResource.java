@@ -14,6 +14,7 @@ import javax.ws.rs.Path;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -72,5 +73,10 @@ public class UserResource {
             return Response.created(uriBuilder.build()).entity(user).build();
         }
     }
-
+    
+    @DELETE
+    public Response deleteUser() {
+        steamService.clear();
+        return Response.status(200).entity(serializedSeriesRepository.getAllUsers()).build();
+    }
 }
