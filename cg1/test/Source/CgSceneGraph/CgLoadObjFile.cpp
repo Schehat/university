@@ -7,6 +7,20 @@ CgLoadObjFile::CgLoadObjFile(int id):
 m_type(Cg::TriangleMesh),
 m_id(id)
 {
+
+}
+
+CgLoadObjFile::CgLoadObjFile(int id, std::string filename):
+m_type(Cg::TriangleMesh),
+m_id(id)
+{
+
+    ObjLoader loader;
+    loader.load(filename);
+
+    loader.getPositionData(m_vertices);
+    loader.getNormalData(m_vertex_normals);
+    loader.getFaceIndexData(m_triangle_indices);
 }
 
 CgLoadObjFile::CgLoadObjFile(int id, std::vector<glm::vec3> arg_verts,  std::vector<glm::vec3> arg_normals, std::vector<unsigned int> arg_triangle_indices):
@@ -32,7 +46,6 @@ m_id(id)
     }
     //dreieck Normalen + punkt normalen berechnen
     for (unsigned int i = 0; i < m_triangle_indices.size(); i+=3) {
-        // face normals
         glm::vec3 vec1 = m_vertices[m_triangle_indices[i+1]] - m_vertices[m_triangle_indices[i]];
         glm::vec3 vec2 = m_vertices[m_triangle_indices[i+2]] - m_vertices[m_triangle_indices[i]];
 
@@ -43,10 +56,12 @@ m_id(id)
         m_vertex_normals.at(m_triangle_indices[i])      += normal;
         m_vertex_normals.at(m_triangle_indices[i+1])    += normal;
         m_vertex_normals.at(m_triangle_indices[i+2])    += normal;
+
     }
 
-    for (unsigned int i = 0; i < m_vertex_normals.size(); i++) {
-        m_vertex_normals[i] = glm::normalize(m_vertex_normals[i]);
+    for(unsigned int i = 0; i<m_vertex_normals.size(); i++){
+        m_vertex_normals.at(i) = glm::normalize(m_vertex_normals.at(i));
+
     }
 
 }

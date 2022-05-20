@@ -57,6 +57,7 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     QWidget *opt_rotation = new QWidget;
     createOptionPanelRotation(opt_rotation);
 
+
     QWidget *otheropt = new QWidget;
     createOptionPanelExample1(otheropt);
 
@@ -64,7 +65,7 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     m_tabs->addTab(opt_color,"&Color");        //tab name
     m_tabs->addTab(opt_LR_UA,"&L-R UA");
     m_tabs->addTab(opt_rotation,"&Rotation");
-    m_tabs->addTab(otheropt,"&tab");
+    //m_tabs->addTab(otheropt,"&tab");
     container->addWidget(m_tabs);
 
     m_tabs->setMaximumWidth(400);
@@ -235,7 +236,7 @@ void CgQtGui::createOptionPanelRotation(QWidget* parent)
     tab_Rotation->addWidget(SpinBox_rotatorische_Segmente);
     SpinBox_rotatorische_Segmente->setMinimum(0);
     SpinBox_rotatorische_Segmente->setMaximum(360);
-    SpinBox_rotatorische_Segmente->setValue(0);
+    SpinBox_rotatorische_Segmente->setValue(5);
     //SpinBox_rotatorische_Segmente->setPrefix("");
 
     //set spacing
@@ -364,11 +365,10 @@ void CgQtGui::slotButton_LR_UA_reset_Pressed()
 void CgQtGui::slotButtonRotation()
 {
    std::cout << "button pressed to rotate around the Y-axis" << std::endl;
-   CgBaseEvent* e = new CgRotationEvent(Cg::CgButtonRotation, SpinBox_rotatorische_Segmente->value(),CheckBox_shownormals->isChecked());
+   CgBaseEvent* e = new CgRotationEvent(Cg::CgButtonRotation, SpinBox_rotatorische_Segmente->value(),CheckBox_shownormals->isChecked() );
    notifyObserver(e);
 
 }
-
 
 void CgQtGui::mouseEvent(QMouseEvent* event)
 {

@@ -18,8 +18,9 @@ CgSceneGraph::CgSceneGraph()
     m_index_of_selected_gui_elem = -1;
     std::vector<CgBaseRenderableObject*> objects;
 
-    m_cube = new CgUnityCube(Functions::getId());
-    objects.push_back(m_cube);
+   m_human = new CgLoadObjFile(Functions::getId(),"/home/schehat/university/cg1/test/Source/CgData/Man_sitting.obj");
+   m_cube = new CgUnityCube(Functions::getId());
+   objects.push_back(m_human);
 
     // Initialize sun
     m_sun = new CgSceneGraphEntity(objects);
@@ -29,12 +30,12 @@ CgSceneGraph::CgSceneGraph()
 
     // Initialize planet 1
     m_planet1 = new CgSceneGraphEntity(objects);
-    m_planet1->setAppearance(new CgAppearance());
-    m_planet1->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
     m_planet1->setCurrentTransformation(glm::mat4(glm::vec4(0.5, 0.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 0.5, 0.0, 0.0),
                                                   glm::vec4(0.0, 0.0, 0.5, 0.0),
                                                   glm::vec4(1.0, 1.0, 0.0, 1.0)));
+    m_planet1->setAppearance(new CgAppearance());
+    m_planet1->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
     m_planet1->setParent(m_sun);
 
     // Initialize planet 2
