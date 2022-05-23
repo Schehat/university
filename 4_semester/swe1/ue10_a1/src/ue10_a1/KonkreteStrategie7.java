@@ -5,3 +5,4 @@ public class KonkreteStrategie7 extends Strategie{
 		return (int) (warenwert * 0.07);
 	}
 }
+

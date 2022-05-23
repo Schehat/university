@@ -1,0 +1,10 @@
+<div class="temperature-calculator">
+    <div class="input-celsius">
+        <span>Gib Celsius ein: </span>
+        <input type="number" [(ngModel)]="celsius">
+        <button (click)="addCelsius()">erhöhe um 10 Grad</button>
+    </div>
+    <div class="result">
+        <span>Fahrenheitwert: {{ getFahrenheit()  }}  </span>
+    </div>
+</div> 

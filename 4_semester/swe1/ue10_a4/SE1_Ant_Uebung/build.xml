@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <project name="test" default="compile">
-    <targer name="prepare">
+    <target name="prepare">
         <mkdir dir="bin/model" />
         <mkdir dir="bin/db" />
         <mkdir dir="bin/gui" />
         <mkdir dir="dist" />
-    </targer>
+    </target>
 
-    <targer name="compile" depends="prepare">
-        <javac srcdir="src-model" destdir="bin/model" />
-        <javac srcdir="src-database" destdir="bin/db" />
-        <javac srcdir="src-gui" destdir="bin/gui" />
-    </targer>
+    <target name="compile" depends="prepare">
+        <javac srcdir="src-model" destdir="bin/model" classpath="lib/commons-logging-1.1.jar" />
+        <javac srcdir="src-database" destdir="bin/db" classpath="lib/commons-logging-1.1.jar" />
+        <javac srcdir="src-gui" destdir="bin/gui" classpath="lib/commons-logging-1.1.jar" />
+    </target>
 
     <target name="compress" depends="compile">
         <jar destfile="dist/model.jar" basedir="bin/model" />
@@ -20,7 +20,7 @@
     </target>
 
     <target name="run" depends="compile">
-        <java classname="org.se1.anttest.gui.LectureJFrame" />
+        <java fork="true" classname="org.se1.anttest.gui.LectureJFrame" classpath="lib/commons-logging-1.1.jar" />
     </target>
 
     <target name="clean">

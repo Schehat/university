@@ -1,0 +1,26 @@
+<div class="temperature-calculator">
+    <div class="input-celsius">
+        Ort <input type="string" [(ngModel)]="ort" placeholder="gebe ort ein"/> <br>  <br>
+        <button (click)="getWetter()">Wetter ....</button>
+        <div class="result">
+            Wetterverlauf: 
+                <ul>
+                    <li *ngFor="let w of wetter" > {{w.location}} -- {{w.temperature}} celsius</li>
+                </ul>
+        </div>
+    </div>
+
+    
+    <br />
+    <div class="temperature-calculator">
+        <div class="input-celsius">
+            <span>Celsius </span>
+            <input type="number" [(ngModel)]="celsius" placeholder="gebe celsius ein">
+            <button (click)="calculateFahrenheit()">Fahrenheit ....</button> <br>
+        </div>
+        <div class="result">
+            <span> Fahrenheit: {{fahrenheit}} </span>
+        </div>
+    </div>
+</div>
+<span> {{ error }} </span>
