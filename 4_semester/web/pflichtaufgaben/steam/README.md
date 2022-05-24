@@ -28,6 +28,5 @@ Listen Sie in dieser Markdown-Datei alle Mitglieder Ihrer Gruppe auf (Name, Vorn
 
 4.  Mohamed, Aland 1630233
 ```
-- 3.1 Wireframe
 - 3.2. Umsetzung von HTML5 und CSS3
 ```

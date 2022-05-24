@@ -28,6 +28,7 @@ public class SteamService {
 	public static SteamService getInstance() {
 		if (exemplar == null) {
 			exemplar = new SteamService();
+                        exemplar.repository.readData();
 		}
 		return exemplar; 
 	}
@@ -151,6 +152,10 @@ public class SteamService {
 	public boolean clear(){
 		return repository.clear();
 	}
+        
+        public void dumpRepository(){
+            repository.dumpRepository();
+        }
         
 
 }

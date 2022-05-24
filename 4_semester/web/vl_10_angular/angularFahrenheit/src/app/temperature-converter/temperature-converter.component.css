@@ -1,0 +1,9 @@
+.temperature-calculator {
+    font-family: sans-serif;
+}
+.input-celsius, .result {
+    padding: 20px;
+}
+.result {
+    background: #f4f4f4;
+}

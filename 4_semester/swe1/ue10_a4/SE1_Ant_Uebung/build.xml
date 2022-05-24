@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project name="test" default="compile">
+    <target name="prepare">
+        <mkdir dir="bin/model" />
+        <mkdir dir="bin/db" />
+        <mkdir dir="bin/gui" />
+        <mkdir dir="dist" />
+    </target>
+
+    <target name="compile" depends="prepare">
+        <javac srcdir="src-model" destdir="bin/model" classpath="lib/commons-logging-1.1.jar" />
+        <javac srcdir="src-database" destdir="bin/db" classpath="lib/commons-logging-1.1.jar" />
+        <javac srcdir="src-gui" destdir="bin/gui" classpath="lib/commons-logging-1.1.jar" />
+    </target>
+
+    <target name="compress" depends="compile">
+        <jar destfile="dist/model.jar" basedir="bin/model" />
+        <jar destfile="dist/db.jar" basedir="bin/db" />
+        <jar destfile="dist/gui.jar" basedir="bin/gui" />
+    </target>
+
+    <target name="run" depends="compile">
+        <java fork="true" classname="org.se1.anttest.gui.LectureJFrame" classpath="lib/commons-logging-1.1.jar" />
+    </target>
+
+    <target name="clean">
+        <delete dir="dist" />
+        <delete dir="bin" />
+    </target>
+</project>

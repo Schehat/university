@@ -28,7 +28,7 @@ import javax.ws.rs.core.UriBuilder;
 /**
  * REST Web Service
  *
- * @author SAbde
+ * @author lushaj
  */
 @Path("series")
 @XmlRootElement
@@ -65,9 +65,9 @@ public class SeriesResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchSeries(@QueryParam("genre") String genre,
-                                    @QueryParam("streamingprovider") String streamingprovider) {
+            @QueryParam("streamingprovider") String streamingprovider) {
         List<Series> searchSeries = steamService.search(null, Utils.stringToGenre(genre),
-                                            Utils.stringToProvider(streamingprovider), null);
+                Utils.stringToProvider(streamingprovider), null);
         return Response.ok().entity(searchSeries).build();
     }
 
