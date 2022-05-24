@@ -20,7 +20,6 @@ CgSceneControl::CgSceneControl()
     doX=false;
     doY=false;
     doZ=false;
-
 }
 
 
@@ -57,6 +56,8 @@ void CgSceneControl::renderObjects()
 
     m_renderer->setUniformValue("matSpecularColor"  ,glm::vec4(0.8,0.72,0.21,1.0));
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
+
+    setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
 
     // iterate all children
     if (m_scene!=NULL) {
@@ -141,12 +142,17 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             if (!entity_group_selected) {
                 entity_selected = true;
                 entity_group_selected = true;
-
-                selected_entity->getAppearance().setObjectColor(glm::vec4(255.0, 0.0, 0.0, 1.0));
+                selected_entity->getAppearance().setObjectColor(glm::vec4(237.0, 36.0, 207.0, 1.0));
+                for (unsigned int i = 0; i < selected_entity->getChildren().size(); ++i) {
+                    selected_entity->getChildren()[i]->getAppearance().setObjectColor(glm::vec4(237.0, 36.0, 207.0, 1.0));
+                }
                 m_renderer->redraw();
             } else {
                 entity_group_selected = false;
                 selected_entity->getAppearance().setObjectColor(glm::vec4(0.0, 255.0, 0.0, 1.0));
+                for (unsigned int i = 0; i < selected_entity->getChildren().size(); ++i) {
+                    selected_entity->getChildren()[i]->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
+                }
                 m_renderer->redraw();
             }
 
@@ -240,7 +246,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                     }
                 }
 
-                if (entity_selected && entity_group_selected)
+                if (entity_selected && entity_group_selected) {
                     selected_entity->setCurrentTransformation(glm::scale(selected_entity->getCurrentTransformation(),
                                                                     glm::vec3(scaleX, scaleY, scaleZ)));
                     for (int i = 0; i < 4; ++i) {
@@ -249,6 +255,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                                     << ", " << selected_entity->getCurrentTransformation()[i][2]
                                     << ", " << selected_entity->getCurrentTransformation()[i][3] << ")\n";
                     }
+                }
             }
 
             // decrease in size if object selected
@@ -271,7 +278,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                     }
                 }
 
-                if (entity_selected && entity_group_selected)
+                if (entity_selected && entity_group_selected) {
                     selected_entity->setCurrentTransformation(glm::scale(selected_entity->getCurrentTransformation(),
                                                                     glm::vec3(scaleX, scaleY, scaleZ)));
                     for (int i = 0; i < 4; ++i) {
@@ -280,6 +287,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                                     << ", " << selected_entity->getCurrentTransformation()[i][2]
                                     << ", " << selected_entity->getCurrentTransformation()[i][3] << ")\n";
                     }
+                }
             }
             m_renderer->redraw();
         }
@@ -289,7 +297,6 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             double translateY = 0.0;
             double translateZ = 0.0;
 
-            // increase in size if object selected
             if(ev->text()=="+")
             {
                 if (doX)
@@ -300,9 +307,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                     translateZ = 0.05;
                 if (entity_selected && !entity_group_selected) {
                     glm::mat4 translationMatrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                                      glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                                      glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                                      glm::vec4(translateX, translateY, translateZ, 1.0));
+                                                              glm::vec4(0.0, 1.0, 0.0, 0.0),
+                                                              glm::vec4(0.0, 0.0, 1.0, 0.0),
+                                                              glm::vec4(translateX, translateY, translateZ, 1.0));
                     selected_entity->setObjectTransformation(translationMatrix*selected_entity->getObjectTransformation());
 
                     for (int i = 0; i < 4; ++i) {
@@ -315,9 +322,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
                 if (entity_selected && entity_group_selected) {
                     glm::mat4 translationMatrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                                      glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                                      glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                                      glm::vec4(translateX, translateY, translateZ, 1.0));
+                                                              glm::vec4(0.0, 1.0, 0.0, 0.0),
+                                                              glm::vec4(0.0, 0.0, 1.0, 0.0),
+                                                              glm::vec4(translateX, translateY, translateZ, 1.0));
                     selected_entity->setCurrentTransformation(translationMatrix*selected_entity->getCurrentTransformation());
 
                     for (int i = 0; i < 4; ++i) {
@@ -329,7 +336,6 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                 }
             }
 
-            // decrease in size if object selected
             if(ev->text()=="-")
             {
                 if (doX)
@@ -340,9 +346,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                     translateZ = -0.05;
                 if (entity_selected && !entity_group_selected) {
                     glm::mat4 translationMatrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                                      glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                                      glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                                      glm::vec4(translateX, translateY, translateZ, 1.0));
+                                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
+                                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
+                                                                  glm::vec4(translateX, translateY, translateZ, 1.0));
                     selected_entity->setObjectTransformation(translationMatrix*selected_entity->getObjectTransformation());
 
                     for (int i = 0; i < 4; ++i) {

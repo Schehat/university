@@ -14,6 +14,11 @@ bool Functions::XOR(bool a, bool b)
     return (a + b) % 2;
 }
 
+std::string Functions::getPathtoObj(std::string obj) {
+    return "/home/schehat/university/cg1/test/Source/CgData/" + obj;
+}
+
+
 std::vector<glm::vec3> Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(std::vector<glm::vec3> verticesold, int n) {
     // Unter 3 macht der Algorithmus keinen Sinn
     if(verticesold.size() < 3 || n == 0) return verticesold;

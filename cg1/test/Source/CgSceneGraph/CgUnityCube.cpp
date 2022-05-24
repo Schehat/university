@@ -7,16 +7,16 @@ CgUnityCube::CgUnityCube(int id): m_type(Cg::TriangleMesh), m_id(id)
 {
 
     // Vorderseite
-    m_vertices.push_back(glm::vec3(-sqrt(2)/2,0.0,0.5));  // linke ecke x, y, z
-    m_vertices.push_back(glm::vec3(0.0,-sqrt(2)/2,0.5));  // untere ecke
-    m_vertices.push_back(glm::vec3(0.0,sqrt(2)/2,0.5));   // obere ecke
-    m_vertices.push_back(glm::vec3(sqrt(2)/2,0.0,0.5));   // rechte ecke
+    m_vertices.push_back(glm::vec3(-0.5,0.5,0.5));  // linke obere ecke x, y, z
+    m_vertices.push_back(glm::vec3(-0.5,-0.5,0.5));  // linke untere ecke
+    m_vertices.push_back(glm::vec3(0.5,0.5,0.5));   // rechte obere ecke
+    m_vertices.push_back(glm::vec3(0.5,-0.5,0.5));   // rechte untere ecke
 
     // Rückseite
-    m_vertices.push_back(glm::vec3(-sqrt(2)/2,0.0,-0.5));
-    m_vertices.push_back(glm::vec3(0.0,-sqrt(2)/2,-0.5));
-    m_vertices.push_back(glm::vec3(0.0,sqrt(2)/2,-0.5));
-    m_vertices.push_back(glm::vec3(sqrt(2)/2,0.0,-0.5));
+    m_vertices.push_back(glm::vec3(-0.5,0.5,-0.5));
+    m_vertices.push_back(glm::vec3(-0.5,-0.5,-0.5));
+    m_vertices.push_back(glm::vec3(0.5,0.5,-0.5));
+    m_vertices.push_back(glm::vec3(0.5,-0.5,-0.5));
 
     // Umlaufsinn gegen den Uhrzeiger
     // Fläche Vorderseite:

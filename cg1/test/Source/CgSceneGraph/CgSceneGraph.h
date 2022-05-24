@@ -31,21 +31,21 @@ public:
 
     void setRenderer(CgBaseRenderer* renderer);
     void setRootNode(CgSceneGraphEntity* root);
+
     CgSceneGraphEntity* getRootNode();
-    void initializeInorderList(CgSceneGraphEntity* entity);
     glm::vec4 getCurrentEntityOldColor();
     CgSceneGraphEntity* getCurrentEntity();
     CgSceneGraphEntity* getNextEntity();
-    void render(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
-
     CgCoordSystem* getCoordSystem();
 
+    void initializeInorderList(CgSceneGraphEntity* entity);
+
+    void render(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
 private:
     void pushMatrix();
     void popMatrix();
     void applyTransform(glm::mat4 arg);
 
-private:
     CgSceneGraphEntity* m_root_node;
     std::stack<glm::mat4> m_modelview_matrix_stack;
 
@@ -53,41 +53,30 @@ private:
     glm::vec4 m_current_entity_old_color;
     std::vector<CgSceneGraphEntity*> m_inorder_scene_entities;
 
-    CgExampleTriangle* m_triangle;
-    CgUnityCube* m_cube;
-    CgRotation* m_rotation;
-    CgLoadObjFile* m_loadFile;
-    CgPolyline* m_polyline;
-
-    CgSceneGraphEntity* m_sun;
-    CgSceneGraphEntity* m_planet1;
-    CgSceneGraphEntity* m_planet2;
-    CgSceneGraphEntity* m_moon1;
-    CgSceneGraphEntity* m_moon2;
-
     CgCoordSystem* coord_system;
 
-    //die Welt
+    std::vector<CgBaseRenderableObject*> o_all_objects;
+
+    // all entities
     CgSceneGraphEntity* m_world;
+    CgSceneGraphEntity* m_stuhlbein_ul;
+    CgSceneGraphEntity* m_stuhlbein_ur;
+    CgSceneGraphEntity* m_stuhlbein_ol;
+    CgSceneGraphEntity* m_stuhlbein_or;
+    CgSceneGraphEntity* m_stuhlplate;
+    CgSceneGraphEntity* m_man;
+    CgSceneGraphEntity* m_lehne;
+    CgSceneGraphEntity* m_king;
+    CgSceneGraphEntity* m_checkerboard;
 
-    //stuhl
-    CgSceneGraphEntity* m_chair;
-        //human
-        CgLoadObjFile* m_human;
-
-    //tisch
-    CgSceneGraphEntity* m_table;
-
-        //Schachfigurenbrett
-        CgSceneGraphEntity* m_checkerboard;
-        CgLoadObjFile* m_king;
-        CgLoadObjFile* m_queen;
-        CgLoadObjFile* m_bishop;
-        CgLoadObjFile* m_knight;
-        CgLoadObjFile* m_rock;
-        CgLoadObjFile* m_pawn;
-
-
+    //all objs
+    CgLoadObjFile*  obj_man;
+    CgLoadObjFile*  obj_king;
+    CgLoadObjFile*  obj_queen;
+    CgLoadObjFile*  obj_bishop;
+    CgLoadObjFile*  obj_knight;
+    CgLoadObjFile*  obj_rook;
+    CgUnityCube*    obj_cube;
+    CgRotation*     obj_pawn;
 };
-
 #endif // SCENEGRAPH_H
