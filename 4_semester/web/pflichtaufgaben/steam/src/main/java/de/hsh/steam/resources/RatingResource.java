@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 /**
  * REST Web Service
  *
- * @author SAbde
+ * @author lushaj
  */
 @Path("users/{name}/ratings")
 @XmlRootElement

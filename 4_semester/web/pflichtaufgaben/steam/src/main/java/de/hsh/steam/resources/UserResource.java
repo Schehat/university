@@ -16,6 +16,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +26,7 @@ import javax.ws.rs.core.UriBuilder;
 /**
  * REST Web Service
  *
- * @author SAbde
+ * @author lushaj
  */
 @Path("users")
 @XmlRootElement
@@ -60,23 +61,42 @@ public class UserResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response createUser(User user, @Context UriInfo uriInfo) {
-
-        boolean usernametaken = steamService.newUser(user.getUsername(), user.getPassword());
-
-        if (usernametaken == false) {
-            return Response.status(409).build();
+    public Response registerUser(User user, @Context UriInfo uriInfo) {
+        System.out.println("REST RegisterUser arrived");
+        if (user.getUsername().equals("") || user.getPassword().equals("")) 
+            return Response.status(406).entity("Registierung fehlgeschlagen. Username oder Passwort leer").build();
+        boolean userCreated = steamService.newUser(user.getUsername(), user.getPassword());
+        if (!userCreated) {
+            UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+            uriBuilder.path(user.getUsername());
+            return Response.created(uriBuilder.build()).entity("Registierung erfolgreich").build();
+        } else {
+            return Response.status(409).entity("Registierung fehlgeschlagen. Username bereits vergeben").build();
+        }
+    }
+    
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response loginUser(User user, @Context UriInfo uriInfo) {
+        System.out.println("REST LoginUser arrived");
+        if (user.getUsername().equals("") || user.getPassword().equals("")) 
+            return Response.status(406).entity("Login fehlgeschlagen. Username oder Passwort leer").build();
+        boolean loginSucessful = steamService.login(user.getUsername(), user.getPassword());
+        if (loginSucessful) {
+            return Response.ok().entity("Login erfolgreich").build();
         } else {
             UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
             uriBuilder.path(user.getUsername());
-            user = this.serializedSeriesRepository.getUserObject(user.getUsername());
-            return Response.created(uriBuilder.build()).entity(user).build();
+            return Response.status(406).entity("Login fehlgeschlagen. Username oder Passwort sind falsch").build();
         }
     }
     
     @DELETE
     public Response deleteUser() {
+        System.out.println("start clearing");
         steamService.clear();
         return Response.status(200).entity(serializedSeriesRepository.getAllUsers()).build();
     }
+
 }

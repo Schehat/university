@@ -6,14 +6,15 @@
 function berechnen() {
     let gewicht = document.getElementById("gewicht").value;
     let groeße = document.getElementById("groese").value;
-    let queryParam = new URLSearchParams({"gewicht": gewicht, "groese": groeße})
+    let queryParam = new URLSearchParams({"gewicht": gewicht, "groese": groeße});
     let url = "http://localhost:8080/BMIWebApplication/resources/BMIResource?";
     fetch(url + queryParam)
         .then(response => response.json())
         .then(data => {
             localStorage.setItem("bmi", data.bmi);
             localStorage.setItem("ergebnis", data.ergebnis);
-        });
+        })
+        .catch{ err => console.log("Fetch error", err);
     window.location.href = "bmi_result.html";
 }
 

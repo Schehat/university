@@ -7,12 +7,14 @@ C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\web
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\resources\UserResource.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\entities\Series.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\repositories\SerializedSeriesRepository.java
+C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\web\event\RatingEventNavigator.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\web\data\UserDataBean.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\entities\Genre.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\resources\JakartaEE8Resource.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\services\SteamService.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\entities\Rating.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\resources\Utils.java
+C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\web\data\RatingDataBean.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\entities\User.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\repositories\SeriesRepository.java
 C:\Users\SAbde\university\4_semester\web\pflichtaufgaben\steam\src\main\java\de\hsh\steam\JakartaRestConfiguration.java
