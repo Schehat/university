@@ -1,4 +1,3 @@
-
 #ifndef CGSCENECONTROL_H
 #define CGSCENECONTROL_H
 
@@ -48,6 +47,9 @@ public:
     void renderObjects();
     void setScene(CgSceneGraph* scene);
     void setCurrentTransformation(glm::mat4);
+
+    void iterateChildrenSetColor(CgSceneGraphEntity* entity, glm::vec4 color);
+    void iterateChildrenRestoreOldColor(CgSceneGraphEntity* entity);
 
 private:
     CgSceneGraph* m_scene;

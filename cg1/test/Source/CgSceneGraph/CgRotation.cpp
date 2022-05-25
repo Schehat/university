@@ -5,63 +5,66 @@
 
 CgRotation::CgRotation(int id, std::vector<glm::vec3> indices, int originial_size): m_type(Cg::TriangleMesh), m_id(id)
 {
-    m_vertices.clear();
-
-    for (int i = 0; i < indices.size(); ++i) {
+    for (unsigned int i = 0; i < indices.size(); ++i) {
         m_vertices.push_back(indices.at(i));
     }
-int pos;
+    int pos;
 
-    for (unsigned int i = 0; i < (m_vertices.size()/originial_size)-1; i+=1) { // i-tes Segment
-        for (int j = 0; j < originial_size - 1; ++j) { // pos j im i-ten segment
-             pos = i*originial_size+j;
-            m_triangle_indices.push_back(pos);
-            m_triangle_indices.push_back(pos+1);
-            m_triangle_indices.push_back(originial_size+1+pos);
+    for (unsigned int i = 0; i < (m_vertices.size()/originial_size)-1; i+=1) {      // i-tes Segment
+        for (int j = 0; j < originial_size - 1; ++j) {                              // pos j im i-ten segment
+            pos = i * originial_size + j;
 
             m_triangle_indices.push_back(pos);
-            m_triangle_indices.push_back(originial_size+1+pos);
-            m_triangle_indices.push_back(originial_size+pos);
+            m_triangle_indices.push_back(pos + 1);
+            m_triangle_indices.push_back(pos + originial_size + 1);
+
+            m_triangle_indices.push_back(pos);
+            m_triangle_indices.push_back(pos + originial_size + 1);
+            m_triangle_indices.push_back(pos + originial_size);
         }
     }
-
-     //Normalen & Schwerpunkt berechnen
-//    for (int i = 0; i < m_triangle_indices.size(); i+=3) {
-//        glm::vec3 vec1 = m_vertices[m_triangle_indices[i+1]] - m_vertices[m_triangle_indices[i]];
-//        glm::vec3 vec2 = m_vertices[m_triangle_indices[i+2]] - m_vertices[m_triangle_indices[i]];
-//        glm::vec3 normal = glm::cross(vec2, vec1);
-//        normal=glm::normalize(normal);
-//        m_face_normals.push_back(normal);
-
-//        // vec3 besteht aus floats nicht doubles
-//        glm::vec3 vec_centroid = (m_vertices[m_triangle_indices[i]] + m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+2]]) / (3.0f);
-//        m_face_centroid.push_back(vec_centroid);
-//    }
 
     for (unsigned int i = 0; i < m_vertices.size(); i++) {
         m_vertex_normals.push_back(glm::vec3(0,0,0));
     }
+
     //dreieck Normalen + punkt normalen berechnen
     for (unsigned int i = 0; i < m_triangle_indices.size(); i+=3) {
-        // face normals
         glm::vec3 vec1 = m_vertices[m_triangle_indices[i+1]] - m_vertices[m_triangle_indices[i]];
         glm::vec3 vec2 = m_vertices[m_triangle_indices[i+2]] - m_vertices[m_triangle_indices[i]];
+
         glm::vec3 normal = glm::cross(vec2, vec1);
         normal=glm::normalize(normal);
         m_face_normals.push_back(normal);
 
-         //vec3 besteht aus floats nicht doubles
-          glm::vec3 vec_centroid = (m_vertices[m_triangle_indices[i]] + m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+2]]) / (3.0f);
-          m_face_centroid.push_back(vec_centroid);
+        glm::vec3 vec_centroid = (m_vertices[m_triangle_indices[i]] + m_vertices[m_triangle_indices[i+1]] + m_vertices[m_triangle_indices[i+2]]) / (3.0f);
+        m_face_centroid.push_back(vec_centroid);
 
-        m_vertex_normals.at(m_triangle_indices[i]) += normal;
-        m_vertex_normals.at(m_triangle_indices[i+1]) += normal;
-        m_vertex_normals.at(m_triangle_indices[i+2]) += normal;
+        m_vertex_normals.at(m_triangle_indices[i])      += normal;
+        m_vertex_normals.at(m_triangle_indices[i+1])    += normal;
+        m_vertex_normals.at(m_triangle_indices[i+2])    += normal;
     }
 
-    for (unsigned int i = 0; i < m_vertices.size(); i++) {
-        m_vertex_normals[i] = glm::normalize(m_vertex_normals[i]);
+    for(unsigned int i = 0; i<m_vertex_normals.size(); i++){
+        m_vertex_normals.at(i) = glm::normalize(m_vertex_normals.at(i));
     }
+
+        // Die Variante in O(n²) mit n = Anzahl vertices
+//    for(int i = 0; i < m_vertices.size(); i++){
+//        int pos1 = i;
+//        for(int j = 0; j< originial_size; j++){
+//            if(i == m_vertices.size() - originial_size +j) pos1 =j;
+//        }
+//        for(int j = 0; j<  m_triangle_indices.size(); j+=3) {
+//            if(pos1 == m_triangle_indices[j] || pos1 == m_triangle_indices[j] || pos1 == m_triangle_indices[j] ){
+//                glm::vec3 vec1 = m_vertices[m_triangle_indices[j+1]] - m_vertices[m_triangle_indices[j]];
+//                glm::vec3 vec2 = m_vertices[m_triangle_indices[j+2]] - m_vertices[m_triangle_indices[j]];
+//                glm::vec3 normal = glm::cross(vec2, vec1);
+//                normal=glm::normalize(normal);
+//                m_vertex_normals.at(pos1) += normal;
+//            }
+//        }
+//    }
 
 }
 

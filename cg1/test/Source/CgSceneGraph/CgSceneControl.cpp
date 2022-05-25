@@ -1,7 +1,4 @@
-//Objekte und Strukturen anlegen, verwalten resetten und l¨oschen. Dies stellt den Bereich Control“ des MVC Konzeptes dar.
-
 #include "CgSceneControl.h"
-
 
 CgSceneControl::CgSceneControl()
 {
@@ -61,6 +58,8 @@ void CgSceneControl::renderObjects()
 
     // iterate all children
     if (m_scene!=NULL) {
+        m_scene->popMatrix();
+        m_scene->pushMatrix(m_scene->getRootNode()->getCurrentTransformation());
         m_scene->render(this, m_scene->getRootNode());
     }
 
@@ -127,32 +126,31 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
         // unselect object
         if (ev->text() == "w") {
-            entity_selected = false;
-            entity_group_selected = false;
             if (m_scene->getCurrentEntity() != NULL) {
                 // restore color of current entity because will be overwritten when selected
-                glm::vec4 old_color = m_scene->getCurrentEntityOldColor();
-                old_color *= 255.0;
-                m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
+                m_scene->getCurrentEntity()->getAppearance().setObjectColor(Functions::getWhite());
                 m_renderer->redraw();
+                if(entity_group_selected)
+                    iterateChildrenRestoreOldColor(selected_entity);
             }
+            entity_selected = false;
+            entity_group_selected = false;
         }
         // select group object
         if (ev->text() == "e") {
             if (!entity_group_selected) {
                 entity_selected = true;
                 entity_group_selected = true;
-                selected_entity->getAppearance().setObjectColor(glm::vec4(237.0, 36.0, 207.0, 1.0));
-                for (unsigned int i = 0; i < selected_entity->getChildren().size(); ++i) {
-                    selected_entity->getChildren()[i]->getAppearance().setObjectColor(glm::vec4(237.0, 36.0, 207.0, 1.0));
-                }
+                selected_entity->getAppearance().setOldColor(selected_entity->getAppearance().getObjectColor());
+                selected_entity->getAppearance().setObjectColor(Functions::getPink());
+                iterateChildrenSetColor(selected_entity, Functions::getPink());
                 m_renderer->redraw();
             } else {
                 entity_group_selected = false;
-                selected_entity->getAppearance().setObjectColor(glm::vec4(0.0, 255.0, 0.0, 1.0));
-                for (unsigned int i = 0; i < selected_entity->getChildren().size(); ++i) {
-                    selected_entity->getChildren()[i]->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
-                }
+                glm::vec4 old_color = selected_entity->getAppearance().getOldColor();
+                old_color *= 255.0;
+                m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
+                iterateChildrenRestoreOldColor(selected_entity);
                 m_renderer->redraw();
             }
 
@@ -160,22 +158,22 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         // select object
         if(ev->text()=="q")
         {
+            if (entity_group_selected)
+                iterateChildrenRestoreOldColor(selected_entity);
             entity_group_selected = false;
             // restore color of current entity
             if (m_scene->getCurrentEntity() != NULL) {
-                glm::vec4 old_color = m_scene->getCurrentEntityOldColor();
-                old_color *= 255.0;
-                m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
+                selected_entity->getAppearance().setObjectColor(Functions::getWhite());
             }
             // select next entity and change its color
             if (entity_selected==true) {
                 selected_entity = m_scene->getNextEntity();
             }
             entity_selected=true;
-            selected_entity->getAppearance().setObjectColor(glm::vec4(0.0, 255.0, 0.0, 1.0));
+            selected_entity->getAppearance().setOldColor(selected_entity->getAppearance().getObjectColor());
+            selected_entity->getAppearance().setObjectColor(Functions::getGreen());
             m_renderer->redraw();
         }
-
 
         if(ev->text()=="t") {
             doTranslate = true;
@@ -378,13 +376,14 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         }
 
         if (doRotate) {
+            double angle = M_PI/24;
             // x-rotation - red axis
             if(entity_selected && !entity_group_selected && ev->text()=="x")
             {
                 glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getObjectTransformation());
                 glm::mat4 rotation_matrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                     glm::vec4(0.0, cos(M_PI/24) , sin(M_PI/24), 0.0),
-                                                     glm::vec4(0.0, -sin(M_PI/24) , cos(M_PI/24), 0.0),
+                                                     glm::vec4(0.0, cos(angle) , sin(angle), 0.0),
+                                                     glm::vec4(0.0, -sin(angle) , cos(angle), 0.0),
                                                      glm::vec4(0.0, 0.0, 0.0, 1.0));
                 glm::mat4 translateBack = glm::inverse(translationToOrigin);
                 selected_entity->setObjectTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getObjectTransformation());
@@ -394,8 +393,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             {
                 glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getCurrentTransformation());
                 glm::mat4 rotation_matrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                     glm::vec4(0.0, cos(M_PI/24) , sin(M_PI/24), 0.0),
-                                                     glm::vec4(0.0, -sin(M_PI/24) , cos(M_PI/24), 0.0),
+                                                     glm::vec4(0.0, cos(angle) , sin(angle), 0.0),
+                                                     glm::vec4(0.0, -sin(angle) , cos(angle), 0.0),
                                                      glm::vec4(0.0, 0.0, 0.0, 1.0));
                 glm::mat4 translateBack = glm::inverse(translationToOrigin);
                 selected_entity->setCurrentTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getCurrentTransformation());
@@ -406,9 +405,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             if(entity_selected && !entity_group_selected && ev->text()=="y")
             {
                 glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getObjectTransformation());
-                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/24), 0.0, -sin(M_PI/24), 0.0),
+                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(angle), 0.0, -sin(angle), 0.0),
                                                      glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                     glm::vec4(sin(M_PI/24), 0.0, cos(M_PI/24), 0.0),
+                                                     glm::vec4(sin(angle), 0.0, cos(angle), 0.0),
                                                      glm::vec4(0.0, 0.0, 0.0, 1.0));
                 glm::mat4 translateBack = glm::inverse(translationToOrigin);
                 selected_entity->setObjectTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getObjectTransformation());
@@ -417,9 +416,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             if(entity_selected && entity_group_selected && ev->text()=="y")
             {
                 glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getCurrentTransformation());
-                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/24), 0.0, -sin(M_PI/24), 0.0),
+                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(angle), 0.0, -sin(angle), 0.0),
                                                      glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                     glm::vec4(sin(M_PI/24), 0.0, cos(M_PI/24), 0.0),
+                                                     glm::vec4(sin(angle), 0.0, cos(angle), 0.0),
                                                      glm::vec4(0.0, 0.0, 0.0, 1.0));
                 glm::mat4 translateBack = glm::inverse(translationToOrigin);
                 selected_entity->setCurrentTransformation(translateBack*rotation_matrix*translationToOrigin*selected_entity->getCurrentTransformation());
@@ -430,8 +429,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             if(entity_selected && !entity_group_selected && ev->text()=="z")
             {
                 glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getObjectTransformation());
-                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/24), -sin(M_PI/24), 0.0, 0.0),
-                                                     glm::vec4(sin(M_PI/24), cos(M_PI/24), 0.0, 0.0),
+                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(angle), -sin(angle), 0.0, 0.0),
+                                                     glm::vec4(sin(angle), cos(angle), 0.0, 0.0),
                                                      glm::vec4(0.0, 0.0, 1.0, 0.0),
                                                      glm::vec4(0.0, 0.0, 0.0, 1.0));
                 glm::mat4 translateBack = glm::inverse(translationToOrigin);
@@ -441,8 +440,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             if(entity_selected && entity_group_selected && ev->text()=="z")
             {
                 glm::mat4 translationToOrigin =  glm::inverse(selected_entity->getCurrentTransformation());
-                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(M_PI/24), -sin(M_PI/24), 0.0, 0.0),
-                                                     glm::vec4(sin(M_PI/24), cos(M_PI/24), 0.0, 0.0),
+                glm::mat4 rotation_matrix = glm::mat4(glm::vec4(cos(angle), -sin(angle), 0.0, 0.0),
+                                                     glm::vec4(sin(angle), cos(angle), 0.0, 0.0),
                                                      glm::vec4(0.0, 0.0, 1.0, 0.0),
                                                      glm::vec4(0.0, 0.0, 0.0, 1.0));
                 glm::mat4 translateBack = glm::inverse(translationToOrigin);
@@ -477,4 +476,21 @@ void CgSceneControl::setCurrentTransformation(glm::mat4 transformation_matrix)
     m_renderer->setUniformValue("projMatrix",m_proj_matrix);
     m_renderer->setUniformValue("modelviewMatrix",mv_matrix);
     m_renderer->setUniformValue("normalMatrix",normal_matrix);
+}
+
+void CgSceneControl::iterateChildrenSetColor(CgSceneGraphEntity* entity,glm::vec4 color) {
+    for(unsigned int i = 0; i < entity->getChildren().size(); i++) {
+        entity->getChildren()[i]->getAppearance().setOldColor(entity->getChildren()[i]->getAppearance().getObjectColor());
+        entity->getChildren()[i]->getAppearance().setObjectColor(color);
+        iterateChildrenSetColor(entity->getChildren()[i],color);
+    }
+}
+
+void CgSceneControl::iterateChildrenRestoreOldColor(CgSceneGraphEntity* entity) {
+    for(unsigned int i = 0; i < entity->getChildren().size(); i++) {
+        glm::vec4 old_color = entity->getChildren()[i]->getAppearance().getOldColor();
+        old_color *= 255.0;
+        entity->getChildren()[i]->getAppearance().setObjectColor(old_color);
+        iterateChildrenRestoreOldColor(entity->getChildren()[i]);
+    }
 }
