@@ -40,10 +40,12 @@ public:
 
     void initializeInorderList(CgSceneGraphEntity* entity);
 
+    void pushMatrix(glm::mat4);
+    void popMatrix();
+
     void render(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
 private:
     void pushMatrix();
-    void popMatrix();
     void applyTransform(glm::mat4 arg);
 
     CgSceneGraphEntity* m_root_node;
@@ -60,14 +62,57 @@ private:
     // all entities
     CgSceneGraphEntity* m_world;
     CgSceneGraphEntity* m_stuhlbein_ul;
-    CgSceneGraphEntity* m_stuhlbein_ur;
-    CgSceneGraphEntity* m_stuhlbein_ol;
-    CgSceneGraphEntity* m_stuhlbein_or;
-    CgSceneGraphEntity* m_stuhlplate;
-    CgSceneGraphEntity* m_man;
-    CgSceneGraphEntity* m_lehne;
-    CgSceneGraphEntity* m_king;
-    CgSceneGraphEntity* m_checkerboard;
+        CgSceneGraphEntity* m_stuhlbein_ur;
+        CgSceneGraphEntity* m_stuhlbein_ol;
+        CgSceneGraphEntity* m_stuhlbein_or;
+        CgSceneGraphEntity* m_stuhlplate;
+        CgSceneGraphEntity* m_lehne;
+        CgSceneGraphEntity* m_man;
+    CgSceneGraphEntity* m_tischbein_ul;
+        CgSceneGraphEntity* m_tischbein_ur;
+        CgSceneGraphEntity* m_tischbein_ol;
+        CgSceneGraphEntity* m_tischbein_or;
+        CgSceneGraphEntity* m_tischplatte;
+        CgSceneGraphEntity* m_checkerboard;
+            CgSceneGraphEntity* m_b_king;
+            CgSceneGraphEntity* m_b_queen;
+            CgSceneGraphEntity* m_b_bishop_1;
+            CgSceneGraphEntity* m_b_bishop_2;
+            CgSceneGraphEntity* m_b_knight_1;
+            CgSceneGraphEntity* m_b_knight_2;
+            CgSceneGraphEntity* m_b_rook_1;
+            CgSceneGraphEntity* m_b_rook_2;
+            CgSceneGraphEntity* m_b_pawn_1;
+            CgSceneGraphEntity* m_b_pawn_2;
+            CgSceneGraphEntity* m_b_pawn_3;
+            CgSceneGraphEntity* m_b_pawn_4;
+            CgSceneGraphEntity* m_b_pawn_5;
+            CgSceneGraphEntity* m_b_pawn_6;
+            CgSceneGraphEntity* m_b_pawn_7;
+            CgSceneGraphEntity* m_b_pawn_8;
+
+            CgSceneGraphEntity* m_w_king;
+            CgSceneGraphEntity* m_w_queen;
+            CgSceneGraphEntity* m_w_bishop_1;
+            CgSceneGraphEntity* m_w_bishop_2;
+            CgSceneGraphEntity* m_w_knight_1;
+            CgSceneGraphEntity* m_w_knight_2;
+            CgSceneGraphEntity* m_w_rook_1;
+            CgSceneGraphEntity* m_w_rook_2;
+            CgSceneGraphEntity* m_w_pawn_1;
+            CgSceneGraphEntity* m_w_pawn_2;
+            CgSceneGraphEntity* m_w_pawn_3;
+            CgSceneGraphEntity* m_w_pawn_4;
+            CgSceneGraphEntity* m_w_pawn_5;
+            CgSceneGraphEntity* m_w_pawn_6;
+            CgSceneGraphEntity* m_w_pawn_7;
+            CgSceneGraphEntity* m_w_pawn_8;
+        CgSceneGraphEntity* m_box_plate;
+            CgSceneGraphEntity* m_box_wand1;
+            CgSceneGraphEntity* m_box_wand2;
+            CgSceneGraphEntity* m_box_wand3;
+            CgSceneGraphEntity* m_box_wand4;
+
 
     //all objs
     CgLoadObjFile*  obj_man;
