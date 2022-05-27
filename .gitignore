@@ -5,6 +5,8 @@ bin
 .metadata
 hibernate-release-5.6.0.Final
 glassfish6
+
+target/
 /4_semester/web/07_servelt_jsp/BMI_Rechner_Servlet/target/
 /4_semester/web/07_servelt_jsp/BMI/BMI/target/
 /4_semester/web/07_servelt_jsp/BMI_Rechner_JSP/target/
@@ -12,3 +14,45 @@ glassfish6
 /4_semester/web/pflichtaufgaben/steam/target/
 /4_semester/web/07_08_10_servelt_jsp_jsf_js/BMIWebApplication/target/
 /4_semester/web/07_08_10_servelt_jsp_jsf_js/BMIApplication/target/
+
+# Angular related
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db

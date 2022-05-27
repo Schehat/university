@@ -6,7 +6,7 @@
 function login() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
-    let object = {"username": username, "password": password};
+    let object = {username: username, password: password};
     let url = "http://localhost:8080/steam/resources/users";
     fetch(url, {
         method: "put",
@@ -26,7 +26,7 @@ function login() {
             window.location.href = "series.html";
         })
         .catch( err => {
-            err.text().then (errMess => alert(errMess));
+            err.text().then(errMess => alert(errMess));
         });
 }
 
@@ -52,7 +52,7 @@ function register() {
             alert(data);    
         })
         .catch( err => {
-            err.text().then (errMess => alert(errMess));
+            err.text().then(errMess => alert(errMess));
         });
 
         document.getElementById("username").value = "";

@@ -16,7 +16,7 @@ public class Series implements Serializable {
     private int numberOfSeasons;
     private Genre genre;
     private Streamingprovider streamedBy;
-    private ArrayList<User> seenBy = new ArrayList<User>();
+    private ArrayList<User> seenBy = new ArrayList<>();
 
     public Series() {
     }
@@ -63,6 +63,13 @@ public class Series implements Serializable {
      */
     public ArrayList<User> getSeenBy() {
         return seenBy;
+    }
+    
+    /**
+     * @param seenBy
+     */
+    public void setSeebBy(ArrayList<User> seenBy) {
+        this.seenBy = seenBy;
     }
 
     /**

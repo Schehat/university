@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * Class Rating
  */
-@XmlRootElement(name = "rating")
+@XmlRootElement(name = "ratings")
 public class Rating implements Serializable {
 
     private static final long serialVersionUID = -7806234457596021877L;
@@ -16,7 +16,7 @@ public class Rating implements Serializable {
     private User ratingUser;
     private Series ratedSeries;
 
-    Rating() {
+    public Rating() {
     }
 
     /**
@@ -71,10 +71,10 @@ public class Rating implements Serializable {
     }
 
     /**
-     * @param ofUser
+     * @param ratingUser
      */
-    public void setRatingUser(User ofUser) {
-        this.ratingUser = ofUser;
+    public void setRatingUser(User ratingUser) {
+        this.ratingUser = ratingUser;
     }
 
     /**
@@ -85,10 +85,10 @@ public class Rating implements Serializable {
     }
 
     /**
-     * @param ofSeries
+     * @param ratedSeries
      */
-    public void setRatedSeries(Series ofSeries) {
-        this.ratedSeries = ofSeries;
+    public void setRatedSeries(Series ratedSeries) {
+        this.ratedSeries = ratedSeries;
     }
 
     @Override

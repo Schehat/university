@@ -66,7 +66,7 @@ public class UserResource {
         if (user.getUsername().equals("") || user.getPassword().equals("")) 
             return Response.status(406).entity("Registierung fehlgeschlagen. Username oder Passwort leer").build();
         boolean userCreated = steamService.newUser(user.getUsername(), user.getPassword());
-        if (!userCreated) {
+        if (userCreated) {
             UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
             uriBuilder.path(user.getUsername());
             return Response.created(uriBuilder.build()).entity("Registierung erfolgreich").build();
