@@ -128,7 +128,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         if (ev->text() == "w") {
             if (m_scene->getCurrentEntity() != NULL) {
                 // restore color of current entity because will be overwritten when selected
-                m_scene->getCurrentEntity()->getAppearance().setObjectColor(Functions::getWhite());
+                glm::vec4 old_color = selected_entity->getAppearance().getOldColor();
+                old_color *= 255.0;
+                m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
                 m_renderer->redraw();
                 if(entity_group_selected)
                     iterateChildrenRestoreOldColor(selected_entity);
@@ -141,7 +143,6 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             if (!entity_group_selected) {
                 entity_selected = true;
                 entity_group_selected = true;
-                selected_entity->getAppearance().setOldColor(selected_entity->getAppearance().getObjectColor());
                 selected_entity->getAppearance().setObjectColor(Functions::getPink());
                 iterateChildrenSetColor(selected_entity, Functions::getPink());
                 m_renderer->redraw();
@@ -163,14 +164,15 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             entity_group_selected = false;
             // restore color of current entity
             if (m_scene->getCurrentEntity() != NULL) {
-                selected_entity->getAppearance().setObjectColor(Functions::getWhite());
+                glm::vec4 old_color = selected_entity->getAppearance().getOldColor();
+                old_color *= 255.0;
+                selected_entity->getAppearance().setObjectColor(old_color);
             }
             // select next entity and change its color
             if (entity_selected==true) {
                 selected_entity = m_scene->getNextEntity();
             }
             entity_selected=true;
-            selected_entity->getAppearance().setOldColor(selected_entity->getAppearance().getObjectColor());
             selected_entity->getAppearance().setObjectColor(Functions::getGreen());
             m_renderer->redraw();
         }
@@ -480,7 +482,6 @@ void CgSceneControl::setCurrentTransformation(glm::mat4 transformation_matrix)
 
 void CgSceneControl::iterateChildrenSetColor(CgSceneGraphEntity* entity,glm::vec4 color) {
     for(unsigned int i = 0; i < entity->getChildren().size(); i++) {
-        entity->getChildren()[i]->getAppearance().setOldColor(entity->getChildren()[i]->getAppearance().getObjectColor());
         entity->getChildren()[i]->getAppearance().setObjectColor(color);
         iterateChildrenSetColor(entity->getChildren()[i],color);
     }
