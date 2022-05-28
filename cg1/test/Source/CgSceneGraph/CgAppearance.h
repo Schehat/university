@@ -15,6 +15,7 @@ public:
 
     const glm::vec4& getObjectColor();
     void setObjectColor(glm::vec4 color);
+    void setObjectColorNoOldColorSave(glm::vec4 color);
     glm::vec4& getOldColor();
 };
 

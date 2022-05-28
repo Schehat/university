@@ -130,20 +130,26 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                 // restore color of current entity because will be overwritten when selected
                 glm::vec4 old_color = selected_entity->getAppearance().getOldColor();
                 old_color *= 255.0;
-                m_scene->getCurrentEntity()->getAppearance().setObjectColor(old_color);
+                m_scene->getCurrentEntity()->getAppearance().setObjectColorNoOldColorSave(old_color);
                 m_renderer->redraw();
                 if(entity_group_selected)
                     iterateChildrenRestoreOldColor(selected_entity);
             }
             entity_selected = false;
             entity_group_selected = false;
+            lastPressQ = false;
+            lastPressE = false;
         }
         // select group object
         if (ev->text() == "e") {
             if (!entity_group_selected) {
                 entity_selected = true;
                 entity_group_selected = true;
-                selected_entity->getAppearance().setObjectColor(Functions::getPink());
+                if (lastPressQ || lastPressE) {
+                    selected_entity->getAppearance().setObjectColorNoOldColorSave(Functions::getPink());
+                } else {
+                    selected_entity->getAppearance().setObjectColor(Functions::getPink());
+                }
                 iterateChildrenSetColor(selected_entity, Functions::getPink());
                 m_renderer->redraw();
             } else {
@@ -154,11 +160,12 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                 iterateChildrenRestoreOldColor(selected_entity);
                 m_renderer->redraw();
             }
-
+            lastPressQ = false;
+            lastPressE = true;
         }
         // select object
         if(ev->text()=="q")
-        {
+        {   lastPressQ = true;
             if (entity_group_selected)
                 iterateChildrenRestoreOldColor(selected_entity);
             entity_group_selected = false;
@@ -175,6 +182,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             entity_selected=true;
             selected_entity->getAppearance().setObjectColor(Functions::getGreen());
             m_renderer->redraw();
+            lastPressE = false;
         }
 
         if(ev->text()=="t") {
