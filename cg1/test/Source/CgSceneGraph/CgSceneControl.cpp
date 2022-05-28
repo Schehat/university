@@ -10,7 +10,6 @@ CgSceneControl::CgSceneControl()
     m_trackball_rotation        =glm::mat4(1.);
     m_scalemat                  = glm::mat4(1.);
 
-
     doTranslate = false;
     doScale = false;
     doRotate = false;
@@ -85,6 +84,24 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         std::cout << *ev << std::endl;
 
         // hier kommt jetzt die Abarbeitung des Events hin...
+//        Pixelkoordinaten => NDC wie in Folie 159
+//        NDC mit Inverse der Projektionsmatrix von m_proj_matrix => Kamerakoordinaten
+//        Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation => Weltkoordinaten
+//        Dann durch alle Entities iterieren und Inverse der CurrentMatrix und ObjectMatrix anwenden => Objektkoordinaten
+        double nx_halfed = Functions::getWidth() / 2;
+        double ny_halfed = Functions::getHeight() / 2;
+        double xNDC = (ev->x() - nx_halfed) / nx_halfed;
+        double yNDC = (ev->y() - ny_halfed) / (-nx_halfed);
+        std::cout << "Width: " << Functions::getWidth() << " xNDC: " << xNDC
+                  << " Height: " << Functions::getHeight() << " yNDC: " << yNDC << "\n";
+        glm::vec4 vec = glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1, 1);
+        vec = glm::normalize(vec);
+        vec= glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation)*vec;
+        vec = glm::normalize(vec);
+        std::vector<glm::vec4> vector;
+        vector.push_back(vec);
+        vector.push_bacl(vec*5);
+        CgPolyline strahl = new CgPolyline(1, vector);
     }
 
     if(e->getType() & Cg::CgTrackballEvent)
@@ -464,6 +481,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         {
             CgWindowResizeEvent* ev = (CgWindowResizeEvent*)e;
             std::cout << *ev <<std::endl;
+
             m_proj_matrix=glm::perspective(45.0f, (float)(ev->w()) / ev->h(), 0.01f, 100.0f);
         }
 

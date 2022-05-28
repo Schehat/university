@@ -35,7 +35,6 @@ class CgSceneGraphEntity;
 class CgBaseEvent;
 class CgBaseRenderer;
 
-
 class CgSceneControl : public CgObserver, public CgBaseSceneControl
 {
 public:

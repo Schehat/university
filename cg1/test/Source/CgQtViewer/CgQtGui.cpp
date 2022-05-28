@@ -11,6 +11,7 @@
 #include "../CgEvents/CgColorChangeEvent.h"
 #include "../CgEvents/CgLaneRiesenfeldEvent.h"
 #include "../CgEvents/CgRotationEvent.h"
+#include "../CgUtils/Functions.h"
 
 #include <QSlider>
 #include <QVBoxLayout>
@@ -37,7 +38,6 @@ CgQtGui::CgQtGui(CgQtMainApplication *mw)
     : m_mainWindow(mw)
 {
     m_glRenderWidget = new CgQtGLRenderWidget;
-
 
     connect(m_glRenderWidget, SIGNAL(mouseEvent(QMouseEvent*)), this, SLOT(mouseEvent(QMouseEvent*)));
     connect(m_glRenderWidget, SIGNAL(viewportChanged(int,int)), this, SLOT(viewportChanged(int,int)));
@@ -407,6 +407,8 @@ void CgQtGui::keyPressEvent(QKeyEvent *event)
 
 void CgQtGui::viewportChanged(int w, int h)
 {
+    Functions::setWidth(w);
+    Functions::setHeight(h);
      CgBaseEvent* e = new CgWindowResizeEvent(Cg::WindowResizeEvent,w,h);
      notifyObserver(e);
 }
