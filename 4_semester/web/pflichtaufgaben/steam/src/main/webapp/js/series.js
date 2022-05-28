@@ -111,6 +111,11 @@ function search() {
         .then(response => {
             if (!response.ok) 
                 throw response;
+            // empty body
+            if (response.status === 204) {
+                alert("Keine Treffer");
+                return;
+            }
             return response.json();
     })
         .then(data => {

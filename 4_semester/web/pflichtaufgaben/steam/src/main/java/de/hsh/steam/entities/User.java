@@ -1,8 +1,8 @@
 package de.hsh.steam.entities;
 
-import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Class User
@@ -12,15 +12,17 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = -3545765962123273389L;
 
-    // username ist eindeutig; darf nicht geändert werden
+    // username ist eindeutig
     private String username;
-
-    // password darf nicht geändert werden
+    // username und pwd können nicht geändert werden
     private String password;
+    private ArrayList<Rating> myRatings = new ArrayList<>();
 
-    private ArrayList<Rating> myRatings = new ArrayList<Rating>();
-
+    /**
+     * Constructor
+     */
     public User() {
+
     }
 
     /**
@@ -40,7 +42,7 @@ public class User implements Serializable {
      * @return Boolean
      */
     public Boolean login(String username, String password) {
-        return this.username == username && this.password == password;
+        return this.username.equals(username) && this.password.equals(password);
     }
 
     /**
@@ -107,6 +109,7 @@ public class User implements Serializable {
     /**
      * @return String
      */
+    @Override
     public String toString() {
         return this.username + " " + this.password;
     }
@@ -115,6 +118,7 @@ public class User implements Serializable {
      * @param o
      * @return boolean
      */
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -123,6 +127,6 @@ public class User implements Serializable {
             return true;
         }
         User u = (User) o;
-        return this.username == u.username;
+        return this.username.equals(u.username);
     }
 }

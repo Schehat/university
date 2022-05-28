@@ -1,18 +1,19 @@
 package de.hsh.steam.entities;
 
-import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Class Rating
  */
-@XmlRootElement(name = "ratings")
+@XmlRootElement(name = "rating")
 public class Rating implements Serializable {
 
     private static final long serialVersionUID = -7806234457596021877L;
 
     private Score score;
     private String remark;
+
     private User ratingUser;
     private Series ratedSeries;
 
@@ -71,10 +72,10 @@ public class Rating implements Serializable {
     }
 
     /**
-     * @param ratingUser
+     * @param ofUser
      */
-    public void setRatingUser(User ratingUser) {
-        this.ratingUser = ratingUser;
+    public void setRatingUser(User ofUser) {
+        this.ratingUser = ofUser;
     }
 
     /**
@@ -85,20 +86,15 @@ public class Rating implements Serializable {
     }
 
     /**
-     * @param ratedSeries
+     * @param ofSeries
      */
-    public void setRatedSeries(Series ratedSeries) {
-        this.ratedSeries = ratedSeries;
+    public void setRatedSeries(Series ofSeries) {
+        this.ratedSeries = ofSeries;
     }
 
     @Override
     public String toString() {
-        return "{"
-                + " score='" + getScore() + "'"
-                + ", remark='" + getRemark() + "'"
-                + ", ratingUser='" + getRatingUser() + "'"
-                + ", ratedSeries='" + getRatedSeries() + "'"
-                + "}";
+        return this.ratingUser.getUsername() + " watched " + this.ratedSeries.toString() + " - Rating : " + this.score + ", remark: " + this.remark;
     }
 
 }
