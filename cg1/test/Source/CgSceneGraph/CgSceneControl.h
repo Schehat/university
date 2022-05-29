@@ -29,11 +29,14 @@
 #include "CgUtils/ObjLoader.h"
 #include <string>
 #include <cmath>
+#include <vector>
+#include <glm/glm.hpp>
 
 class CgSceneGraph;
 class CgSceneGraphEntity;
 class CgBaseEvent;
 class CgBaseRenderer;
+class CgPolyline;
 
 class CgSceneControl : public CgObserver, public CgBaseSceneControl
 {

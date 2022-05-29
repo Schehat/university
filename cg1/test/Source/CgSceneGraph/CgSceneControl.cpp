@@ -29,7 +29,6 @@ void CgSceneControl::setRenderer(CgBaseRenderer* r)
 {
     m_renderer=r;
     m_renderer->setSceneControl(this);
-
 }
 CgBaseRenderer*& CgSceneControl::getRenderer()
 {
@@ -71,6 +70,21 @@ void CgSceneControl::renderObjects()
             m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
         }
     }
+
+    if (m_scene != NULL &&  m_scene->getRay() != nullptr) {
+        setCurrentTransformation(glm::mat4(1.0));
+        glm::mat4 translationMatrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
+                                                      glm::vec4(0.0, 1.0, 0.0, 0.0),
+                                                      glm::vec4(0.0, 0.0, 1.0, 0.0),
+                                                      glm::vec4(m_scene->getRay()->getVertices()[1][0],
+                                                                m_scene->getRay()->getVertices()[1][1],
+                                                                m_scene->getRay()->getVertices()[1][2], 1.0));
+        setCurrentTransformation(translationMatrix);
+        // setCurrentTransformation(glm::mat4(1.0));
+        // setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
+        m_renderer->setUniformValue("mycolor", glm::vec4(153.0, 0.0, 255.0, 1.0));
+        m_renderer->render(m_scene->getRay());
+    }
 }
 
 void CgSceneControl::handleEvent(CgBaseEvent* e)
@@ -83,25 +97,40 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         CgMouseEvent* ev = (CgMouseEvent*)e;
         std::cout << *ev << std::endl;
 
-        // hier kommt jetzt die Abarbeitung des Events hin...
-//        Pixelkoordinaten => NDC wie in Folie 159
-//        NDC mit Inverse der Projektionsmatrix von m_proj_matrix => Kamerakoordinaten
-//        Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation => Weltkoordinaten
 //        Dann durch alle Entities iterieren und Inverse der CurrentMatrix und ObjectMatrix anwenden => Objektkoordinaten
-        double nx_halfed = Functions::getWidth() / 2;
-        double ny_halfed = Functions::getHeight() / 2;
-        double xNDC = (ev->x() - nx_halfed) / nx_halfed;
-        double yNDC = (ev->y() - ny_halfed) / (-nx_halfed);
-        std::cout << "Width: " << Functions::getWidth() << " xNDC: " << xNDC
-                  << " Height: " << Functions::getHeight() << " yNDC: " << yNDC << "\n";
-        glm::vec4 vec = glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1, 1);
-        vec = glm::normalize(vec);
-        vec= glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation)*vec;
-        vec = glm::normalize(vec);
-        std::vector<glm::vec4> vector;
-        vector.push_back(vec);
-        vector.push_bacl(vec*5);
-        CgPolyline strahl = new CgPolyline(1, vector);
+
+        if (ev->getMouseButton() == 2) {
+            // Pixelkoordinaten in NDCs
+            double xNDC = ((double) ev->x() - Functions::getWidth()/2.0) / (Functions::getWidth() / 2.0);
+            double yNDC = ((double) ev->y() - Functions::getHeight()/2.0) / (-Functions::getWidth() / 2.0);
+
+            //  NDC mit Inverse der Projektionsmatrix von m_proj_matrix => Kamerakoordinaten
+            glm::vec4 picking_point = glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1, 1);
+            picking_point /= picking_point[3];
+
+            // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation => Weltkoordinaten
+            picking_point = glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation)*picking_point;
+            picking_point /= picking_point[3];
+
+
+            // !!! vllt. Strahl erstellen und dann in Weltkoordinaten umwandeln
+
+
+            // Picking Ray erstellen
+            std::vector<glm::vec3> ray_vertices;
+            double scaling = 1.0;
+            ray_vertices.push_back(glm::vec3(-scaling * picking_point[0], -scaling * picking_point[1], -scaling * picking_point[2]));
+            ray_vertices.push_back(glm::vec3(scaling * picking_point[0], scaling * picking_point[1], scaling * picking_point[2]));
+            m_scene->getRay()->setVertices(ray_vertices);
+
+            std::cout << "Width: " << Functions::getWidth() << " xNDC: " << xNDC
+                      << " Height: " << Functions::getHeight() << " yNDC: " << yNDC << " "
+                      << "A: (" << ray_vertices[0][0] << ", " << ray_vertices[0][1]  << ", " << ray_vertices[0][2]  << ") "
+                      << "B: (" << ray_vertices[1][0]  << ", " <<  ray_vertices[1][1]  << ", " << ray_vertices[1][2]  << ") \n";
+
+            m_scene->setRenderer(m_renderer);
+            m_renderer->redraw();
+        }
     }
 
     if(e->getType() & Cg::CgTrackballEvent)

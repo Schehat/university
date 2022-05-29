@@ -4,7 +4,9 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
+#include "../CgSceneGraph/CgPolyline.h"
 
+class CgPolyline;
 
 class Functions
 {
@@ -29,6 +31,12 @@ public:
     static int getHeight();
     static void setHeight(int value);
 
+    static std::vector<glm::vec3> getPickingRay();
+    static void setPickingRay(const std::vector<glm::vec3> value);
+
+    static CgPolyline* getPolylineRay();
+    static void setPolylineRay(CgPolyline *value);
+
 private:
     static int unique_id;
     static glm::vec4 white;
@@ -39,6 +47,7 @@ private:
     static glm::vec4 pink;
     static glm::vec4 chessPink;
     static glm::vec4 chessBlue;
+
     static int width;
     static int height;
 };

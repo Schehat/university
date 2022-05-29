@@ -14,17 +14,6 @@ m_face_colors{Functions::getGreen()}
     }
 }
 
-CgPolyline::CgPolyline(int id, std::vector<glm::vec4> vertices):
-m_type(Cg::Polyline),
-m_id(id),
-m_line_width{1},
-m_face_colors{Functions::getGreen()}
-{
-    for(unsigned int i = 0; i< vertices.size(); i++) {
-        m_vertices.push_back(glm::vec3(vertices.at(i)[0], vertices.at(i)[1], vertices.at(i)[2]));
-    }
-}
-
 CgPolyline::~CgPolyline(){
     m_vertices.clear();
 }

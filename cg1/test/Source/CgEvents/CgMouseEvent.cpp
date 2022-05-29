@@ -32,3 +32,5 @@ std::ostream& operator<<(std::ostream& os,const CgMouseEvent& e)
 int CgMouseEvent::x() const { return  m_localPos.x; }
 
 int CgMouseEvent::y() const { return  m_localPos.y; }
+
+Cg::MouseButtons CgMouseEvent::getMouseButton() { return m_button; }

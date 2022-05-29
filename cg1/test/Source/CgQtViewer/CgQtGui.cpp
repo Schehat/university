@@ -409,8 +409,8 @@ void CgQtGui::viewportChanged(int w, int h)
 {
     Functions::setWidth(w);
     Functions::setHeight(h);
-     CgBaseEvent* e = new CgWindowResizeEvent(Cg::WindowResizeEvent,w,h);
-     notifyObserver(e);
+    CgBaseEvent* e = new CgWindowResizeEvent(Cg::WindowResizeEvent,w,h);
+    notifyObserver(e);
 }
 
 CgBaseRenderer* CgQtGui::getRenderer()

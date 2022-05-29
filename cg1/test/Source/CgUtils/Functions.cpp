@@ -28,26 +28,10 @@ glm::vec4 Functions::getPink() { return pink; }
 glm::vec4 Functions::getChessPink() { return chessPink; }
 glm::vec4 Functions::getChessBlue() { return chessBlue; }
 
-int Functions::getWidth()
-{
-    return width;
-}
-
-void Functions::setWidth(int value)
-{
-    width = value;
-}
-
-int Functions::getHeight()
-{
-    return height;
-}
-
-void Functions::setHeight(int value)
-{
-    height = value;
-}
-
+int Functions::getWidth() { return width; }
+void Functions::setWidth(int value) { width = value; }
+int Functions::getHeight() { return height; }
+void Functions::setHeight(int value) { height = value; }
 
 std::vector<glm::vec3> Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(std::vector<glm::vec3> verticesold, int n) {
     // Unter 3 macht der Algorithmus keinen Sinn

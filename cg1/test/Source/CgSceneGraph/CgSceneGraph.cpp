@@ -555,6 +555,12 @@ CgSceneGraph::CgSceneGraph()
    vertices.push_back(glm::vec3(0.0, 0.0, 1.0));
    polylines.push_back(new CgPolyline(Functions::getId(), vertices));
    coord_system = new CgCoordSystem(polylines);
+
+   // Polyline Ray
+   vertices.clear();
+   vertices.push_back(glm::vec3(0.0, 0.0, 0.0));
+   vertices.push_back(glm::vec3(0.0, 0.0, 0.0));
+   m_ray = new CgRay(Functions::getId(), vertices);
 }
 
 CgSceneGraph::~CgSceneGraph() {
@@ -563,6 +569,10 @@ CgSceneGraph::~CgSceneGraph() {
         for (unsigned int i = 0; i < m_world->getChildren().size(); ++i) {
             delete m_world->getChildren()[i]->getObject();
         }
+    }
+
+    if (m_ray != NULL) {
+        delete m_ray;
     }
 }
 
@@ -598,6 +608,7 @@ void CgSceneGraph::setRenderer(CgBaseRenderer* renderer) {
     for (unsigned int i=0; i<coord_system->getCoordSystem().size(); ++i) {
         renderer->init(coord_system->getCoordSystem()[i]);
     }
+    renderer->init(m_ray);
 }
 
 void CgSceneGraph::setRootNode(CgSceneGraphEntity* root) {
@@ -615,6 +626,8 @@ void CgSceneGraph::popMatrix() {
 void CgSceneGraph::applyTransform(glm::mat4 arg) {
     m_modelview_matrix_stack.top()*=arg;
 }
+
+CgRay* CgSceneGraph::getRay() { return m_ray; }
 
 void CgSceneGraph::initializeInorderList(CgSceneGraphEntity* entity) {
     m_inorder_scene_entities.push_back(entity);

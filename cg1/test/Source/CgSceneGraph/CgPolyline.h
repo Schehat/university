@@ -25,7 +25,6 @@ public:
     //eigene methoden
     void setVertices(std::vector<glm::vec3>);
     void addVertice(glm::vec3);
-    CgPolyline(int id, std::vector<glm::vec4> vertices):
 
 private:
     const Cg::ObjectType m_type;
