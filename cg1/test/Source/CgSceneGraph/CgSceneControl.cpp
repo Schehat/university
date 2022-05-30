@@ -73,15 +73,6 @@ void CgSceneControl::renderObjects()
 
     if (m_scene != NULL &&  m_scene->getRay() != nullptr) {
         setCurrentTransformation(glm::mat4(1.0));
-        glm::mat4 translationMatrix = glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                      glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                      glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                      glm::vec4(m_scene->getRay()->getVertices()[1][0],
-                                                                m_scene->getRay()->getVertices()[1][1],
-                                                                m_scene->getRay()->getVertices()[1][2], 1.0));
-        setCurrentTransformation(translationMatrix);
-        // setCurrentTransformation(glm::mat4(1.0));
-        // setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
         m_renderer->setUniformValue("mycolor", glm::vec4(153.0, 0.0, 255.0, 1.0));
         m_renderer->render(m_scene->getRay());
     }
@@ -97,36 +88,28 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         CgMouseEvent* ev = (CgMouseEvent*)e;
         std::cout << *ev << std::endl;
 
-//        Dann durch alle Entities iterieren und Inverse der CurrentMatrix und ObjectMatrix anwenden => Objektkoordinaten
+        // Dann durch alle Entities iterieren und Inverse der CurrentMatrix und ObjectMatrix anwenden => Objektkoordinaten
 
         if (ev->getMouseButton() == 2) {
             // Pixelkoordinaten in NDCs
             double xNDC = ((double) ev->x() - Functions::getWidth()/2.0) / (Functions::getWidth() / 2.0);
-            double yNDC = ((double) ev->y() - Functions::getHeight()/2.0) / (-Functions::getWidth() / 2.0);
+            double yNDC = ((double) ev->y() - Functions::getHeight()/2.0) / (-Functions::getHeight() / 2.0);
 
-            //  NDC mit Inverse der Projektionsmatrix von m_proj_matrix => Kamerakoordinaten
-            glm::vec4 picking_point = glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1, 1);
-            picking_point /= picking_point[3];
+            //  NDC mit Inverse der Proje^ktionsmatrix von m_proj_matrix und durch homogene Koordinate teilen => Kamerakoordinaten
+            m_scene->getRay()->setPickingPoint(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -1, 1));
+            // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen => Weltkoordinaten
+            m_scene->getRay()->setPickingPoint(glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation)*m_scene->getRay()->getPickingPoint());
 
-            // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation => Weltkoordinaten
-            picking_point = glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation)*picking_point;
-            picking_point /= picking_point[3];
-
-
-            // !!! vllt. Strahl erstellen und dann in Weltkoordinaten umwandeln
-
-
-            // Picking Ray erstellen
-            std::vector<glm::vec3> ray_vertices;
-            double scaling = 1.0;
-            ray_vertices.push_back(glm::vec3(-scaling * picking_point[0], -scaling * picking_point[1], -scaling * picking_point[2]));
-            ray_vertices.push_back(glm::vec3(scaling * picking_point[0], scaling * picking_point[1], scaling * picking_point[2]));
-            m_scene->getRay()->setVertices(ray_vertices);
+            m_scene->getRay()->createRay();
 
             std::cout << "Width: " << Functions::getWidth() << " xNDC: " << xNDC
                       << " Height: " << Functions::getHeight() << " yNDC: " << yNDC << " "
-                      << "A: (" << ray_vertices[0][0] << ", " << ray_vertices[0][1]  << ", " << ray_vertices[0][2]  << ") "
-                      << "B: (" << ray_vertices[1][0]  << ", " <<  ray_vertices[1][1]  << ", " << ray_vertices[1][2]  << ") \n";
+                      << "A: (" << m_scene->getRay()->getVertices()[0][0] << ", "
+                      << m_scene->getRay()->getVertices()[0][1] << ", "
+                      << m_scene->getRay()->getVertices()[0][2] << ") "
+                      << "B: (" << m_scene->getRay()->getVertices()[1][0]  << ", "
+                      << m_scene->getRay()->getVertices()[1][1] << ", "
+                      << m_scene->getRay()->getVertices()[1][2] << ") \n";
 
             m_scene->setRenderer(m_renderer);
             m_renderer->redraw();

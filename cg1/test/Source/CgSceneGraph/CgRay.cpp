@@ -4,6 +4,7 @@
 #include <iostream>
 
 CgRay::CgRay(int id, std::vector<glm::vec3> vertices):
+scaler {20.0},
 m_type(Cg::Polyline),
 m_id(id),
 m_line_width{1},
@@ -41,3 +42,25 @@ void CgRay::setVertices(std::vector<glm::vec3> newvertices){
 void CgRay::addVertice(glm::vec3 vertex) {
     m_vertices.push_back(vertex);
 }
+
+glm::vec4 CgRay::getPickingPoint() { return picking_point; }
+
+void CgRay::setPickingPoint(glm::vec4 picking_point) {
+    this->picking_point = picking_point;
+    this->picking_point /= this->picking_point[3];
+}
+
+void CgRay::pickingPointApplyTransformation(glm::mat4 matrix) { picking_point = matrix * picking_point; }
+
+glm::vec4 CgRay::getEndPoint() { return end_point; }
+
+void CgRay::setEndPoint(glm::vec4 end_point) { this->end_point = end_point; }
+
+void CgRay::createRay() {
+    std::vector<glm::vec3> tmp_vertices;
+    tmp_vertices.push_back(glm::vec3(picking_point[0], picking_point[1], picking_point[2]));
+    tmp_vertices.push_back(glm::vec3(scaler * picking_point[0], scaler * picking_point[1], scaler * picking_point[2]));
+    setVertices(tmp_vertices);
+}
+
+

@@ -26,7 +26,20 @@ public:
     void setVertices(std::vector<glm::vec3>);
     void addVertice(glm::vec3);
 
+    glm::vec4 getPickingPoint();
+    void setPickingPoint(glm::vec4);
+    void pickingPointApplyTransformation(glm::mat4);
+
+    glm::vec4 getEndPoint();
+    void setEndPoint(glm::vec4);
+
+    void createRay();
+
 private:
+    glm::vec4 picking_point;
+    glm::vec4 end_point;
+    double scaler;
+
     const Cg::ObjectType m_type;
     const unsigned int m_id;
     std::vector<glm::vec3> m_vertices;
