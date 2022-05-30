@@ -28,7 +28,7 @@ public:
 
     glm::vec4 getPickingPoint();
     void setPickingPoint(glm::vec4);
-    void pickingPointApplyTransformation(glm::mat4);
+    void applyTransformation(glm::mat4);
 
     glm::vec4 getEndPoint();
     void setEndPoint(glm::vec4);

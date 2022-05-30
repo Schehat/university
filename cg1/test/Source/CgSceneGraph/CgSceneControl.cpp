@@ -93,14 +93,13 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         if (ev->getMouseButton() == 2) {
             // Pixelkoordinaten in NDCs
             double xNDC = ((double) ev->x() - Functions::getWidth()/2.0) / (Functions::getWidth() / 2.0);
-            double yNDC = ((double) ev->y() - Functions::getHeight()/2.0) / (-Functions::getHeight() / 2.0);
+            double yNDC = ((double) ev->y() - Functions::getHeight()/2.0) / (-Functions::getWidth() / 2.0);
 
             //  NDC mit Inverse der Proje^ktionsmatrix von m_proj_matrix und durch homogene Koordinate teilen => Kamerakoordinaten
-            m_scene->getRay()->setPickingPoint(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -1, 1));
-            // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen => Weltkoordinaten
-            m_scene->getRay()->setPickingPoint(glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation)*m_scene->getRay()->getPickingPoint());
+            m_scene->getRay()->setPickingPoint(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -0.5, 1));
 
-            m_scene->getRay()->createRay();
+            // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen => Weltkoordinaten
+            m_scene->getRay()->applyTransformation(glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation));
 
             std::cout << "Width: " << Functions::getWidth() << " xNDC: " << xNDC
                       << " Height: " << Functions::getHeight() << " yNDC: " << yNDC << " "
@@ -138,18 +137,14 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         // zoom in
         if((!entity_selected) && ev->text()=="+")
         {
-            // glm::mat4 scalemat = glm::mat4(1.);
             m_scalemat = glm::scale(m_scalemat,glm::vec3(1.2,1.2,1.2));
-            // m_current_transformation=m_current_transformation*scalemat;
             m_renderer->redraw();
         }
 
         // zoom out
         if((!entity_selected) && ev->text()=="-")
         {
-            // glm::mat4 scalemat = glm::mat4(1.);
             m_scalemat = glm::scale(m_scalemat,glm::vec3(0.8,0.8,0.8));
-            // m_current_transformation=m_current_transformation*scalemat;
             m_renderer->redraw();
         }
 
