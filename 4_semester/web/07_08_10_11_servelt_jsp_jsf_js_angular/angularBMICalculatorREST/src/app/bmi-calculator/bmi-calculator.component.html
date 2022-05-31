@@ -14,26 +14,27 @@
 
     <form class="form-group">
         <label> Gewicht</label> <br>
-        <input class="form-control" type="number" [(ngModel)]="weight" name="70" value="70" id="gewicht" placeholder="in kg" min="0"
+        <input class="form-control" type="number" [(ngModel)]="weight" name="70" value="70" placeholder="in kg" min="0"
             max="150" pattern="[0-9]" value=70 required /> <br>
 
         <label> Größe</label> <br>
-        <input class="form-control" type="number" [(ngModel)]="size" name="180" value="180" id="groese" placeholder="in cm" min="30" max="250"
+        <input class="form-control" type="number" [(ngModel)]="size" name="180" value="180" placeholder="in cm" min="30" max="250"
             pattern="[0-9]" value=180 required /> <br>
 
 
-        <button type="button" (click)="evaluate()" id="berechnen"> Berechnen </button>
+        <button type="button" (click)="getBMI()" id="berechnen"> Berechnen </button>
+        <button type="button" (click)="goToAusgabeView()" id="berechnen"> Berechnen mit Routing </button>
     </form>
     <br>
 
     <h1> BMI Ergebnis</h1>
 
     <form class="form-group">
-        <label> Ihr BMI: <span id="currentBMI"> {{ getBMI() }} </span> </label> <br>
+        <label> Ihr BMI: <span id="currentBMI"> {{ bmi.bmi }} </span> </label> <br>
 
-        <label> Ergebnis: <span id="ergebnis"> {{ getResult() }} </span> </label> <br>
+        <label> Ergebnis: <span id="ergebnis"> {{ bmi.ergebnis }} </span> </label> <br>
 
-        <label> Der bisher größte gemessene BMI-Wert war <span id="maxBMI"> {{ getMaxBMI() }} </span> </label>
+        <label> Der bisher größte gemessene BMI-Wert war <span id="maxBMI"> {{ maxBMI }} </span> </label>
         <br>
     </form>
 </body>
