@@ -19,6 +19,8 @@ public:
     int x() const;
     int y() const;
 
+    Cg::MouseButtons getMouseButton();
+
     friend std::ostream& operator <<(std::ostream& os, const CgMouseEvent& e);
 
 

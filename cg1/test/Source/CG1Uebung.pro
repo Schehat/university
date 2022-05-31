@@ -18,6 +18,7 @@ SOURCES += main.cpp \
     CgSceneGraph/CgExampleTriangle.cpp \
     CgSceneGraph/CgLoadObjFile.cpp \
     CgSceneGraph/CgPolyline.cpp \
+    CgSceneGraph/CgRay.cpp \
     CgSceneGraph/CgRotation.cpp \
     CgSceneGraph/CgSceneControl.cpp \
     CgEvents/CgKeyEvent.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     CgSceneGraph/CgExampleTriangle.h \
     CgSceneGraph/CgLoadObjFile.h \
     CgSceneGraph/CgPolyline.h \
+    CgSceneGraph/CgRay.h \
     CgSceneGraph/CgRotation.h \
     CgSceneGraph/CgSceneControl.h \
     CgEvents/CgKeyEvent.h \

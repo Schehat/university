@@ -17,6 +17,7 @@
 #include "CgLoadObjFile.h"
 #include "CgPolyline.h"
 #include "CgCoordSystem.h"
+#include "CgRay.h"
 
 #include"../CgUtils/Functions.h"
 
@@ -38,6 +39,8 @@ public:
     CgSceneGraphEntity* getNextEntity();
     CgCoordSystem* getCoordSystem();
 
+    CgRay* getRay();
+
     void initializeInorderList(CgSceneGraphEntity* entity);
 
     void pushMatrix(glm::mat4);
@@ -58,6 +61,8 @@ private:
     CgCoordSystem* coord_system;
 
     std::vector<CgBaseRenderableObject*> o_all_objects;
+
+    CgRay* m_ray;
 
     // all entities
     CgSceneGraphEntity* m_world;
