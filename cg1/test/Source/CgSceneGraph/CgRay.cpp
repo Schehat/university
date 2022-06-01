@@ -4,7 +4,7 @@
 #include <iostream>
 
 CgRay::CgRay(int id, std::vector<glm::vec3> vertices):
-scaler {10.0},
+t {1.0},
 m_type(Cg::Polyline),
 m_id(id),
 m_line_width{1},
@@ -43,28 +43,42 @@ void CgRay::addVertice(glm::vec3 vertex) {
     m_vertices.push_back(vertex);
 }
 
-glm::vec4 CgRay::getPickingPoint() { return picking_point; }
+glm::vec4 CgRay::getA() { return a; }
+void CgRay::setA(glm::vec4 a) {
+    this->a = a;
+    this->a = 1/this->a[3] * this->a;
+    //createRay();
+}
+void CgRay::applyTransformationA(glm::mat4 matrix) {
+    a = matrix * a;
+    this->a = 1/this->a[3] * this->a;
+    //createRay();
+}
 
-void CgRay::setPickingPoint(glm::vec4 picking_point) {
-    this->picking_point = picking_point;
-    this->picking_point /= this->picking_point[3];
+glm::vec4 CgRay::getB() { return b; }
+void CgRay::setB(glm::vec4 b) {
+    this->b = b;
+    this->b = 1/this->b[3] * this->b;
+   // createRay();
+}
+void CgRay::applyTransformationB(glm::mat4 matrix) {
+    b = matrix * b;
+    this->b = 1/this->b[3] * this->b;
+}
+
+glm::vec4 CgRay::getDirection() { return direction; }
+void CgRay::setDirection(glm::vec4 direction) { this->direction = direction; createRay();}
+void CgRay::applyTransformationDirection(glm::mat4 matrix) {
+    direction = matrix * direction;
+    this->direction = 1/this->direction[3] * this->direction;
     createRay();
 }
 
-void CgRay::applyTransformation(glm::mat4 matrix) {
-    picking_point = matrix * picking_point;
-    this->picking_point /= this->picking_point[3];
-    createRay();
-}
-
-glm::vec4 CgRay::getEndPoint() { return end_point; }
-
-void CgRay::setEndPoint(glm::vec4 end_point) { this->end_point = end_point; }
 
 void CgRay::createRay() {
     std::vector<glm::vec3> tmp_vertices;
-    tmp_vertices.push_back(glm::vec3(picking_point[0], picking_point[1], picking_point[2]));
-    tmp_vertices.push_back(glm::vec3(scaler * picking_point[0], scaler * picking_point[1], scaler * picking_point[2]));
+    tmp_vertices.push_back(glm::vec3(a[0], a[1], a[2]));
+    tmp_vertices.push_back(glm::vec3(a[0] + t*direction[0], a[1] + t*direction[1], a[2] + t*direction[2]));
     setVertices(tmp_vertices);
 }
 

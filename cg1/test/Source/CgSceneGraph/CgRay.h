@@ -26,19 +26,26 @@ public:
     void setVertices(std::vector<glm::vec3>);
     void addVertice(glm::vec3);
 
-    glm::vec4 getPickingPoint();
-    void setPickingPoint(glm::vec4);
-    void applyTransformation(glm::mat4);
+    glm::vec4 getA();
+    void setA(glm::vec4);
+    void applyTransformationA(glm::mat4);
 
-    glm::vec4 getEndPoint();
-    void setEndPoint(glm::vec4);
+    glm::vec4 getB();
+    void setB(glm::vec4);
+    void applyTransformationB(glm::mat4);
+
+    glm::vec4 getDirection();
+    void setDirection(glm::vec4);
+    void applyTransformationDirection(glm::mat4);
 
     void createRay();
 
 private:
-    glm::vec4 picking_point;
-    glm::vec4 end_point;
-    double scaler;
+    glm::vec4 a;
+    glm::vec4 b;
+    glm::vec4 direction;
+    // t >= 0
+    double t;
 
     const Cg::ObjectType m_type;
     const unsigned int m_id;

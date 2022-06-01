@@ -1,4 +1,5 @@
 #include "CgSceneControl.h"
+#include "glm/gtx/string_cast.hpp"
 
 CgSceneControl::CgSceneControl()
 {
@@ -16,6 +17,8 @@ CgSceneControl::CgSceneControl()
     doX=false;
     doY=false;
     doZ=false;
+
+ //   m_cube = new CgUnityCube();
 }
 
 
@@ -53,6 +56,8 @@ void CgSceneControl::renderObjects()
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
 
     setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
+
+
 
     // iterate all children
     if (m_scene!=NULL) {
@@ -92,14 +97,25 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
         if (ev->getMouseButton() == 2) {
             // Pixelkoordinaten in NDCs
-            double xNDC = ((double) ev->x() - Functions::getWidth()/2.0) / (Functions::getWidth() / 2.0);
-            double yNDC = ((double) ev->y() - Functions::getHeight()/2.0) / (-Functions::getWidth() / 2.0);
+            float xNDC = ((float) ev->x() - Functions::getWidth()/2.0) / (Functions::getWidth() / 2.0);
+            float yNDC = ((float) ev->y() - Functions::getHeight()/2.0) / (-Functions::getWidth() / 2.0);
 
-            //  NDC mit Inverse der Proje^ktionsmatrix von m_proj_matrix und durch homogene Koordinate teilen => Kamerakoordinaten
-            m_scene->getRay()->setPickingPoint(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -0.5, 1));
+            if (xNDC > 1) xNDC = 1;
+            if (xNDC < -1) xNDC = -1;
+            if (yNDC > 1) yNDC = 1;
+            if (yNDC < -1) yNDC = -1;
 
-            // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen => Weltkoordinaten
-            m_scene->getRay()->applyTransformation(glm::inverse(m_lookAt_matrix)*glm::inverse(m_trackball_rotation));
+            //  NDC mit Inverse der Proje^ktionsmatrix von m_proj_matrix und durch homogene Koordinate teilen
+            // => Kamerakoordinaten
+            m_scene->getRay()->setA(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -0.01, 1));
+            m_scene->getRay()->setB(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1, 1));
+
+            // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen
+            // => Weltkoordinaten
+            m_scene->getRay()->applyTransformationA(glm::inverse(m_lookAt_matrix * m_trackball_rotation * m_current_transformation));
+            m_scene->getRay()->applyTransformationB(glm::inverse(m_lookAt_matrix * m_trackball_rotation * m_current_transformation));
+
+            m_scene->getRay()->setDirection(m_scene->getRay()->getB() - m_scene->getRay()->getA());
 
             std::cout << "Width: " << Functions::getWidth() << " xNDC: " << xNDC
                       << " Height: " << Functions::getHeight() << " yNDC: " << yNDC << " "

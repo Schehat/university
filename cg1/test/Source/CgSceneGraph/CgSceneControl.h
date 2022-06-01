@@ -56,6 +56,8 @@ public:
 private:
     CgSceneGraph* m_scene;
 
+    //CgUnityCube* m_cube;
+
     CgSceneGraphEntity* selected_entity;
     bool entity_selected;
     bool entity_group_selected;
