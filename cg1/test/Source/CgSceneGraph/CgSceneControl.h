@@ -31,6 +31,7 @@
 #include <cmath>
 #include <vector>
 #include <glm/glm.hpp>
+#include "glm/gtx/string_cast.hpp"
 
 class CgSceneGraph;
 class CgSceneGraphEntity;
@@ -55,8 +56,6 @@ public:
 
 private:
     CgSceneGraph* m_scene;
-
-    //CgUnityCube* m_cube;
 
     CgSceneGraphEntity* selected_entity;
     bool entity_selected;

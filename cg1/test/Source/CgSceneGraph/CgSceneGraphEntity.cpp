@@ -6,15 +6,15 @@ CgSceneGraphEntity::CgSceneGraphEntity()
     setCurrentTransformation(glm::mat4(1.));
     setObjectTransformation(glm::mat4(1.));
 }
-CgSceneGraphEntity::CgSceneGraphEntity(CgBaseRenderableObject* object) : m_object(object) {
+CgSceneGraphEntity::CgSceneGraphEntity(CgBaseTriangleMesh* object) : m_object(object) {
     setCurrentTransformation(glm::mat4(1.));
     setObjectTransformation(glm::mat4(1.));
 }
 
-CgBaseRenderableObject* CgSceneGraphEntity::getObject() {
+CgBaseTriangleMesh* CgSceneGraphEntity::getObject() {
     return m_object;
 }
-void CgSceneGraphEntity::setObject(CgBaseRenderableObject* object) {
+void CgSceneGraphEntity::setObject(CgBaseTriangleMesh* object) {
     this->m_object = object;
 }
 

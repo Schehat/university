@@ -18,6 +18,7 @@
 #include "CgPolyline.h"
 #include "CgCoordSystem.h"
 #include "CgRay.h"
+#include "CgPlane.h"
 
 #include"../CgUtils/Functions.h"
 
@@ -50,6 +51,10 @@ public:
 private:
     void pushMatrix();
     void applyTransform(glm::mat4 arg);
+
+    void pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
+    bool IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q);
+    void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3 q, float& u, float& v, float& w);
 
     CgSceneGraphEntity* m_root_node;
     std::stack<glm::mat4> m_modelview_matrix_stack;

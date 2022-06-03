@@ -8,6 +8,7 @@
 #include "CgAppearance.h"
 #include "CgSceneGraph.h"
 #include "CgBase/CgBaseRenderer.h"
+#include "../CgBase/CgBaseTriangleMesh.h"
 
 class CgSceneGraph;
 
@@ -15,17 +16,17 @@ class CgSceneGraphEntity
 {
 public:
     CgSceneGraphEntity();
-    CgSceneGraphEntity(CgBaseRenderableObject* objects);
+    CgSceneGraphEntity(CgBaseTriangleMesh* objects);
 
 
-    CgBaseRenderableObject* getObject();
+    CgBaseTriangleMesh* getObject();
     glm::mat4 getCurrentTransformation();
     CgAppearance& getAppearance();
     const CgSceneGraphEntity& getParent() const;
     const std::vector<CgSceneGraphEntity*> getChildren() const;
     glm::mat4 getObjectTransformation() const;
 
-    void setObject(CgBaseRenderableObject* object);
+    void setObject(CgBaseTriangleMesh* object);
     void setCurrentTransformation(glm::mat4 curren_transformation);
     void setAppearance(CgAppearance* appearance);
     void setParent(CgSceneGraphEntity* parent);
@@ -34,7 +35,7 @@ public:
     void pushChildren(CgSceneGraphEntity* child);
     void removeLastChild();
 private:
-    CgBaseRenderableObject* m_object;
+    CgBaseTriangleMesh* m_object;
     glm::mat4 m_current_transformation;
     glm::mat4 m_object_transformation;
 

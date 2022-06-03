@@ -36,14 +36,20 @@ public:
 
     glm::vec4 getDirection();
     void setDirection(glm::vec4);
-    void applyTransformationDirection(glm::mat4);
 
     void createRay();
+    void resetObjCoordToWorld();
+    void secureWorldCoord();
 
 private:
     glm::vec4 a;
     glm::vec4 b;
     glm::vec4 direction;
+
+    glm::vec4 tmp_a;
+    glm::vec4 tmp_b;
+    glm::vec4 tmp_direction;
+
     // t >= 0
     double t;
 

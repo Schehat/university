@@ -643,13 +643,102 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
     // render objects of the group
     scene_control->getRenderer()->render(entity->getObject());
 
+    // reset picking ray in world coordinates
+    m_ray->resetObjCoordToWorld();
+
+    if (entity->getChildren().size() == 0) {
+        m_ray->secureWorldCoord();
+        m_ray->applyTransformationA(glm::inverse(entity->getCurrentTransformation()
+                                    *entity->getObjectTransformation()));
+        m_ray->applyTransformationB(glm::inverse(entity->getCurrentTransformation()
+                                    *entity->getObjectTransformation()));
+        m_ray->setDirection(m_ray->getB() - m_ray->getA());
+
+        pickingIntersection(scene_control, entity);
+
+    }
+
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         pushMatrix();
         applyTransform(entity->getChildren()[i]->getCurrentTransformation());
         render(scene_control, entity->getChildren()[i]);
+
+        // inverse for picking ray
+        m_ray->secureWorldCoord();
+        m_ray->applyTransformationA(glm::inverse(entity->getCurrentTransformation()
+                                    *entity->getObjectTransformation()));
+        m_ray->applyTransformationB(glm::inverse(entity->getCurrentTransformation()
+                                    *entity->getObjectTransformation()));
+        m_ray->setDirection(m_ray->getB() - m_ray->getA());
+        //scene_control->getRenderer()->render(m_ray);
+
+        // intersection calculation
+        pickingIntersection(scene_control, entity);
+
         m_modelview_matrix_stack.pop();
     }
+}
+
+void CgSceneGraph::pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
+    for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
+        glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
+        glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
+        glm::vec3 c = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]+2];
+        CgPlane p {CgPlane(a, b, c)};
+        float t;
+        glm::vec3 q;
+        if (!IntersectRayPlane(p, t, q))
+            return; // no intersection
+
+        float u, v, w;
+        Barycentric(a, b, c, q, u, v, w);
+        if (!(u >= 0 && u <= 1))
+            return;  // not in triangle
+
+        std::vector<glm::vec3> indices;
+        indices.push_back(glm::vec3(q[0], q[1] + 0.5, q[2]));
+        indices.push_back(glm::vec3(q[0] + 0.5, q[1] + 0.25, q[2]));
+        indices.push_back(glm::vec3(q[0] + 0.5, q[1] - 0.25 , q[2]));
+        indices.push_back(glm::vec3(q[0], q[1] - 0.5, q[2]));
+        CgRotation* obj_intersection  = new CgRotation(Functions::getId(),indices,indices.size(),30);
+        scene_control->getRenderer()->init(obj_intersection);
+        scene_control->getRenderer()->setUniformValue("mycolor", Functions::getRed());
+        scene_control->setCurrentTransformation(entity->getCurrentTransformation()
+                                                *entity->getObjectTransformation());
+        scene_control->getRenderer()->render(obj_intersection);
+        std::cout << i + 1<<" Schnittpunkt: " << glm::to_string(q) << "\n";
+        delete obj_intersection;
+    }
+}
+
+bool CgSceneGraph::IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q) {
+    glm::vec3 a = glm::vec3(m_ray->getA()[0], m_ray->getA()[1], m_ray->getA()[2]);
+    glm::vec3 ab = glm::vec3(m_ray->getDirection()[0], m_ray->getDirection()[1], m_ray->getDirection()[2]);
+
+    t = (p.d - glm::dot(p.n, a) / glm::dot(p.n, ab));
+
+    if (t >= 0.0f && t < INFINITY) {
+        q = a + t * ab;
+        return 1;
+    }
+    return 0;
+}
+
+void CgSceneGraph::Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3 q,
+                               float& u, float& v, float& w) {
+    glm::vec3 v0 = b - a;
+    glm::vec3 v1 = c - a;
+    glm::vec3 v2 = q - a;
+    float d00 = glm::dot(v0, v0);
+    float d01 = glm::dot(v0, v1);
+    float d11 = glm::dot(v1, v1);
+    float d20 = glm::dot(v2, v0);
+    float d21 = glm::dot(v2, v1);
+    float denom = d00 * d11 - d01 * d01;
+    v = (d11 * d20 - d01 * d21) / denom;
+    w = (d00 * d21 - d01 * d20) / denom;
+    u = 1.0f - v - w;
 }
 
 CgCoordSystem* CgSceneGraph::getCoordSystem() {
@@ -659,3 +748,4 @@ CgCoordSystem* CgSceneGraph::getCoordSystem() {
 void CgSceneGraph::pushMatrix(glm::mat4 arg) {
     m_modelview_matrix_stack.push(arg);
 }
+

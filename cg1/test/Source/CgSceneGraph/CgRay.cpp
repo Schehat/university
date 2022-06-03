@@ -47,33 +47,30 @@ glm::vec4 CgRay::getA() { return a; }
 void CgRay::setA(glm::vec4 a) {
     this->a = a;
     this->a = 1/this->a[3] * this->a;
-    //createRay();
+    tmp_a = this->a;
 }
 void CgRay::applyTransformationA(glm::mat4 matrix) {
     a = matrix * a;
     this->a = 1/this->a[3] * this->a;
-    //createRay();
 }
 
 glm::vec4 CgRay::getB() { return b; }
 void CgRay::setB(glm::vec4 b) {
     this->b = b;
     this->b = 1/this->b[3] * this->b;
-   // createRay();
+    tmp_b = this->b;
 }
 void CgRay::applyTransformationB(glm::mat4 matrix) {
     b = matrix * b;
     this->b = 1/this->b[3] * this->b;
+    tmp_direction = this->direction;
 }
 
 glm::vec4 CgRay::getDirection() { return direction; }
-void CgRay::setDirection(glm::vec4 direction) { this->direction = direction; createRay();}
-void CgRay::applyTransformationDirection(glm::mat4 matrix) {
-    direction = matrix * direction;
-    this->direction = 1/this->direction[3] * this->direction;
+void CgRay::setDirection(glm::vec4 direction) {
+    this->direction = direction;
     createRay();
 }
-
 
 void CgRay::createRay() {
     std::vector<glm::vec3> tmp_vertices;
@@ -82,4 +79,15 @@ void CgRay::createRay() {
     setVertices(tmp_vertices);
 }
 
+void CgRay::secureWorldCoord() {
+    tmp_a = a;
+    tmp_b = b;
+    tmp_direction = direction;
+}
+
+void CgRay::resetObjCoordToWorld() {
+    a = tmp_a;
+    b = tmp_b;
+    direction = tmp_direction;
+}
 
