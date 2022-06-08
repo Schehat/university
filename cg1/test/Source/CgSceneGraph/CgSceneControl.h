@@ -33,7 +33,6 @@
 #include <glm/glm.hpp>
 #include "glm/gtx/string_cast.hpp"
 #include "CgPlane.h"
-#include "CgRay.h"
 
 class CgSceneGraph;
 class CgSceneGraphEntity;
@@ -56,8 +55,6 @@ public:
     void iterateChildrenSetColor(CgSceneGraphEntity* entity, glm::vec4 color);
     void iterateChildrenRestoreOldColor(CgSceneGraphEntity* entity);
 
-    CgRay* getRay();
-
     void pickingIntersection();
     bool IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q);
     void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
@@ -65,7 +62,6 @@ public:
     CgSceneGraphEntity* getSelectedEntity();
 private:
     CgUnityCube* m_cube;
-    CgRay* m_ray;
 
     std::vector<glm::vec3> m_intersections;
 
