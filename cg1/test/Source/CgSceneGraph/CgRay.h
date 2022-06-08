@@ -10,6 +10,7 @@
 class CgRay : public CgBasePolyline
 {
 public:
+    CgRay(int id);
     CgRay(int id, std::vector<glm::vec3> vertices);
 
     virtual ~CgRay();

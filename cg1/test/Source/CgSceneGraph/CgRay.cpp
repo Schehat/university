@@ -3,6 +3,15 @@
 #include "CgUtils/ObjLoader.h"
 #include <iostream>
 
+CgRay::CgRay(int id):
+t {1.0},
+m_type(Cg::Polyline),
+m_id(id),
+m_line_width{1},
+m_face_colors{Functions::getGreen()}
+{
+}
+
 CgRay::CgRay(int id, std::vector<glm::vec3> vertices):
 t {1.0},
 m_type(Cg::Polyline),

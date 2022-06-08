@@ -39,22 +39,24 @@ public:
     CgSceneGraphEntity* getCurrentEntity();
     CgSceneGraphEntity* getNextEntity();
     CgCoordSystem* getCoordSystem();
-
     CgRay* getRay();
+    std::vector<glm::vec3> getIntersections();
 
     void initializeInorderList(CgSceneGraphEntity* entity);
 
     void pushMatrix(glm::mat4);
     void popMatrix();
 
+    void startIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
+    void checkIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
+    void pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity, CgRay* local_ray);
+    bool IntersectRayPlane(CgRay* local_ray, CgPlane& p, float& t, glm::vec3& q);
+    void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
+
     void render(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
 private:
     void pushMatrix();
     void applyTransform(glm::mat4 arg);
-
-    void pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
-    bool IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q);
-    void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
 
     std::vector<glm::vec3> m_intersections;
 

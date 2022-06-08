@@ -13,7 +13,6 @@ SOURCES += main.cpp \
     CgBase/CgObservable.cpp \
     CgEvents/CgMouseEvent.cpp \
     CgQtViewer/CgQtMainApplication.cpp \
-    CgSceneGraph/CgAABB.cpp \
     CgSceneGraph/CgAppearance.cpp \
     CgSceneGraph/CgCoordSystem.cpp \
     CgSceneGraph/CgExampleTriangle.cpp \

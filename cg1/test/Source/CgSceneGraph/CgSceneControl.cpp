@@ -99,6 +99,14 @@ void CgSceneControl::renderObjects()
         getRenderer()->render(obj_intersection);
         delete obj_intersection;
     }
+    for (unsigned int i = 0; i < m_scene->getIntersections().size(); ++i) {
+        glm::vec3 q = m_scene->getIntersections()[i];
+        // std::cout << "Schnittpunkte: " << glm::to_string(m_scene->getIntersections()[i]) << "\n";
+        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
+        getRenderer()->init(obj_intersection);
+        getRenderer()->render(obj_intersection);
+        delete obj_intersection;
+    }
     std::cout << "----------------------------------------\n";
 }
 
@@ -126,11 +134,14 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
             //  NDC mit Inverse der Proje^ktionsmatrix von m_proj_matrix und durch homogene Koordinate teilen
             // => Kamerakoordinaten
+            setCurrentTransformation(glm::mat4(1.0));
             m_scene->getRay()->setA(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -0.01, 1));
             m_scene->getRay()->setB(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1.0, 1));
 
             // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen
             // => Weltkoordinaten
+            // currentTransformation Einheitmatrix setzten und m_scalemat wird so auch berücksichtigt
+            //setCurrentTransformation(glm::mat4(1.0));
             m_scene->getRay()->applyTransformationA(glm::inverse(m_lookAt_matrix * m_trackball_rotation
                                                                  * m_current_transformation));
             m_scene->getRay()->applyTransformationB(glm::inverse(m_lookAt_matrix * m_trackball_rotation
@@ -138,16 +149,10 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
             m_scene->getRay()->setDirection(m_scene->getRay()->getB() - m_scene->getRay()->getA());
 
-            std::cout << "Width: " << Functions::getWidth() << " xNDC: " << xNDC
-                      << " Height: " << Functions::getHeight() << " yNDC: " << yNDC << " "
-                      << "A: (" << m_scene->getRay()->getVertices()[0][0] << ", "
-                      << m_scene->getRay()->getVertices()[0][1] << ", "
-                      << m_scene->getRay()->getVertices()[0][2] << ") "
-                      << "B: (" << m_scene->getRay()->getVertices()[1][0]  << ", "
-                      << m_scene->getRay()->getVertices()[1][1] << ", "
-                      << m_scene->getRay()->getVertices()[1][2] << ") \n";
-
             pickingIntersection();
+            m_scene->startIntersection(this, m_scene->getRootNode());
+
+
             m_renderer->init(m_scene->getRay());
             m_scene->setRenderer(m_renderer);
             m_renderer->redraw();
@@ -157,7 +162,6 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
     if(e->getType() & Cg::CgTrackballEvent)
     {
         CgTrackballEvent* ev = (CgTrackballEvent*)e;
-
 
         m_trackball_rotation=ev->getRotationMatrix();
         m_renderer->redraw();
@@ -588,7 +592,6 @@ void CgSceneControl::pickingIntersection() {
             if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1)
                  m_intersections.push_back(glm::vec3(q[0], q[1], q[2]));
         }
-
     }
 }
 

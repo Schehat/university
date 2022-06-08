@@ -644,44 +644,47 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
     // render objects of the group
     scene_control->getRenderer()->render(entity->getObject());
 
-    // reset picking ray in world coordinates
-    m_ray->resetObjCoordToWorld();
-
-    if (entity->getChildren().size() == 0) {
-        m_ray->secureWorldCoord();
-        m_ray->applyTransformationA(glm::inverse(entity->getCurrentTransformation()
-                                    *entity->getObjectTransformation()));
-        m_ray->applyTransformationB(glm::inverse(entity->getCurrentTransformation()
-                                    *entity->getObjectTransformation()));
-        m_ray->setDirection(m_ray->getB() - m_ray->getA());
-
-        // pickingIntersection(scene_control, entity);
-
-    }
-
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         pushMatrix();
         applyTransform(entity->getChildren()[i]->getCurrentTransformation());
-
-        // inverse for picking ray
-        m_ray->secureWorldCoord();
-        m_ray->applyTransformationA(glm::inverse(entity->getCurrentTransformation()
-                                    *entity->getObjectTransformation()));
-        m_ray->applyTransformationB(glm::inverse(entity->getCurrentTransformation()
-                                    *entity->getObjectTransformation()));
-        m_ray->setDirection(m_ray->getB() - m_ray->getA());
-        // scene_control->getRenderer()->render(m_ray);
         render(scene_control, entity->getChildren()[i]);
-
-        // intersection calculation
-        // pickingIntersection(scene_control, entity);
-
         m_modelview_matrix_stack.pop();
     }
 }
 
-void CgSceneGraph::pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
+void CgSceneGraph::startIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
+    m_intersections.clear();
+    checkIntersection(scene_control, entity);
+    std::cout << "Anzahl Schnittpunkte: " << m_intersections.size() << "\n";
+}
+
+void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
+    glm::mat4 currentTransformation = entity->getCurrentTransformation() * entity->getObjectTransformation();
+    glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
+
+    CgRay* local_ray { new CgRay{Functions::getId()}};
+    local_ray->setA(currentTransformation_inverse * m_ray->getA());
+    local_ray->setB(currentTransformation_inverse * m_ray->getB());
+    local_ray->setDirection(local_ray->getB() - local_ray->getA());
+
+    scene_control->getRenderer()->init(local_ray);
+    scene_control->getRenderer()->render(local_ray);
+
+//    std::cout << "A: " << glm::to_string(local_ray->getA()) << ", "
+//              << "B: " << glm::to_string(local_ray->getB()) << " ";
+
+    pickingIntersection(scene_control, entity, local_ray);
+    delete local_ray;
+
+    // iterate through children recursive
+    for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
+        checkIntersection(scene_control, entity->getChildren()[i]);
+    }
+
+}
+
+void CgSceneGraph::pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity, CgRay* local_ray) {
     for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
         glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
         glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
@@ -689,43 +692,27 @@ void CgSceneGraph::pickingIntersection(CgSceneControl* scene_control, CgSceneGra
         CgPlane p {CgPlane(a, b, c)};
         float t;
         glm::vec3 q;
-        if (!IntersectRayPlane(p, t, q))
-            continue; // no intersection
-
-        float u, v, w;
-        Barycentric(a, b, c, q, u, v, w);
-        if (!(u >= 0 && u <= 1))
-            continue;  // not in triangle
-
-        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
-        scene_control->getRenderer()->init(obj_intersection);
-        scene_control->getRenderer()->render(obj_intersection);
-        delete obj_intersection;
+        if (IntersectRayPlane(local_ray, p, t, q))
+        {
+            float u, v, w;
+            Barycentric(a, b, c, q, u, v, w);
+            if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1) {
+                glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
+                intersection_point = entity->getCurrentTransformation() * entity->getObjectTransformation() * intersection_point;
+                std::cout << "Schnittpunkt: " << glm::to_string(intersection_point) << "\n";
+                m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
+            }
+        }
     }
-    // TODO für mehrere
-//    getRenderer()->setUniformValue("mycolor", Functions::getRed());
-//    for (unsigned int i = 0; i < m_intersections.size(); ++i) {
-//        glm::vec3 q = m_intersections[i];
-//        std::cout << "Schnittpunkte: " << glm::to_string(m_intersections[i]) << "\n";
-////        std::vector<glm::vec3> indices;
-////        indices.push_back(glm::vec3(q[0], q[1] + 0.1, q[2]));
-////        indices.push_back(glm::vec3(q[0] + 0.1, q[1], q[2]));
-////        indices.push_back(glm::vec3(q[0], q[1], q[2] - 0.1));
-////        CgRotation* obj_intersection  = new CgRotation(Functions::getId(),indices,indices.size(),30);
-//        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
-//        getRenderer()->init(obj_intersection);
-//        getRenderer()->render(obj_intersection);
-//        delete obj_intersection;
-//    }
 }
 
-bool CgSceneGraph::IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q) {
-    glm::vec3 a = glm::vec3(m_ray->getA()[0], m_ray->getA()[1], m_ray->getA()[2]);
-    glm::vec3 ab = glm::vec3(m_ray->getDirection()[0], m_ray->getDirection()[1], m_ray->getDirection()[2]);
+bool CgSceneGraph::IntersectRayPlane(CgRay* local_ray, CgPlane& p, float& t, glm::vec3& q) {
+    glm::vec3 a = glm::vec3(local_ray->getA()[0], local_ray->getA()[1], local_ray->getA()[2]);
+    glm::vec3 ab = glm::vec3(local_ray->getDirection()[0], local_ray->getDirection()[1], local_ray->getDirection()[2]);
 
     t = (p.d - glm::dot(p.n, a)) / glm::dot(p.n, ab);
 
-    if (t >= 0.0f && t < INFINITY) {
+    if (std::isfinite(t) && t >= 0.0f ) {
         q = a + t * ab;
         return 1;
     }
@@ -751,6 +738,9 @@ void CgSceneGraph::Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::ve
 CgCoordSystem* CgSceneGraph::getCoordSystem() {
     return coord_system;
 }
+
+std::vector<glm::vec3> CgSceneGraph::getIntersections() { return m_intersections; }
+
 
 void CgSceneGraph::pushMatrix(glm::mat4 arg) {
     m_modelview_matrix_stack.push(arg);
