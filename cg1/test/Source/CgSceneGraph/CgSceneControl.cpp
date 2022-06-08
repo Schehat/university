@@ -16,6 +16,15 @@ CgSceneControl::CgSceneControl()
     doX=false;
     doY=false;
     doZ=false;
+
+    m_cube = new CgUnityCube(Functions::getId());
+
+    // Polyline Ray
+    std::vector<glm::vec3> vertices;
+    vertices.clear();
+    vertices.push_back(glm::vec3(0.0, 0.0, 0.0));
+    vertices.push_back(glm::vec3(0.0, 0.0, 0.0));
+    m_ray = new CgRay(Functions::getId(), vertices);
 }
 
 
@@ -23,12 +32,20 @@ CgSceneControl::~CgSceneControl()
 {
     if (m_scene != NULL)
         delete m_scene;
+    if (m_cube != NULL)
+            delete m_cube;
+    if (m_ray != NULL)
+            delete m_ray;
 }
 
 void CgSceneControl::setRenderer(CgBaseRenderer* r)
 {
     m_renderer=r;
     m_renderer->setSceneControl(this);
+    if(m_cube!=NULL)
+            m_renderer->init(m_cube);
+    if (m_scene != NULL &&  m_scene->getRay() != NULL)
+        m_renderer->render(m_scene->getRay());
 }
 CgBaseRenderer*& CgSceneControl::getRenderer()
 {
@@ -52,30 +69,57 @@ void CgSceneControl::renderObjects()
     m_renderer->setUniformValue("matSpecularColor"  ,glm::vec4(0.8,0.72,0.21,1.0));
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
 
-    setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
+//    setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
 
     // iterate all children
-    if (m_scene!=NULL) {
-        m_scene->popMatrix();
-        m_scene->pushMatrix(m_scene->getRootNode()->getCurrentTransformation());
-        m_scene->render(this, m_scene->getRootNode());
-    }
+//    if (m_scene!=NULL) {
+//        m_scene->popMatrix();
+//        m_scene->pushMatrix(m_scene->getRootNode()->getCurrentTransformation());
+//        m_scene->render(this, m_scene->getRootNode());
+//    }
 
     // set coordinate system
-    if (entity_selected) {
-        for (int i=0; i<3; ++i) {
-            // verschieben zum selektierten Objekt
-            setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
-            m_renderer->setUniformValue("mycolor", m_scene->getCoordSystem()->getColorSystem()[i]);
-            m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
-        }
-    }
+//    if (entity_selected) {
+//        for (int i=0; i<3; ++i) {
+//            // verschieben zum selektierten Objekt
+//            setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
+//            m_renderer->setUniformValue("mycolor", m_scene->getCoordSystem()->getColorSystem()[i]);
+//            m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
+//        }
+//        setCurrentTransformation(glm::inverse(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation()));
+//        m_renderer->setUniformValue("mycolor", Functions::getYellow());
+//        m_renderer->render(m_scene->getRay());
 
-    if (m_scene != NULL &&  m_scene->getRay() != nullptr) {
-        setCurrentTransformation(glm::mat4(1.0));
+////        setCurrentTransformation(glm::mat4(1.0));
+////        if (selected_entity->getObject() != nullptr)
+////            m_renderer->render(selected_entity->getObject());
+//    }
+    setCurrentTransformation(glm::mat4(1.0));
+
+    m_renderer->setUniformValue("mycolor", Functions::getWhite());
+    if (m_cube != NULL)
+        m_renderer->render(m_cube);
+
+    if (m_scene != NULL &&  m_scene->getRay() != NULL) {
         m_renderer->setUniformValue("mycolor", glm::vec4(100.0, 0.0, 255.0, 1.0));
         m_renderer->render(m_scene->getRay());
     }
+
+    getRenderer()->setUniformValue("mycolor", Functions::getRed());
+    for (unsigned int i = 0; i < m_intersections.size(); ++i) {
+        glm::vec3 q = m_intersections[i];
+        std::cout << "Schnittpunkte: " << glm::to_string(m_intersections[i]) << "\n";
+//        std::vector<glm::vec3> indices;
+//        indices.push_back(glm::vec3(q[0], q[1] + 0.1, q[2]));
+//        indices.push_back(glm::vec3(q[0] + 0.1, q[1], q[2]));
+//        indices.push_back(glm::vec3(q[0], q[1], q[2] - 0.1));
+//        CgRotation* obj_intersection  = new CgRotation(Functions::getId(),indices,indices.size(),30);
+        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
+        getRenderer()->init(obj_intersection);
+        getRenderer()->render(obj_intersection);
+        delete obj_intersection;
+    }
+    std::cout << "----------------------------------------\n";
 }
 
 void CgSceneControl::handleEvent(CgBaseEvent* e)
@@ -123,7 +167,9 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                       << m_scene->getRay()->getVertices()[1][1] << ", "
                       << m_scene->getRay()->getVertices()[1][2] << ") \n";
 
-            m_scene->setRenderer(m_renderer);
+            pickingIntersection();
+            m_renderer->init(m_scene->getRay());
+            // m_scene->setRenderer(m_renderer);
             m_renderer->redraw();
         }
     }
@@ -512,7 +558,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
 void CgSceneControl::setScene(CgSceneGraph *scene) {
     m_scene = scene;
-    m_scene->setRenderer(m_renderer);
+    //m_scene->setRenderer(m_renderer);
 }
 
 void CgSceneControl::setCurrentTransformation(glm::mat4 transformation_matrix)
@@ -540,4 +586,60 @@ void CgSceneControl::iterateChildrenRestoreOldColor(CgSceneGraphEntity* entity) 
         entity->getChildren()[i]->getAppearance().setObjectColor(old_color);
         iterateChildrenRestoreOldColor(entity->getChildren()[i]);
     }
+}
+
+CgSceneGraphEntity* CgSceneControl::getSelectedEntity() {
+    return selected_entity;
+}
+
+CgRay* CgSceneGraph::getRay() { return m_ray; }
+
+void CgSceneControl::pickingIntersection() {
+    m_intersections.clear();
+    for (unsigned int i = 0; i < m_cube->getTriangleIndices().size(); i+=3) {
+        glm::vec3 a = m_cube->getVertices()[m_cube->getTriangleIndices()[i]];
+        glm::vec3 b = m_cube->getVertices()[m_cube->getTriangleIndices()[i+1]];
+        glm::vec3 c = m_cube->getVertices()[m_cube->getTriangleIndices()[i+2]];
+        CgPlane p {CgPlane(a, b, c)};
+        float t;
+        glm::vec3 q;
+        if (!IntersectRayPlane(p, t, q))
+            continue; // no intersection
+
+        float u, v, w;
+        Barycentric(a, b, c, q, u, v, w);
+        if (!(u >= 0 && u <= 1))
+            continue;  // not in triangle
+
+        m_intersections.push_back(glm::vec3(q[0], q[1], q[2]));
+    }
+}
+
+bool CgSceneControl::IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q) {
+    glm::vec3 a = glm::vec3(m_scene->getRay()->getA()[0], m_scene->getRay()->getA()[1], m_scene->getRay()->getA()[2]);
+    glm::vec3 ab = glm::vec3(m_scene->getRay()->getDirection()[0], m_scene->getRay()->getDirection()[1], m_scene->getRay()->getDirection()[2]);
+
+    t = (p.d - glm::dot(p.n, a)) / glm::dot(p.n, ab);
+
+    if (t >= 0.0f && t < INFINITY) {
+        q = a + t * ab;
+        return 1;
+    }
+    return 0;
+}
+
+void CgSceneControl::Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q,
+                               float& u, float& v, float& w) {
+    glm::vec3 v0 = b - a;
+    glm::vec3 v1 = c - a;
+    glm::vec3 v2 = q - a;
+    float d00 = glm::dot(v0, v0);
+    float d01 = glm::dot(v0, v1);
+    float d11 = glm::dot(v1, v1);
+    float d20 = glm::dot(v2, v0);
+    float d21 = glm::dot(v2, v1);
+    float denom = d00 * d11 - d01 * d01;
+    v = (d11 * d20 - d01 * d21) / denom;
+    w = (d00 * d21 - d01 * d20) / denom;
+    u = 1.0f - v - w;
 }

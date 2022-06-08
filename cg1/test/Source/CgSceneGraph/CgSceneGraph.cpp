@@ -53,487 +53,488 @@ CgSceneGraph::CgSceneGraph()
     m_modelview_matrix_stack.push(m_world->getCurrentTransformation());
 
     // Initialize Stuhl
-    m_stuhlbein_ul = new CgSceneGraphEntity(obj_cube);
-    m_stuhlbein_ul->setCurrentTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
-                                                  glm::vec4(0, 2.88165, 0, 0),
-                                                  glm::vec4(0, 0, 0.66342, 0),
-                                                  glm::vec4(-4.8, -3.7, 0.85, 1)));
-    m_stuhlbein_ul->setAppearance(new CgAppearance());
-    m_stuhlbein_ul->getAppearance().setObjectColor(Functions::getWhite());
-    m_stuhlbein_ul->setParent(m_world);
-
-    m_stuhlbein_ur = new CgSceneGraphEntity(obj_cube);
-    m_stuhlbein_ur->setAppearance(new CgAppearance());
-    m_stuhlbein_ur->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                  glm::vec4(2.5, 0.0, 0.0, 1.0)));
-    m_stuhlbein_ur->getAppearance().setObjectColor(Functions::getWhite());
-    m_stuhlbein_ul->pushChildren(m_stuhlbein_ur);
-
-    m_stuhlbein_ol = new CgSceneGraphEntity(obj_cube);
-    m_stuhlbein_ol->setAppearance(new CgAppearance());
-    m_stuhlbein_ol->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                  glm::vec4(0.0, 0.0, -3.0, 1.0)));
-    m_stuhlbein_ol->getAppearance().setObjectColor(Functions::getWhite());
-    m_stuhlbein_ul->pushChildren(m_stuhlbein_ol);
-
-    m_stuhlbein_or = new CgSceneGraphEntity(obj_cube);
-    m_stuhlbein_or->setAppearance(new CgAppearance());
-    m_stuhlbein_or->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
-                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
-                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                  glm::vec4(2.5, 0.0, -3.0, 1.0)));
-    m_stuhlbein_or->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
-    m_stuhlbein_ul->pushChildren(m_stuhlbein_or);
-
-    m_stuhlplate = new CgSceneGraphEntity(obj_cube);
-    m_stuhlplate->setAppearance(new CgAppearance());
-    m_stuhlplate->setObjectTransformation(glm::mat4(glm::vec4(3.40753, 0, 0, 0),
-                                                  glm::vec4(0, 0.0694426, 0, 0),
-                                                  glm::vec4(0, 0, 3.97438, 0),
-                                                  glm::vec4(1.25, 0.55, -1.5, 1)));
-    m_stuhlplate->getAppearance().setObjectColor(Functions::getWhite());
-    m_stuhlbein_ul->pushChildren(m_stuhlplate);
-
-    m_lehne = new CgSceneGraphEntity(obj_cube);
-    m_lehne->setAppearance(new CgAppearance());
-    m_lehne->setObjectTransformation(glm::mat4(glm::vec4(0.397214, 0, 0, 0),
-                                             glm::vec4(0, 1.52438, 0, 0),
-                                             glm::vec4(0, 0, 3.86169, 0),
-                                             glm::vec4(-0.25, 1.3, -1.45, 1)));
-    m_lehne->getAppearance().setObjectColor(Functions::getWhite());
-    m_stuhlbein_ul->pushChildren(m_lehne);
-
-    // initiliaze man
-    m_man = new CgSceneGraphEntity(obj_man);
-    m_man->setAppearance(new CgAppearance());
-    m_man->setObjectTransformation(glm::mat4(glm::vec4(-0.0349137, 0, -0.265196, 0),
-                                             glm::vec4(0, 0.0659707, 0, 0),
-                                             glm::vec4(0.165278, 0, -0.0217593, 0),
-                                             glm::vec4(3.85, -0.6, -1.55, 1)));
-    m_man->getAppearance().setObjectColor(Functions::getWhite());
-    m_stuhlbein_ul->pushChildren(m_man);
-
-    //Table
-    m_tischplatte = new CgSceneGraphEntity(obj_cube);
-    m_tischplatte->setAppearance(new CgAppearance());
-    m_tischplatte->setObjectTransformation(glm::mat4(glm::vec4(6.39331, 0, 0, 0),
-                                                  glm::vec4(0, 0.13029, 0, 0),
-                                                  glm::vec4(0, 0, 7.45686, 0),
-                                                  glm::vec4(0, 0, 0, 1) ));
-    m_tischplatte->getAppearance().setObjectColor(Functions::getWhite());
-    m_tischplatte->setParent(m_world);
-
-    m_tischbein_ul = new CgSceneGraphEntity(obj_cube);
-    m_tischbein_ul->setAppearance(new CgAppearance());
-    m_tischbein_ul->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
-                                                  glm::vec4(0, 4.97186, 0, 0),
-                                                  glm::vec4(0, 0, 0.66342, 0),
-                                                  glm::vec4(-2.85, -2.55, -3.4, 1)));
-    m_tischbein_ul->getAppearance().setObjectColor(Functions::getWhite());
-    m_tischplatte->pushChildren(m_tischbein_ul);
-
-    m_tischbein_ur = new CgSceneGraphEntity(obj_cube);
-    m_tischbein_ur->setAppearance(new CgAppearance());
-    m_tischbein_ur->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
-                                                  glm::vec4(0, 4.97186, 0, 0),
-                                                  glm::vec4(0, 0, 0.66342, 0),
-                                                  glm::vec4(-2.85, -2.55, 3.4, 1)));
-    m_tischbein_ur->getAppearance().setObjectColor(Functions::getWhite());
-    m_tischplatte->pushChildren(m_tischbein_ur);
-
-    m_tischbein_or = new CgSceneGraphEntity(obj_cube);
-    m_tischbein_or->setAppearance(new CgAppearance());
-    m_tischbein_or->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
-                                                  glm::vec4(0, 4.97186, 0, 0),
-                                                  glm::vec4(0, 0, 0.66342, 0),
-                                                  glm::vec4(2.85, -2.55, 3.4, 1)));
-    m_tischbein_or->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
-    m_tischplatte->pushChildren(m_tischbein_or);
-
-    m_tischbein_ol = new CgSceneGraphEntity(obj_cube);
-    m_tischbein_ol->setAppearance(new CgAppearance());
-    m_tischbein_ol->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
-                                                  glm::vec4(0, 4.97186, 0, 0),
-                                                  glm::vec4(0, 0, 0.66342, 0),
-                                                  glm::vec4(2.85, -2.55, -3.4, 1)));
-    m_tischbein_ol->getAppearance().setObjectColor(Functions::getWhite());
-    m_tischplatte->pushChildren(m_tischbein_ol);
-
-
-    //Checkboard
-    m_checkerboard = new CgSceneGraphEntity(obj_cube);
-    m_checkerboard->setAppearance(new CgAppearance());
-    m_checkerboard->setObjectTransformation(glm::mat4(glm::vec4(3.50266, 0, 0, 0),
-                                                  glm::vec4(0, 0.243235, 0, 0),
-                                                  glm::vec4(0, 0, 3.50266, 0),
-                                                  glm::vec4(0, 0.2, 0, 1) ));
-    m_checkerboard->getAppearance().setObjectColor(Functions::getWhite());
-    m_tischplatte->pushChildren(m_checkerboard);
-
-
-    m_box_plate = new CgSceneGraphEntity(obj_cube);
-    m_box_plate->setAppearance(new CgAppearance());
-    m_box_plate->setObjectTransformation(glm::mat4(glm::vec4(2.78241, 0, 0, 0),
-                                                  glm::vec4(0, 0.242627, 0, 0),
-                                                  glm::vec4(0, 0, 1.24004, 0),
-                                                  glm::vec4(-7.45058e-09, 0.2, -2.8, 1) ));
-    m_box_plate->getAppearance().setObjectColor(Functions::getWhite());
-    m_tischplatte->pushChildren(m_box_plate);
-
-
-    m_box_wand1 = new CgSceneGraphEntity(obj_cube); //aussen seite  - menschensicht link
-    m_box_wand1->setAppearance(new CgAppearance());
-    m_box_wand1->setObjectTransformation(glm::mat4(glm::vec4(2.78241, 0, 0, 0),
-                                                  glm::vec4(0, 0.799306, 0, 0),
-                                                  glm::vec4(0, 0, 0.15936, 0),
-                                                  glm::vec4(-7.45058e-09, 0.65, -3.35, 1) ));
-    m_box_wand1->getAppearance().setObjectColor(Functions::getWhite());
-    m_box_plate->pushChildren(m_box_wand1);
-
-    m_box_wand2 = new CgSceneGraphEntity(obj_cube); //innenseite - menschensicht rechts
-    m_box_wand2->setAppearance(new CgAppearance());
-    m_box_wand2->setObjectTransformation(glm::mat4(glm::vec4(2.78241, 0, 0, 0),
-                                                  glm::vec4(0, 0.799306, 0, 0),
-                                                  glm::vec4(0, 0, 0.15936, 0),
-                                                  glm::vec4(-7.45058e-09, 0.65, -2.25, 1) ));
-    m_box_wand2->getAppearance().setObjectColor(Functions::getWhite());
-    m_box_plate->pushChildren(m_box_wand2);
-
-    m_box_wand3 = new CgSceneGraphEntity(obj_cube); //innenseite - menschensicht vorne
-    m_box_wand3->setAppearance(new CgAppearance());
-    m_box_wand3->setObjectTransformation(glm::mat4(glm::vec4(0.22536, 0, 0, 0),
-                                                  glm::vec4(0, 0.799306, 0, 0),
-                                                  glm::vec4(0, 0, 1.00745, 0),
-                                                  glm::vec4(-1.3, 0.65, -2.8, 1) ));
-    m_box_wand3->getAppearance().setObjectColor(Functions::getWhite());
-    m_box_plate->pushChildren(m_box_wand3);
-
-    m_box_wand4 = new CgSceneGraphEntity(obj_cube); //innenseite - menschensicht hinten
-    m_box_wand4->setAppearance(new CgAppearance());
-    m_box_wand4->setObjectTransformation(glm::mat4(glm::vec4(0.22536, 0, 0, 0),
-                                                  glm::vec4(0, 0.799306, 0, 0),
-                                                  glm::vec4(0, 0, 1.00745, 0),
-                                                  glm::vec4(1.3, 0.65, -2.8, 1) ));
-    m_box_wand4->getAppearance().setObjectColor(Functions::getWhite());
-    m_box_plate->pushChildren(m_box_wand4);
-
-    // team 1
-    m_b_rook_1 = new CgSceneGraphEntity(obj_rook); //links
-    m_b_rook_1->setAppearance(new CgAppearance());
-    m_b_rook_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                glm::vec4(0, 0.237827, 0, 0),
-                                                glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(-1.6, 0.3, -1.7, 1) ));
-    m_b_rook_1->getAppearance().setObjectColor(Functions::getChessPink());
-    m_checkerboard->pushChildren(m_b_rook_1);
-
-
-
-    m_b_rook_2 = new CgSceneGraphEntity(obj_rook); //rechts
-    m_b_rook_2->setAppearance(new CgAppearance());
-    m_b_rook_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                glm::vec4(0, 0.237827, 0, 0),
-                                                glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(-1.6, 0.3, 1.4, 1) ));
-    m_b_rook_2->getAppearance().setObjectColor(Functions::getChessPink());
-    m_checkerboard->pushChildren(m_b_rook_2);
-
-    m_b_knight_1 = new CgSceneGraphEntity(obj_knight); //links
-    m_b_knight_1->setAppearance(new CgAppearance());
-    m_b_knight_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                    glm::vec4(-1.6, 0.3, -1.2, 1) ));
-    m_b_knight_1->getAppearance().setObjectColor(Functions::getChessPink());
-    m_checkerboard->pushChildren(m_b_knight_1);
-
-
-
-    m_b_knight_2 = new CgSceneGraphEntity(obj_knight); //rechts
-    m_b_knight_2->setAppearance(new CgAppearance());
-    m_b_knight_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(-1.6, 0.3, 1.0, 1) ));
-    m_b_knight_2->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_knight_2);
-
-
-    m_b_bishop_1 = new CgSceneGraphEntity(obj_bishop); //links
-    m_b_bishop_1->setAppearance(new CgAppearance());
-    m_b_bishop_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                    glm::vec4(-1.6, 0.3, 0.55, 1) ));
-    m_b_bishop_1->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_bishop_1);
-
-
-
-    m_b_bishop_2 = new CgSceneGraphEntity(obj_bishop); //rechts
-    m_b_bishop_2->setAppearance(new CgAppearance());
-    m_b_bishop_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(-1.6, 0.3, -0.8, 1) ));
-    m_b_bishop_2->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_bishop_2);
-
-
-    m_b_queen = new CgSceneGraphEntity(obj_queen); //innenseite - menschensicht hinten
-    m_b_queen->setAppearance(new CgAppearance());
-    m_b_queen->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                 glm::vec4(0, 0.237827, 0, 0),
-                                                 glm::vec4(0, 0, 0.237827, 0),
-                                                 glm::vec4(-1.6, 0.3, -0.3, 1) ));
-    m_b_queen->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_queen);
-
-    m_b_king = new CgSceneGraphEntity(obj_king); //innenseite - menschensicht hinten
-    m_b_king->setAppearance(new CgAppearance());
-    m_b_king->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                glm::vec4(0, 0.237827, 0, 0),
-                                                glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(-1.6, 0.3, 0.15, 1) ));
-    m_b_king->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_king);
-
-
-    m_b_pawn_1 = new CgSceneGraphEntity(obj_pawn); //links
-    m_b_pawn_1->setAppearance(new CgAppearance());
-    m_b_pawn_1->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, -1.55, 1) ));
-    m_b_pawn_1->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_1);
-
-    m_b_pawn_2 = new CgSceneGraphEntity(obj_pawn);
-    m_b_pawn_2->setAppearance(new CgAppearance());
-    m_b_pawn_2->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, -1.1, 1) ));
-    m_b_pawn_2->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_2);
-
-    m_b_pawn_3= new CgSceneGraphEntity(obj_pawn);
-    m_b_pawn_3->setAppearance(new CgAppearance());
-    m_b_pawn_3->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, -0.65, 1) ));
-    m_b_pawn_3->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_3);
-
-    m_b_pawn_4= new CgSceneGraphEntity(obj_pawn);
-    m_b_pawn_4->setAppearance(new CgAppearance());
-    m_b_pawn_4->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, -0.2, 1) ));
-    m_b_pawn_4->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_4);
-
-
-    m_b_pawn_5= new CgSceneGraphEntity(obj_pawn);
-    m_b_pawn_5->setAppearance(new CgAppearance());
-    m_b_pawn_5->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, 0.25, 1) ));
-    m_b_pawn_5->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_5);
-
-    m_b_pawn_6= new CgSceneGraphEntity(obj_pawn);
-    m_b_pawn_6->setAppearance(new CgAppearance());
-    m_b_pawn_6->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, 0.7, 1) ));
-    m_b_pawn_6->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_6);
-
-    m_b_pawn_7= new CgSceneGraphEntity(obj_pawn);
-    m_b_pawn_7->setAppearance(new CgAppearance());
-    m_b_pawn_7->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, 1.15, 1) ));
-    m_b_pawn_7->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_7);
-
-    m_b_pawn_8= new CgSceneGraphEntity(obj_pawn);
-    m_b_pawn_8->setAppearance(new CgAppearance());
-    m_b_pawn_8->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(-1.15, 0.3, 1.55, 1) ));
-    m_b_pawn_8->getAppearance().setObjectColor(Functions::getChessPink() );
-    m_checkerboard->pushChildren(m_b_pawn_8);
-
-    //team 2
-    m_w_rook_1 = new CgSceneGraphEntity(obj_rook);
-    m_w_rook_1->setAppearance(new CgAppearance());
-    m_w_rook_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                glm::vec4(0, 0.237827, 0, 0),
-                                                glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(1.4, 0.3, -1.7, 1) ));
-    m_w_rook_1->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_rook_1);
-
-
-
-    m_w_rook_2 = new CgSceneGraphEntity(obj_rook); //rechts
-    m_w_rook_2->setAppearance(new CgAppearance());
-    m_w_rook_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                glm::vec4(0, 0.237827, 0, 0),
-                                                glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(1.4, 0.3, 1.4, 1) ));
-    m_w_rook_2->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_rook_2);
-
-    m_w_knight_1 = new CgSceneGraphEntity(obj_knight); //links
-    m_w_knight_1->setAppearance(new CgAppearance());
-    m_w_knight_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                    glm::vec4(1.4, 0.3, -1.2, 1) ));
-    m_w_knight_1->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_knight_1);
-
-
-
-    m_w_knight_2 = new CgSceneGraphEntity(obj_knight); //rechts
-    m_w_knight_2->setAppearance(new CgAppearance());
-    m_w_knight_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(1.4, 0.3, 1.0, 1) ));
-    m_w_knight_2->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_knight_2);
-
-
-    m_w_bishop_1 = new CgSceneGraphEntity(obj_bishop); //links
-    m_w_bishop_1->setAppearance(new CgAppearance());
-    m_w_bishop_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                    glm::vec4(1.4, 0.3, 0.55, 1) ));
-    m_w_bishop_1->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_bishop_1);
-
-
-
-    m_w_bishop_2 = new CgSceneGraphEntity(obj_bishop); //rechts
-    m_w_bishop_2->setAppearance(new CgAppearance());
-    m_w_bishop_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                    glm::vec4(0, 0.237827, 0, 0),
-                                                    glm::vec4(0, 0, 0.237827, 0),
-                                                glm::vec4(1.4, 0.3, -0.8, 1) ));
-    m_w_bishop_2->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_bishop_2);
-
-    m_w_king = new CgSceneGraphEntity(obj_king); //innenseite - menschensicht hinten
-    m_w_king->setAppearance(new CgAppearance());
-    m_w_king->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                glm::vec4(0, -0.0310426, 0.235792, 0),
-                                                glm::vec4(0, -0.235792, -0.0310426, 0),
-                                                glm::vec4(0.65, 0.6, 0.15, 1) ));
-    m_w_king->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_king);
-
-
-    m_w_pawn_1 = new CgSceneGraphEntity(obj_pawn); //links
-    m_w_pawn_1->setAppearance(new CgAppearance());
-    m_w_pawn_1->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, -1.55, 1) ));
-    m_w_pawn_1->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_1);
-
-    m_w_pawn_2 = new CgSceneGraphEntity(obj_pawn);
-    m_w_pawn_2->setAppearance(new CgAppearance());
-    m_w_pawn_2->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, -1.1, 1) ));
-    m_w_pawn_2->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_2);
-
-    m_w_pawn_3= new CgSceneGraphEntity(obj_pawn);
-    m_w_pawn_3->setAppearance(new CgAppearance());
-    m_w_pawn_3->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, -0.65, 1) ));
-    m_w_pawn_3->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_3);
-
-    m_w_pawn_4= new CgSceneGraphEntity(obj_pawn);
-    m_w_pawn_4->setAppearance(new CgAppearance());
-    m_w_pawn_4->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, -0.2, 1) ));
-    m_w_pawn_4->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_4);
-
-
-    m_w_pawn_5= new CgSceneGraphEntity(obj_pawn);
-    m_w_pawn_5->setAppearance(new CgAppearance());
-    m_w_pawn_5->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, 0.25, 1) ));
-    m_w_pawn_5->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_5);
-
-    m_w_pawn_6= new CgSceneGraphEntity(obj_pawn);
-    m_w_pawn_6->setAppearance(new CgAppearance());
-    m_w_pawn_6->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, 0.7, 1) ));
-    m_w_pawn_6->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_6);
-
-    m_w_pawn_7= new CgSceneGraphEntity(obj_pawn);
-    m_w_pawn_7->setAppearance(new CgAppearance());
-    m_w_pawn_7->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, 1.15, 1) ));
-    m_w_pawn_7->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_7);
-
-    m_w_pawn_8= new CgSceneGraphEntity(obj_pawn);
-    m_w_pawn_8->setAppearance(new CgAppearance());
-    m_w_pawn_8->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
-                                     glm::vec4(0, 0.0236495, 0, 0),
-                                     glm::vec4(0, 0, 0.0236495, 0),
-                                     glm::vec4(1.15, 0.3, 1.55, 1) ));
-    m_w_pawn_8->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_checkerboard->pushChildren(m_w_pawn_8);
-
-    m_w_queen = new CgSceneGraphEntity(obj_queen); //innenseite - menschensicht hinten
-    m_w_queen->setAppearance(new CgAppearance());
-    m_w_queen->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
-                                                 glm::vec4(0, 0.237827, 0, 0),
-                                                 glm::vec4(0, 0, 0.237827, 0),
-                                                 glm::vec4(0, 0.3, -2.95, 1) ));
-    m_w_queen->getAppearance().setObjectColor(Functions::getChessBlue());
-    m_box_plate->pushChildren(m_w_queen);
+
+//    m_stuhlbein_ul = new CgSceneGraphEntity(obj_cube);
+//    m_stuhlbein_ul->setCurrentTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
+//                                                  glm::vec4(0, 2.88165, 0, 0),
+//                                                  glm::vec4(0, 0, 0.66342, 0),
+//                                                  glm::vec4(-4.8, -3.7, 0.85, 1)));
+//    m_stuhlbein_ul->setAppearance(new CgAppearance());
+//    m_stuhlbein_ul->getAppearance().setObjectColor(Functions::getWhite());
+//    m_stuhlbein_ul->setParent(m_world);
+
+//    m_stuhlbein_ur = new CgSceneGraphEntity(obj_cube);
+//    m_stuhlbein_ur->setAppearance(new CgAppearance());
+//    m_stuhlbein_ur->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
+//                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
+//                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
+//                                                  glm::vec4(2.5, 0.0, 0.0, 1.0)));
+//    m_stuhlbein_ur->getAppearance().setObjectColor(Functions::getWhite());
+//    m_stuhlbein_ul->pushChildren(m_stuhlbein_ur);
+
+//    m_stuhlbein_ol = new CgSceneGraphEntity(obj_cube);
+//    m_stuhlbein_ol->setAppearance(new CgAppearance());
+//    m_stuhlbein_ol->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
+//                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
+//                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
+//                                                  glm::vec4(0.0, 0.0, -3.0, 1.0)));
+//    m_stuhlbein_ol->getAppearance().setObjectColor(Functions::getWhite());
+//    m_stuhlbein_ul->pushChildren(m_stuhlbein_ol);
+
+//    m_stuhlbein_or = new CgSceneGraphEntity(obj_cube);
+//    m_stuhlbein_or->setAppearance(new CgAppearance());
+//    m_stuhlbein_or->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
+//                                                  glm::vec4(0.0, 1.0, 0.0, 0.0),
+//                                                  glm::vec4(0.0, 0.0, 1.0, 0.0),
+//                                                  glm::vec4(2.5, 0.0, -3.0, 1.0)));
+//    m_stuhlbein_or->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
+//    m_stuhlbein_ul->pushChildren(m_stuhlbein_or);
+
+//    m_stuhlplate = new CgSceneGraphEntity(obj_cube);
+//    m_stuhlplate->setAppearance(new CgAppearance());
+//    m_stuhlplate->setObjectTransformation(glm::mat4(glm::vec4(3.40753, 0, 0, 0),
+//                                                  glm::vec4(0, 0.0694426, 0, 0),
+//                                                  glm::vec4(0, 0, 3.97438, 0),
+//                                                  glm::vec4(1.25, 0.55, -1.5, 1)));
+//    m_stuhlplate->getAppearance().setObjectColor(Functions::getWhite());
+//    m_stuhlbein_ul->pushChildren(m_stuhlplate);
+
+//    m_lehne = new CgSceneGraphEntity(obj_cube);
+//    m_lehne->setAppearance(new CgAppearance());
+//    m_lehne->setObjectTransformation(glm::mat4(glm::vec4(0.397214, 0, 0, 0),
+//                                             glm::vec4(0, 1.52438, 0, 0),
+//                                             glm::vec4(0, 0, 3.86169, 0),
+//                                             glm::vec4(-0.25, 1.3, -1.45, 1)));
+//    m_lehne->getAppearance().setObjectColor(Functions::getWhite());
+//    m_stuhlbein_ul->pushChildren(m_lehne);
+
+//    // initiliaze man
+//    m_man = new CgSceneGraphEntity(obj_man);
+//    m_man->setAppearance(new CgAppearance());
+//    m_man->setObjectTransformation(glm::mat4(glm::vec4(-0.0349137, 0, -0.265196, 0),
+//                                             glm::vec4(0, 0.0659707, 0, 0),
+//                                             glm::vec4(0.165278, 0, -0.0217593, 0),
+//                                             glm::vec4(3.85, -0.6, -1.55, 1)));
+//    m_man->getAppearance().setObjectColor(Functions::getWhite());
+//    m_stuhlbein_ul->pushChildren(m_man);
+
+//    //Table
+//    m_tischplatte = new CgSceneGraphEntity(obj_cube);
+//    m_tischplatte->setAppearance(new CgAppearance());
+//    m_tischplatte->setObjectTransformation(glm::mat4(glm::vec4(6.39331, 0, 0, 0),
+//                                                  glm::vec4(0, 0.13029, 0, 0),
+//                                                  glm::vec4(0, 0, 7.45686, 0),
+//                                                  glm::vec4(0, 0, 0, 1) ));
+//    m_tischplatte->getAppearance().setObjectColor(Functions::getWhite());
+//    m_tischplatte->setParent(m_world);
+
+//    m_tischbein_ul = new CgSceneGraphEntity(obj_cube);
+//    m_tischbein_ul->setAppearance(new CgAppearance());
+//    m_tischbein_ul->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
+//                                                  glm::vec4(0, 4.97186, 0, 0),
+//                                                  glm::vec4(0, 0, 0.66342, 0),
+//                                                  glm::vec4(-2.85, -2.55, -3.4, 1)));
+//    m_tischbein_ul->getAppearance().setObjectColor(Functions::getWhite());
+//    m_tischplatte->pushChildren(m_tischbein_ul);
+
+//    m_tischbein_ur = new CgSceneGraphEntity(obj_cube);
+//    m_tischbein_ur->setAppearance(new CgAppearance());
+//    m_tischbein_ur->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
+//                                                  glm::vec4(0, 4.97186, 0, 0),
+//                                                  glm::vec4(0, 0, 0.66342, 0),
+//                                                  glm::vec4(-2.85, -2.55, 3.4, 1)));
+//    m_tischbein_ur->getAppearance().setObjectColor(Functions::getWhite());
+//    m_tischplatte->pushChildren(m_tischbein_ur);
+
+//    m_tischbein_or = new CgSceneGraphEntity(obj_cube);
+//    m_tischbein_or->setAppearance(new CgAppearance());
+//    m_tischbein_or->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
+//                                                  glm::vec4(0, 4.97186, 0, 0),
+//                                                  glm::vec4(0, 0, 0.66342, 0),
+//                                                  glm::vec4(2.85, -2.55, 3.4, 1)));
+//    m_tischbein_or->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
+//    m_tischplatte->pushChildren(m_tischbein_or);
+
+//    m_tischbein_ol = new CgSceneGraphEntity(obj_cube);
+//    m_tischbein_ol->setAppearance(new CgAppearance());
+//    m_tischbein_ol->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
+//                                                  glm::vec4(0, 4.97186, 0, 0),
+//                                                  glm::vec4(0, 0, 0.66342, 0),
+//                                                  glm::vec4(2.85, -2.55, -3.4, 1)));
+//    m_tischbein_ol->getAppearance().setObjectColor(Functions::getWhite());
+//    m_tischplatte->pushChildren(m_tischbein_ol);
+
+
+//    //Checkboard
+//    m_checkerboard = new CgSceneGraphEntity(obj_cube);
+//    m_checkerboard->setAppearance(new CgAppearance());
+//    m_checkerboard->setObjectTransformation(glm::mat4(glm::vec4(3.50266, 0, 0, 0),
+//                                                  glm::vec4(0, 0.243235, 0, 0),
+//                                                  glm::vec4(0, 0, 3.50266, 0),
+//                                                  glm::vec4(0, 0.2, 0, 1) ));
+//    m_checkerboard->getAppearance().setObjectColor(Functions::getWhite());
+//    m_tischplatte->pushChildren(m_checkerboard);
+
+
+//    m_box_plate = new CgSceneGraphEntity(obj_cube);
+//    m_box_plate->setAppearance(new CgAppearance());
+//    m_box_plate->setObjectTransformation(glm::mat4(glm::vec4(2.78241, 0, 0, 0),
+//                                                  glm::vec4(0, 0.242627, 0, 0),
+//                                                  glm::vec4(0, 0, 1.24004, 0),
+//                                                  glm::vec4(-7.45058e-09, 0.2, -2.8, 1) ));
+//    m_box_plate->getAppearance().setObjectColor(Functions::getWhite());
+//    m_tischplatte->pushChildren(m_box_plate);
+
+
+//    m_box_wand1 = new CgSceneGraphEntity(obj_cube); //aussen seite  - menschensicht link
+//    m_box_wand1->setAppearance(new CgAppearance());
+//    m_box_wand1->setObjectTransformation(glm::mat4(glm::vec4(2.78241, 0, 0, 0),
+//                                                  glm::vec4(0, 0.799306, 0, 0),
+//                                                  glm::vec4(0, 0, 0.15936, 0),
+//                                                  glm::vec4(-7.45058e-09, 0.65, -3.35, 1) ));
+//    m_box_wand1->getAppearance().setObjectColor(Functions::getWhite());
+//    m_box_plate->pushChildren(m_box_wand1);
+
+//    m_box_wand2 = new CgSceneGraphEntity(obj_cube); //innenseite - menschensicht rechts
+//    m_box_wand2->setAppearance(new CgAppearance());
+//    m_box_wand2->setObjectTransformation(glm::mat4(glm::vec4(2.78241, 0, 0, 0),
+//                                                  glm::vec4(0, 0.799306, 0, 0),
+//                                                  glm::vec4(0, 0, 0.15936, 0),
+//                                                  glm::vec4(-7.45058e-09, 0.65, -2.25, 1) ));
+//    m_box_wand2->getAppearance().setObjectColor(Functions::getWhite());
+//    m_box_plate->pushChildren(m_box_wand2);
+
+//    m_box_wand3 = new CgSceneGraphEntity(obj_cube); //innenseite - menschensicht vorne
+//    m_box_wand3->setAppearance(new CgAppearance());
+//    m_box_wand3->setObjectTransformation(glm::mat4(glm::vec4(0.22536, 0, 0, 0),
+//                                                  glm::vec4(0, 0.799306, 0, 0),
+//                                                  glm::vec4(0, 0, 1.00745, 0),
+//                                                  glm::vec4(-1.3, 0.65, -2.8, 1) ));
+//    m_box_wand3->getAppearance().setObjectColor(Functions::getWhite());
+//    m_box_plate->pushChildren(m_box_wand3);
+
+//    m_box_wand4 = new CgSceneGraphEntity(obj_cube); //innenseite - menschensicht hinten
+//    m_box_wand4->setAppearance(new CgAppearance());
+//    m_box_wand4->setObjectTransformation(glm::mat4(glm::vec4(0.22536, 0, 0, 0),
+//                                                  glm::vec4(0, 0.799306, 0, 0),
+//                                                  glm::vec4(0, 0, 1.00745, 0),
+//                                                  glm::vec4(1.3, 0.65, -2.8, 1) ));
+//    m_box_wand4->getAppearance().setObjectColor(Functions::getWhite());
+//    m_box_plate->pushChildren(m_box_wand4);
+
+//    // team 1
+//    m_b_rook_1 = new CgSceneGraphEntity(obj_rook); //links
+//    m_b_rook_1->setAppearance(new CgAppearance());
+//    m_b_rook_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                glm::vec4(0, 0.237827, 0, 0),
+//                                                glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(-1.6, 0.3, -1.7, 1) ));
+//    m_b_rook_1->getAppearance().setObjectColor(Functions::getChessPink());
+//    m_checkerboard->pushChildren(m_b_rook_1);
+
+
+
+//    m_b_rook_2 = new CgSceneGraphEntity(obj_rook); //rechts
+//    m_b_rook_2->setAppearance(new CgAppearance());
+//    m_b_rook_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                glm::vec4(0, 0.237827, 0, 0),
+//                                                glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(-1.6, 0.3, 1.4, 1) ));
+//    m_b_rook_2->getAppearance().setObjectColor(Functions::getChessPink());
+//    m_checkerboard->pushChildren(m_b_rook_2);
+
+//    m_b_knight_1 = new CgSceneGraphEntity(obj_knight); //links
+//    m_b_knight_1->setAppearance(new CgAppearance());
+//    m_b_knight_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                    glm::vec4(-1.6, 0.3, -1.2, 1) ));
+//    m_b_knight_1->getAppearance().setObjectColor(Functions::getChessPink());
+//    m_checkerboard->pushChildren(m_b_knight_1);
+
+
+
+//    m_b_knight_2 = new CgSceneGraphEntity(obj_knight); //rechts
+//    m_b_knight_2->setAppearance(new CgAppearance());
+//    m_b_knight_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(-1.6, 0.3, 1.0, 1) ));
+//    m_b_knight_2->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_knight_2);
+
+
+//    m_b_bishop_1 = new CgSceneGraphEntity(obj_bishop); //links
+//    m_b_bishop_1->setAppearance(new CgAppearance());
+//    m_b_bishop_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                    glm::vec4(-1.6, 0.3, 0.55, 1) ));
+//    m_b_bishop_1->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_bishop_1);
+
+
+
+//    m_b_bishop_2 = new CgSceneGraphEntity(obj_bishop); //rechts
+//    m_b_bishop_2->setAppearance(new CgAppearance());
+//    m_b_bishop_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(-1.6, 0.3, -0.8, 1) ));
+//    m_b_bishop_2->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_bishop_2);
+
+
+//    m_b_queen = new CgSceneGraphEntity(obj_queen); //innenseite - menschensicht hinten
+//    m_b_queen->setAppearance(new CgAppearance());
+//    m_b_queen->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                 glm::vec4(0, 0.237827, 0, 0),
+//                                                 glm::vec4(0, 0, 0.237827, 0),
+//                                                 glm::vec4(-1.6, 0.3, -0.3, 1) ));
+//    m_b_queen->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_queen);
+
+//    m_b_king = new CgSceneGraphEntity(obj_king); //innenseite - menschensicht hinten
+//    m_b_king->setAppearance(new CgAppearance());
+//    m_b_king->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                glm::vec4(0, 0.237827, 0, 0),
+//                                                glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(-1.6, 0.3, 0.15, 1) ));
+//    m_b_king->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_king);
+
+
+//    m_b_pawn_1 = new CgSceneGraphEntity(obj_pawn); //links
+//    m_b_pawn_1->setAppearance(new CgAppearance());
+//    m_b_pawn_1->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, -1.55, 1) ));
+//    m_b_pawn_1->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_1);
+
+//    m_b_pawn_2 = new CgSceneGraphEntity(obj_pawn);
+//    m_b_pawn_2->setAppearance(new CgAppearance());
+//    m_b_pawn_2->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, -1.1, 1) ));
+//    m_b_pawn_2->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_2);
+
+//    m_b_pawn_3= new CgSceneGraphEntity(obj_pawn);
+//    m_b_pawn_3->setAppearance(new CgAppearance());
+//    m_b_pawn_3->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, -0.65, 1) ));
+//    m_b_pawn_3->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_3);
+
+//    m_b_pawn_4= new CgSceneGraphEntity(obj_pawn);
+//    m_b_pawn_4->setAppearance(new CgAppearance());
+//    m_b_pawn_4->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, -0.2, 1) ));
+//    m_b_pawn_4->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_4);
+
+
+//    m_b_pawn_5= new CgSceneGraphEntity(obj_pawn);
+//    m_b_pawn_5->setAppearance(new CgAppearance());
+//    m_b_pawn_5->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, 0.25, 1) ));
+//    m_b_pawn_5->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_5);
+
+//    m_b_pawn_6= new CgSceneGraphEntity(obj_pawn);
+//    m_b_pawn_6->setAppearance(new CgAppearance());
+//    m_b_pawn_6->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, 0.7, 1) ));
+//    m_b_pawn_6->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_6);
+
+//    m_b_pawn_7= new CgSceneGraphEntity(obj_pawn);
+//    m_b_pawn_7->setAppearance(new CgAppearance());
+//    m_b_pawn_7->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, 1.15, 1) ));
+//    m_b_pawn_7->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_7);
+
+//    m_b_pawn_8= new CgSceneGraphEntity(obj_pawn);
+//    m_b_pawn_8->setAppearance(new CgAppearance());
+//    m_b_pawn_8->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(-1.15, 0.3, 1.55, 1) ));
+//    m_b_pawn_8->getAppearance().setObjectColor(Functions::getChessPink() );
+//    m_checkerboard->pushChildren(m_b_pawn_8);
+
+//    //team 2
+//    m_w_rook_1 = new CgSceneGraphEntity(obj_rook);
+//    m_w_rook_1->setAppearance(new CgAppearance());
+//    m_w_rook_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                glm::vec4(0, 0.237827, 0, 0),
+//                                                glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(1.4, 0.3, -1.7, 1) ));
+//    m_w_rook_1->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_rook_1);
+
+
+
+//    m_w_rook_2 = new CgSceneGraphEntity(obj_rook); //rechts
+//    m_w_rook_2->setAppearance(new CgAppearance());
+//    m_w_rook_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                glm::vec4(0, 0.237827, 0, 0),
+//                                                glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(1.4, 0.3, 1.4, 1) ));
+//    m_w_rook_2->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_rook_2);
+
+//    m_w_knight_1 = new CgSceneGraphEntity(obj_knight); //links
+//    m_w_knight_1->setAppearance(new CgAppearance());
+//    m_w_knight_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                    glm::vec4(1.4, 0.3, -1.2, 1) ));
+//    m_w_knight_1->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_knight_1);
+
+
+
+//    m_w_knight_2 = new CgSceneGraphEntity(obj_knight); //rechts
+//    m_w_knight_2->setAppearance(new CgAppearance());
+//    m_w_knight_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(1.4, 0.3, 1.0, 1) ));
+//    m_w_knight_2->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_knight_2);
+
+
+//    m_w_bishop_1 = new CgSceneGraphEntity(obj_bishop); //links
+//    m_w_bishop_1->setAppearance(new CgAppearance());
+//    m_w_bishop_1->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                    glm::vec4(1.4, 0.3, 0.55, 1) ));
+//    m_w_bishop_1->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_bishop_1);
+
+
+
+//    m_w_bishop_2 = new CgSceneGraphEntity(obj_bishop); //rechts
+//    m_w_bishop_2->setAppearance(new CgAppearance());
+//    m_w_bishop_2->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                    glm::vec4(0, 0.237827, 0, 0),
+//                                                    glm::vec4(0, 0, 0.237827, 0),
+//                                                glm::vec4(1.4, 0.3, -0.8, 1) ));
+//    m_w_bishop_2->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_bishop_2);
+
+//    m_w_king = new CgSceneGraphEntity(obj_king); //innenseite - menschensicht hinten
+//    m_w_king->setAppearance(new CgAppearance());
+//    m_w_king->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                glm::vec4(0, -0.0310426, 0.235792, 0),
+//                                                glm::vec4(0, -0.235792, -0.0310426, 0),
+//                                                glm::vec4(0.65, 0.6, 0.15, 1) ));
+//    m_w_king->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_king);
+
+
+//    m_w_pawn_1 = new CgSceneGraphEntity(obj_pawn); //links
+//    m_w_pawn_1->setAppearance(new CgAppearance());
+//    m_w_pawn_1->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, -1.55, 1) ));
+//    m_w_pawn_1->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_1);
+
+//    m_w_pawn_2 = new CgSceneGraphEntity(obj_pawn);
+//    m_w_pawn_2->setAppearance(new CgAppearance());
+//    m_w_pawn_2->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, -1.1, 1) ));
+//    m_w_pawn_2->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_2);
+
+//    m_w_pawn_3= new CgSceneGraphEntity(obj_pawn);
+//    m_w_pawn_3->setAppearance(new CgAppearance());
+//    m_w_pawn_3->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, -0.65, 1) ));
+//    m_w_pawn_3->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_3);
+
+//    m_w_pawn_4= new CgSceneGraphEntity(obj_pawn);
+//    m_w_pawn_4->setAppearance(new CgAppearance());
+//    m_w_pawn_4->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, -0.2, 1) ));
+//    m_w_pawn_4->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_4);
+
+
+//    m_w_pawn_5= new CgSceneGraphEntity(obj_pawn);
+//    m_w_pawn_5->setAppearance(new CgAppearance());
+//    m_w_pawn_5->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, 0.25, 1) ));
+//    m_w_pawn_5->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_5);
+
+//    m_w_pawn_6= new CgSceneGraphEntity(obj_pawn);
+//    m_w_pawn_6->setAppearance(new CgAppearance());
+//    m_w_pawn_6->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, 0.7, 1) ));
+//    m_w_pawn_6->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_6);
+
+//    m_w_pawn_7= new CgSceneGraphEntity(obj_pawn);
+//    m_w_pawn_7->setAppearance(new CgAppearance());
+//    m_w_pawn_7->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, 1.15, 1) ));
+//    m_w_pawn_7->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_7);
+
+//    m_w_pawn_8= new CgSceneGraphEntity(obj_pawn);
+//    m_w_pawn_8->setAppearance(new CgAppearance());
+//    m_w_pawn_8->setObjectTransformation(glm::mat4(glm::vec4(0.0236495, 0, 0, 0),
+//                                     glm::vec4(0, 0.0236495, 0, 0),
+//                                     glm::vec4(0, 0, 0.0236495, 0),
+//                                     glm::vec4(1.15, 0.3, 1.55, 1) ));
+//    m_w_pawn_8->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_checkerboard->pushChildren(m_w_pawn_8);
+
+//    m_w_queen = new CgSceneGraphEntity(obj_queen); //innenseite - menschensicht hinten
+//    m_w_queen->setAppearance(new CgAppearance());
+//    m_w_queen->setObjectTransformation(glm::mat4(glm::vec4(0.237827, 0, 0, 0),
+//                                                 glm::vec4(0, 0.237827, 0, 0),
+//                                                 glm::vec4(0, 0, 0.237827, 0),
+//                                                 glm::vec4(0, 0.3, -2.95, 1) ));
+//    m_w_queen->getAppearance().setObjectColor(Functions::getChessBlue());
+//    m_box_plate->pushChildren(m_w_queen);
 
 
     // Children of world
-    m_world->pushChildren(m_stuhlbein_ul);
-    m_world->pushChildren(m_tischplatte);
+//    m_world->pushChildren(m_stuhlbein_ul);
+//    m_world->pushChildren(m_tischplatte);
 
 
    this->setRootNode(m_world);
@@ -627,8 +628,6 @@ void CgSceneGraph::applyTransform(glm::mat4 arg) {
     m_modelview_matrix_stack.top()*=arg;
 }
 
-CgRay* CgSceneGraph::getRay() { return m_ray; }
-
 void CgSceneGraph::initializeInorderList(CgSceneGraphEntity* entity) {
     m_inorder_scene_entities.push_back(entity);
     for (unsigned int i=0; i<entity->getChildren().size(); ++i) {
@@ -662,7 +661,6 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         pushMatrix();
         applyTransform(entity->getChildren()[i]->getCurrentTransformation());
-        render(scene_control, entity->getChildren()[i]);
 
         // inverse for picking ray
         m_ray->secureWorldCoord();
@@ -671,7 +669,8 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
         m_ray->applyTransformationB(glm::inverse(entity->getCurrentTransformation()
                                     *entity->getObjectTransformation()));
         m_ray->setDirection(m_ray->getB() - m_ray->getA());
-        //scene_control->getRenderer()->render(m_ray);
+        scene_control->getRenderer()->render(m_ray);
+        render(scene_control, entity->getChildren()[i]);
 
         // intersection calculation
         pickingIntersection(scene_control, entity);
@@ -689,34 +688,40 @@ void CgSceneGraph::pickingIntersection(CgSceneControl* scene_control, CgSceneGra
         float t;
         glm::vec3 q;
         if (!IntersectRayPlane(p, t, q))
-            return; // no intersection
+            continue; // no intersection
 
         float u, v, w;
         Barycentric(a, b, c, q, u, v, w);
         if (!(u >= 0 && u <= 1))
-            return;  // not in triangle
+            continue;  // not in triangle
 
-        std::vector<glm::vec3> indices;
-        indices.push_back(glm::vec3(q[0], q[1] + 0.5, q[2]));
-        indices.push_back(glm::vec3(q[0] + 0.5, q[1] + 0.25, q[2]));
-        indices.push_back(glm::vec3(q[0] + 0.5, q[1] - 0.25 , q[2]));
-        indices.push_back(glm::vec3(q[0], q[1] - 0.5, q[2]));
-        CgRotation* obj_intersection  = new CgRotation(Functions::getId(),indices,indices.size(),30);
+        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
         scene_control->getRenderer()->init(obj_intersection);
-        scene_control->getRenderer()->setUniformValue("mycolor", Functions::getRed());
-        scene_control->setCurrentTransformation(entity->getCurrentTransformation()
-                                                *entity->getObjectTransformation());
         scene_control->getRenderer()->render(obj_intersection);
-        std::cout << i + 1<<" Schnittpunkt: " << glm::to_string(q) << "\n";
         delete obj_intersection;
     }
+    // TODO für mehrere
+//    getRenderer()->setUniformValue("mycolor", Functions::getRed());
+//    for (unsigned int i = 0; i < m_intersections.size(); ++i) {
+//        glm::vec3 q = m_intersections[i];
+//        std::cout << "Schnittpunkte: " << glm::to_string(m_intersections[i]) << "\n";
+////        std::vector<glm::vec3> indices;
+////        indices.push_back(glm::vec3(q[0], q[1] + 0.1, q[2]));
+////        indices.push_back(glm::vec3(q[0] + 0.1, q[1], q[2]));
+////        indices.push_back(glm::vec3(q[0], q[1], q[2] - 0.1));
+////        CgRotation* obj_intersection  = new CgRotation(Functions::getId(),indices,indices.size(),30);
+//        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
+//        getRenderer()->init(obj_intersection);
+//        getRenderer()->render(obj_intersection);
+//        delete obj_intersection;
+//    }
 }
 
 bool CgSceneGraph::IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q) {
     glm::vec3 a = glm::vec3(m_ray->getA()[0], m_ray->getA()[1], m_ray->getA()[2]);
     glm::vec3 ab = glm::vec3(m_ray->getDirection()[0], m_ray->getDirection()[1], m_ray->getDirection()[2]);
 
-    t = (p.d - glm::dot(p.n, a) / glm::dot(p.n, ab));
+    t = (p.d - glm::dot(p.n, a)) / glm::dot(p.n, ab);
 
     if (t >= 0.0f && t < INFINITY) {
         q = a + t * ab;
@@ -725,7 +730,7 @@ bool CgSceneGraph::IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q) {
     return 0;
 }
 
-void CgSceneGraph::Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3 q,
+void CgSceneGraph::Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q,
                                float& u, float& v, float& w) {
     glm::vec3 v0 = b - a;
     glm::vec3 v1 = c - a;

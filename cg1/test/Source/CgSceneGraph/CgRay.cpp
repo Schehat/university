@@ -69,6 +69,7 @@ void CgRay::applyTransformationB(glm::mat4 matrix) {
 glm::vec4 CgRay::getDirection() { return direction; }
 void CgRay::setDirection(glm::vec4 direction) {
     this->direction = direction;
+    glm::normalize(direction);
     createRay();
 }
 

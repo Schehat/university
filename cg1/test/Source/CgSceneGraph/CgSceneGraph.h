@@ -54,7 +54,9 @@ private:
 
     void pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
     bool IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q);
-    void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3 q, float& u, float& v, float& w);
+    void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
+
+    std::vector<glm::vec3> m_intersections;
 
     CgSceneGraphEntity* m_root_node;
     std::stack<glm::mat4> m_modelview_matrix_stack;

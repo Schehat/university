@@ -13,6 +13,7 @@ class CgUnityCube: public CgBaseTriangleMesh
 public:
     CgUnityCube();
     CgUnityCube(int id);
+    CgUnityCube(int id, glm::vec3);
     CgUnityCube(int id,double a);
 
 

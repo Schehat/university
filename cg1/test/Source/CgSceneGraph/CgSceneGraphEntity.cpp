@@ -63,3 +63,11 @@ void CgSceneGraphEntity::setObjectTransformation(const glm::mat4 &object_transfo
 {
     m_object_transformation = object_transformation;
 }
+
+CgAABB* CgSceneGraphEntity::getAABB() {
+    return m_aabb;
+}
+
+void CgSceneGraphEntity::setAABB(CgAABB* aabb) {
+    this->m_aabb = m_aabb;
+}
