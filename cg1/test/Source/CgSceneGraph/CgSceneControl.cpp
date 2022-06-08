@@ -288,7 +288,31 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         }
         if(ev->text()=="x") {
             doX = !doX;
-            if (doX) {
+            if (doX) {//    setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
+
+                // iterate all children
+            //    if (m_scene!=NULL) {
+            //        m_scene->popMatrix();
+            //        m_scene->pushMatrix(m_scene->getRootNode()->getCurrentTransformation());
+            //        m_scene->render(this, m_scene->getRootNode());
+            //    }
+
+                // set coordinate system
+            //    if (entity_selected) {
+            //        for (int i=0; i<3; ++i) {
+            //            // verschieben zum selektierten Objekt
+            //            setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
+            //            m_renderer->setUniformValue("mycolor", m_scene->getCoordSystem()->getColorSystem()[i]);
+            //            m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
+            //        }
+            //        setCurrentTransformation(glm::inverse(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation()));
+            //        m_renderer->setUniformValue("mycolor", Functions::getYellow());
+            //        m_renderer->render(m_scene->getRay());
+
+            ////        setCurrentTransformation(glm::mat4(1.0));
+            ////        if (selected_entity->getObject() != nullptr)
+            ////            m_renderer->render(selected_entity->getObject());
+            //    }
                 std::cout << "x ausgewähllt\n";
             } else {
                 std::cout << "x abgewählt\n";
@@ -603,15 +627,14 @@ void CgSceneControl::pickingIntersection() {
         CgPlane p {CgPlane(a, b, c)};
         float t;
         glm::vec3 q;
-        if (!IntersectRayPlane(p, t, q))
-            continue; // no intersection
+        if (IntersectRayPlane(p, t, q))
+        {
+            float u, v, w;
+            Barycentric(a, b, c, q, u, v, w);
+            if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1)
+                 m_intersections.push_back(glm::vec3(q[0], q[1], q[2]));
+        }
 
-        float u, v, w;
-        Barycentric(a, b, c, q, u, v, w);
-        if (!(u >= 0 && u <= 1))
-            continue;  // not in triangle
-
-        m_intersections.push_back(glm::vec3(q[0], q[1], q[2]));
     }
 }
 
@@ -621,7 +644,7 @@ bool CgSceneControl::IntersectRayPlane(CgPlane& p, float& t, glm::vec3& q) {
 
     t = (p.d - glm::dot(p.n, a)) / glm::dot(p.n, ab);
 
-    if (t >= 0.0f && t < INFINITY) {
+    if (std::isfinite(t) && t >= 0.0f ) {
         q = a + t * ab;
         return 1;
     }
