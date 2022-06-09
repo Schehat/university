@@ -14,8 +14,8 @@ public:
     CgUnityCube();
     CgUnityCube(int id);
     CgUnityCube(int id, glm::vec3);
-    CgUnityCube(int id,double a);
-
+    CgUnityCube(int id, double a);
+    CgUnityCube(int id, float, float, float, float, float, float);
 
     ~CgUnityCube();
 

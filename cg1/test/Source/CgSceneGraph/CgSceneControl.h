@@ -62,8 +62,8 @@ public:
     CgSceneGraphEntity* getSelectedEntity();
 private:
     CgSceneGraph* m_scene;
-    CgUnityCube* m_cube;
-    std::vector<glm::vec3> m_intersections;
+    //CgUnityCube* m_cube;
+    // std::vector<glm::vec3> m_intersections;
 
     CgSceneGraphEntity* selected_entity;
     bool entity_selected;

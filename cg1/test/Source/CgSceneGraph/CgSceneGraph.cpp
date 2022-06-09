@@ -647,6 +647,10 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         pushMatrix();
+        if (m_modelview_matrix_stack.top() != entity->getChildren()[i]->getCurrentTransformation()
+                * entity->getChildren()[i]->getCurrentTransformation()) {
+            calculateAABB(entity);
+        }
         applyTransform(entity->getChildren()[i]->getCurrentTransformation());
         render(scene_control, entity->getChildren()[i]);
         m_modelview_matrix_stack.pop();
@@ -746,3 +750,23 @@ void CgSceneGraph::pushMatrix(glm::mat4 arg) {
     m_modelview_matrix_stack.push(arg);
 }
 
+void CgSceneGraph::calculateAABB(CgSceneGraphEntity* entity) {
+    float x_min = INFINITY, x_max = -INFINITY;
+    float y_min = INFINITY, y_max = -INFINITY;
+    float z_min = INFINITY, z_max = -INFINITY;
+    for (int i = 0; i < entity->getObject()->getVertices().size(); ++i) {
+        if (entity->getObject()->getVertices()[i][0] < x_min)
+            x_min = entity->getObject()->getVertices()[i][0];
+        if (entity->getObject()->getVertices()[i][0] > x_max)
+            x_max = entity->getObject()->getVertices()[i][0];
+        if (entity->getObject()->getVertices()[i][1] < y_min)
+            y_min = entity->getObject()->getVertices()[i][1];
+        if (entity->getObject()->getVertices()[i][1] > y_max)
+            y_max = entity->getObject()->getVertices()[i][1];
+        if (entity->getObject()->getVertices()[i][2] < z_min)
+            z_min = entity->getObject()->getVertices()[i][2];
+        if (entity->getObject()->getVertices()[i][2] > z_max)
+            z_max = entity->getObject()->getVertices()[i][2];
+    }
+    entity->setAABB(x_min, x_max, y_min, y_max, z_min, z_max);
+}

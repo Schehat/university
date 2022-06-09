@@ -52,6 +52,7 @@ public:
     void pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity, CgRay* local_ray);
     bool IntersectRayPlane(CgRay* local_ray, CgPlane& p, float& t, glm::vec3& q);
     void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
+    void calculateAABB(CgSceneGraphEntity* entity);
 
     void render(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
 private:

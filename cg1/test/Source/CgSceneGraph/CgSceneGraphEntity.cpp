@@ -5,6 +5,7 @@ CgSceneGraphEntity::CgSceneGraphEntity()
 {
     setCurrentTransformation(glm::mat4(1.));
     setObjectTransformation(glm::mat4(1.));
+    m_aabb = new CgUnityCube(Functions::getId());
 }
 CgSceneGraphEntity::CgSceneGraphEntity(CgBaseTriangleMesh* object) : m_object(object) {
     setCurrentTransformation(glm::mat4(1.));
@@ -62,4 +63,20 @@ glm::mat4 CgSceneGraphEntity::getObjectTransformation() const
 void CgSceneGraphEntity::setObjectTransformation(const glm::mat4 &object_transformation)
 {
     m_object_transformation = object_transformation;
+}
+
+CgUnityCube* CgSceneGraphEntity::getAABB() {
+    // TODO: get vertices empty fix?
+//    std::cout << m_aabb->getVertices().size() << "\n";
+//    for (int i = 0; i < m_aabb->getVertices().size(); ++i) {
+//        std::cout << m_aabb->getVertices()[i][0] << " " <<
+//                     m_aabb->getVertices()[i][1] << " " <<
+//                     m_aabb->getVertices()[i][2] << "\n";
+//    }
+    return m_aabb;
+}
+void CgSceneGraphEntity::setAABB(CgUnityCube* aabb) { m_aabb = aabb; }
+void CgSceneGraphEntity::setAABB(float x_min, float x_max, float y_min, float y_max, float z_min, float z_max) {
+    //delete m_aabb;
+    m_aabb = new CgUnityCube(Functions::getId(), x_min, x_max, y_min, y_max, z_min, z_max);
 }

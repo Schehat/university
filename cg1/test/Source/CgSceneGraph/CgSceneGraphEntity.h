@@ -9,7 +9,7 @@
 #include "CgSceneGraph.h"
 #include "CgBase/CgBaseRenderer.h"
 #include "../CgBase/CgBaseTriangleMesh.h"
-#include "CgAABB.h"
+#include "CgUnityCube.h"
 
 class CgSceneGraph;
 
@@ -26,16 +26,21 @@ public:
     const CgSceneGraphEntity& getParent() const;
     const std::vector<CgSceneGraphEntity*> getChildren() const;
     glm::mat4 getObjectTransformation() const;
+    CgUnityCube* getAABB();
 
     void setObject(CgBaseTriangleMesh* object);
     void setCurrentTransformation(glm::mat4 curren_transformation);
     void setAppearance(CgAppearance* appearance);
     void setParent(CgSceneGraphEntity* parent);
     void setObjectTransformation(const glm::mat4 &object_transformation);
+    void setAABB(CgUnityCube*);
+    void setAABB(float, float, float, float, float, float);
 
     void pushChildren(CgSceneGraphEntity* child);
     void removeLastChild();
 private:
+    CgUnityCube* m_aabb;
+
     CgBaseTriangleMesh* m_object;
     glm::mat4 m_current_transformation;
     glm::mat4 m_object_transformation;

@@ -17,7 +17,7 @@ CgSceneControl::CgSceneControl()
     doY=false;
     doZ=false;
 
-    m_cube = new CgUnityCube(Functions::getId());
+    //m_cube = new CgUnityCube(Functions::getId());
 }
 
 
@@ -25,18 +25,16 @@ CgSceneControl::~CgSceneControl()
 {
     if (m_scene != NULL)
         delete m_scene;
-    if (m_cube != NULL)
-            delete m_cube;
+//    if (m_cube != NULL)
+//            delete m_cube;
 }
 
 void CgSceneControl::setRenderer(CgBaseRenderer* r)
 {
     m_renderer=r;
     m_renderer->setSceneControl(this);
-    if(m_cube!=NULL)
-            m_renderer->init(m_cube);
-    if (m_scene != NULL &&  m_scene->getRay() != NULL)
-        m_renderer->render(m_scene->getRay());
+//    if(m_cube!=NULL)
+//            m_renderer->init(m_cube);
 }
 CgBaseRenderer*& CgSceneControl::getRenderer()
 {
@@ -78,12 +76,16 @@ void CgSceneControl::renderObjects()
             m_renderer->setUniformValue("mycolor", m_scene->getCoordSystem()->getColorSystem()[i]);
             m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
         }
+        m_renderer->setUniformValue("mycolor", Functions::getYellow());
+        if (selected_entity->getAABB() != NULL) {}
+            //m_renderer->render(selected_entity->getAABB());
+
     }
     setCurrentTransformation(glm::mat4(1.0));
 
-    m_renderer->setUniformValue("mycolor", Functions::getWhite());
-    if (m_cube != NULL)
-        m_renderer->render(m_cube);
+//    m_renderer->setUniformValue("mycolor", Functions::getWhite());
+//    if (m_cube != NULL)
+//        m_renderer->render(m_cube);
 
     if (m_scene != NULL &&  m_scene->getRay() != NULL) {
         m_renderer->setUniformValue("mycolor", glm::vec4(100.0, 0.0, 255.0, 1.0));
@@ -91,14 +93,14 @@ void CgSceneControl::renderObjects()
     }
 
     getRenderer()->setUniformValue("mycolor", Functions::getRed());
-    for (unsigned int i = 0; i < m_intersections.size(); ++i) {
-        glm::vec3 q = m_intersections[i];
-        std::cout << "Schnittpunkte: " << glm::to_string(m_intersections[i]) << "\n";
-        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
-        getRenderer()->init(obj_intersection);
-        getRenderer()->render(obj_intersection);
-        delete obj_intersection;
-    }
+//    for (unsigned int i = 0; i < m_intersections.size(); ++i) {
+//        glm::vec3 q = m_intersections[i];
+//        std::cout << "Schnittpunkte: " << glm::to_string(m_intersections[i]) << "\n";
+//        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
+//        getRenderer()->init(obj_intersection);
+//        getRenderer()->render(obj_intersection);
+//        delete obj_intersection;
+//    }
     for (unsigned int i = 0; i < m_scene->getIntersections().size(); ++i) {
         glm::vec3 q = m_scene->getIntersections()[i];
         // std::cout << "Schnittpunkte: " << glm::to_string(m_scene->getIntersections()[i]) << "\n";
@@ -141,7 +143,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen
             // => Weltkoordinaten
             // currentTransformation Einheitmatrix setzten und m_scalemat wird so auch berücksichtigt
-            //setCurrentTransformation(glm::mat4(1.0));
+            setCurrentTransformation(glm::mat4(1.0));
             m_scene->getRay()->applyTransformationA(glm::inverse(m_lookAt_matrix * m_trackball_rotation
                                                                  * m_current_transformation));
             m_scene->getRay()->applyTransformationB(glm::inverse(m_lookAt_matrix * m_trackball_rotation
@@ -149,12 +151,11 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
             m_scene->getRay()->setDirection(m_scene->getRay()->getB() - m_scene->getRay()->getA());
 
-            pickingIntersection();
+            //pickingIntersection();
             m_scene->startIntersection(this, m_scene->getRootNode());
 
-
-            m_renderer->init(m_scene->getRay());
             m_scene->setRenderer(m_renderer);
+            m_renderer->init(m_scene->getRay());
             m_renderer->redraw();
         }
     }
@@ -232,7 +233,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         }
         // select object
         if(ev->text()=="q")
-        {   lastPressQ = true;
+        {
+            lastPressQ = true;
             if (entity_group_selected)
                 iterateChildrenRestoreOldColor(selected_entity);
             entity_group_selected = false;
@@ -247,10 +249,10 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
                 selected_entity = m_scene->getNextEntity();
             }
             entity_selected=true;
-            selected_entity->getAppearance().setObjectColor(Functions::getGreen());
+            if (selected_entity != NULL)
+                selected_entity->getAppearance().setObjectColor(Functions::getGreen());
             m_renderer->redraw();
-            lastPressE = false;
-        }
+            lastPressE = false;        }
 
         if(ev->text()=="t") {
             doTranslate = true;
@@ -576,7 +578,7 @@ CgSceneGraphEntity* CgSceneControl::getSelectedEntity() {
     return selected_entity;
 }
 
-void CgSceneControl::pickingIntersection() {
+/*void CgSceneControl::pickingIntersection() {
     m_intersections.clear();
     for (unsigned int i = 0; i < m_cube->getTriangleIndices().size(); i+=3) {
         glm::vec3 a = m_cube->getVertices()[m_cube->getTriangleIndices()[i]];
@@ -622,4 +624,4 @@ void CgSceneControl::Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::
     v = (d11 * d20 - d01 * d21) / denom;
     w = (d00 * d21 - d01 * d20) / denom;
     u = 1.0f - v - w;
-}
+}*/
