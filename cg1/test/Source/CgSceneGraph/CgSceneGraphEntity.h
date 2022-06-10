@@ -10,6 +10,7 @@
 #include "CgBase/CgBaseRenderer.h"
 #include "../CgBase/CgBaseTriangleMesh.h"
 #include "CgUnityCube.h"
+#include "CgRay.h"
 
 class CgSceneGraph;
 
@@ -18,7 +19,7 @@ class CgSceneGraphEntity
 public:
     CgSceneGraphEntity();
     CgSceneGraphEntity(CgBaseTriangleMesh* objects);
-
+    ~CgSceneGraphEntity();
 
     CgBaseTriangleMesh* getObject();
     glm::mat4 getCurrentTransformation();
@@ -38,6 +39,8 @@ public:
 
     void pushChildren(CgSceneGraphEntity* child);
     void removeLastChild();
+
+    CgRay* local_ray;
 private:
     CgUnityCube* m_aabb;
 

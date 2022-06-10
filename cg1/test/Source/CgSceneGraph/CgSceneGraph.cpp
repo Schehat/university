@@ -575,6 +575,82 @@ CgSceneGraph::~CgSceneGraph() {
     if (m_ray != NULL) {
         delete m_ray;
     }
+
+    delete m_root_node;
+
+    for (unsigned int i = 0; i < m_inorder_scene_entities.size(); ++i)
+        delete m_inorder_scene_entities[i];
+
+    delete coord_system;
+
+    for (unsigned int i = 0; i < o_all_objects.size(); ++i)
+        delete o_all_objects[i];
+
+    delete m_ray;
+
+    // all entities
+    delete m_world;
+    delete m_stuhlbein_ul;
+        delete m_stuhlbein_ur;
+        delete m_stuhlbein_ol;
+        delete m_stuhlbein_or;
+        delete m_stuhlplate;
+        delete m_lehne;
+        delete m_man;
+    delete m_tischbein_ul;
+        delete m_tischbein_ur;
+        delete m_tischbein_ol;
+        delete m_tischbein_or;
+        delete m_tischplatte;
+        delete m_checkerboard;
+            delete m_b_king;
+            delete m_b_queen;
+            delete m_b_bishop_1;
+            delete m_b_bishop_2;
+            delete m_b_knight_1;
+            delete m_b_knight_2;
+            delete m_b_rook_1;
+            delete m_b_rook_2;
+            delete m_b_pawn_1;
+            delete m_b_pawn_2;
+            delete m_b_pawn_3;
+            delete m_b_pawn_4;
+            delete m_b_pawn_5;
+            delete m_b_pawn_6;
+            delete m_b_pawn_7;
+            delete m_b_pawn_8;
+
+            delete m_w_king;
+            delete m_w_queen;
+            delete m_w_bishop_1;
+            delete m_w_bishop_2;
+            delete m_w_knight_1;
+            delete m_w_knight_2;
+            delete m_w_rook_1;
+            delete m_w_rook_2;
+            delete m_w_pawn_1;
+            delete m_w_pawn_2;
+            delete m_w_pawn_3;
+            delete m_w_pawn_4;
+            delete m_w_pawn_5;
+            delete m_w_pawn_6;
+            delete m_w_pawn_7;
+            delete m_w_pawn_8;
+        delete m_box_plate;
+            delete m_box_wand1;
+            delete m_box_wand2;
+            delete m_box_wand3;
+            delete m_box_wand4;
+
+
+    delete  obj_man;
+    delete  obj_king;
+    delete  obj_queen;
+    delete  obj_bishop;
+    delete  obj_knight;
+    delete  obj_rook;
+    delete    obj_cube;
+    delete     obj_pawn;
 }
 
 CgSceneGraphEntity* CgSceneGraph::getCurrentEntity() {
@@ -611,7 +687,16 @@ void CgSceneGraph::setRenderer(CgBaseRenderer* renderer) {
     for (unsigned int i=0; i<coord_system->getCoordSystem().size(); ++i) {
         renderer->init(coord_system->getCoordSystem()[i]);
     }
+    setAABBForAllChildren(renderer, m_root_node);
     renderer->init(m_ray);
+}
+
+void CgSceneGraph::setAABBForAllChildren(CgBaseRenderer* renderer, CgSceneGraphEntity* entity) {
+    calculateAABB(entity);
+    renderer->init(entity->getAABB());
+    for (unsigned int i = 0; i < entity->getChildren().size(); ++i) {
+        setAABBForAllChildren(renderer, entity->getChildren()[i]);
+    }
 }
 
 void CgSceneGraph::setRootNode(CgSceneGraphEntity* root) {
@@ -643,10 +728,15 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
 
     // render objects of the group
     scene_control->getRenderer()->render(entity->getObject());
+    if (scene_control->getSelectedEntity() == entity && scene_control->getShowAABB() == true) {
+        scene_control->getRenderer()->setUniformValue("mycolor", Functions::getYellow());
+        scene_control->getRenderer()->render(entity->getAABB());
+    }
 
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         pushMatrix();
+        // adjust aabb if transformation of entity has changedq
         if (m_modelview_matrix_stack.top() != entity->getChildren()[i]->getCurrentTransformation()
                 * entity->getChildren()[i]->getCurrentTransformation()) {
             calculateAABB(entity);
@@ -667,32 +757,56 @@ void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraph
     glm::mat4 currentTransformation = entity->getCurrentTransformation() * entity->getObjectTransformation();
     glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
 
-    CgRay* local_ray { new CgRay{Functions::getId()}};
+    CgRay* local_ray = new CgRay(Functions::getId());
+
     local_ray->setA(currentTransformation_inverse * m_ray->getA());
     local_ray->setB(currentTransformation_inverse * m_ray->getB());
-    local_ray->setDirection(local_ray->getB() - local_ray->getA());
+    local_ray->setDirection(currentTransformation_inverse * m_ray->getDirection());
 
-    scene_control->getRenderer()->init(local_ray);
-    scene_control->getRenderer()->render(local_ray);
+//    entity->local_ray->setA(currentTransformation_inverse * m_ray->getA());
+//    entity->local_ray->setB(currentTransformation_inverse * m_ray->getB());
+//    entity->local_ray->setDirection(currentTransformation_inverse * m_ray->getDirection());
 
-//    std::cout << "A: " << glm::to_string(local_ray->getA()) << ", "
-//              << "B: " << glm::to_string(local_ray->getB()) << " ";
-
-    pickingIntersection(scene_control, entity, local_ray);
+    pickingIntersection(entity, local_ray);
     delete local_ray;
 
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         checkIntersection(scene_control, entity->getChildren()[i]);
     }
-
 }
 
-void CgSceneGraph::pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity, CgRay* local_ray) {
-    for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
-        glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
-        glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
-        glm::vec3 c = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]+2];
+void CgSceneGraph::pickingIntersection(CgSceneGraphEntity* entity, CgRay* local_ray) {
+    bool aabb_intersection = checkAABBIntersection(entity, local_ray);
+
+    if (aabb_intersection) {
+        for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
+            glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
+            glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
+            glm::vec3 c = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]+2];
+            CgPlane p {CgPlane(a, b, c)};
+            float t;
+            glm::vec3 q;
+            if (IntersectRayPlane(local_ray, p, t, q))
+            {
+                float u, v, w;
+                Barycentric(a, b, c, q, u, v, w);
+                if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1) {
+                    glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
+                    intersection_point = entity->getObjectTransformation() * entity->getCurrentTransformation() * intersection_point;
+                    std::cout << "Schnittpunkt: " << glm::to_string(intersection_point) << "\n";
+                    m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
+                }
+            }
+        }
+    }
+}
+
+bool CgSceneGraph::checkAABBIntersection(CgSceneGraphEntity* entity, CgRay* local_ray) {
+    for (unsigned int i = 0; i < entity->getAABB()->getTriangleIndices().size(); i+=3) {
+        glm::vec3 a = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i]];
+        glm::vec3 b = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i+1]];
+        glm::vec3 c = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i]+2];
         CgPlane p {CgPlane(a, b, c)};
         float t;
         glm::vec3 q;
@@ -700,14 +814,13 @@ void CgSceneGraph::pickingIntersection(CgSceneControl* scene_control, CgSceneGra
         {
             float u, v, w;
             Barycentric(a, b, c, q, u, v, w);
-            if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1) {
-                glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
-                intersection_point = entity->getCurrentTransformation() * entity->getObjectTransformation() * intersection_point;
-                std::cout << "Schnittpunkt: " << glm::to_string(intersection_point) << "\n";
-                m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
-            }
+            bool next = u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1;
+            if (next)
+                std::cout << "hit\n";
+            return next;
         }
     }
+    return false;
 }
 
 bool CgSceneGraph::IntersectRayPlane(CgRay* local_ray, CgPlane& p, float& t, glm::vec3& q) {
@@ -754,7 +867,7 @@ void CgSceneGraph::calculateAABB(CgSceneGraphEntity* entity) {
     float x_min = INFINITY, x_max = -INFINITY;
     float y_min = INFINITY, y_max = -INFINITY;
     float z_min = INFINITY, z_max = -INFINITY;
-    for (int i = 0; i < entity->getObject()->getVertices().size(); ++i) {
+    for (unsigned int i = 0; i < entity->getObject()->getVertices().size(); ++i) {
         if (entity->getObject()->getVertices()[i][0] < x_min)
             x_min = entity->getObject()->getVertices()[i][0];
         if (entity->getObject()->getVertices()[i][0] > x_max)

@@ -16,6 +16,10 @@ CgSceneControl::CgSceneControl()
     doX=false;
     doY=false;
     doZ=false;
+    showAABB=false;
+    entity_selected=false;
+
+    selected_entity = NULL;
 
     //m_cube = new CgUnityCube(Functions::getId());
 }
@@ -25,6 +29,10 @@ CgSceneControl::~CgSceneControl()
 {
     if (m_scene != NULL)
         delete m_scene;
+    if (m_renderer != NULL)
+        delete m_renderer;
+    if (selected_entity != NULL)
+        delete selected_entity;
 //    if (m_cube != NULL)
 //            delete m_cube;
 }
@@ -58,7 +66,7 @@ void CgSceneControl::renderObjects()
     m_renderer->setUniformValue("matSpecularColor"  ,glm::vec4(0.8,0.72,0.21,1.0));
     m_renderer->setUniformValue("lightSpecularColor",glm::vec4(1.0,1.0,1.0,1.0));
 
-    if (entity_selected)
+    if (entity_selected && selected_entity != NULL && selected_entity != nullptr)
         setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
 
     // iterate all children
@@ -69,20 +77,29 @@ void CgSceneControl::renderObjects()
     }
 
     // set coordinate system
-    if (entity_selected) {
+    if (entity_selected && selected_entity != m_scene->getRootNode() && selected_entity != NULL) {
         for (int i=0; i<3; ++i) {
             // verschieben zum selektierten Objekt
             setCurrentTransformation(selected_entity->getCurrentTransformation()*selected_entity->getObjectTransformation());
             m_renderer->setUniformValue("mycolor", m_scene->getCoordSystem()->getColorSystem()[i]);
             m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
         }
-        m_renderer->setUniformValue("mycolor", Functions::getYellow());
-        if (selected_entity->getAABB() != NULL) {}
-            //m_renderer->render(selected_entity->getAABB());
+        setCurrentTransformation(glm::mat4(1.0));
+        m_renderer->render(selected_entity->getObject());
+        glm::mat4 currentTransformation = selected_entity->getCurrentTransformation() * selected_entity->getObjectTransformation();
+        glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
 
+        CgRay* local_ray = new CgRay(Functions::getId());
+
+        local_ray->setA(currentTransformation_inverse * m_scene->getRay()->getA());
+        local_ray->setB(currentTransformation_inverse * m_scene->getRay()->getB());
+        local_ray->setDirection(currentTransformation_inverse * m_scene->getRay()->getDirection());
+
+        m_renderer->init(local_ray);
+        m_renderer->render(local_ray);
     }
-    setCurrentTransformation(glm::mat4(1.0));
 
+    setCurrentTransformation(glm::mat4(1.0));
 //    m_renderer->setUniformValue("mycolor", Functions::getWhite());
 //    if (m_cube != NULL)
 //        m_renderer->render(m_cube);
@@ -154,7 +171,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             //pickingIntersection();
             m_scene->startIntersection(this, m_scene->getRootNode());
 
-            m_scene->setRenderer(m_renderer);
+            //m_scene->setRenderer(m_renderer);
             m_renderer->init(m_scene->getRay());
             m_renderer->redraw();
         }
@@ -189,6 +206,11 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
         if((!entity_selected) && ev->text()=="-")
         {
             m_scalemat = glm::scale(m_scalemat,glm::vec3(0.8,0.8,0.8));
+            m_renderer->redraw();
+        }
+
+        if (ev->text() == "a") {
+            showAABB = !showAABB;
             m_renderer->redraw();
         }
 
@@ -577,6 +599,8 @@ void CgSceneControl::iterateChildrenRestoreOldColor(CgSceneGraphEntity* entity) 
 CgSceneGraphEntity* CgSceneControl::getSelectedEntity() {
     return selected_entity;
 }
+
+bool CgSceneControl::getShowAABB() { return showAABB; }
 
 /*void CgSceneControl::pickingIntersection() {
     m_intersections.clear();

@@ -49,10 +49,12 @@ public:
 
     void startIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
     void checkIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
-    void pickingIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity, CgRay* local_ray);
+    void pickingIntersection(CgSceneGraphEntity* entity, CgRay* local_ray);
     bool IntersectRayPlane(CgRay* local_ray, CgPlane& p, float& t, glm::vec3& q);
     void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
+    void setAABBForAllChildren(CgBaseRenderer* renderer, CgSceneGraphEntity*);
     void calculateAABB(CgSceneGraphEntity* entity);
+    bool checkAABBIntersection(CgSceneGraphEntity* entity, CgRay* local_ray);
 
     void render(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
 private:

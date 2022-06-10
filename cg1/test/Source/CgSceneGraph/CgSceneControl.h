@@ -60,10 +60,13 @@ public:
     void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
 
     CgSceneGraphEntity* getSelectedEntity();
+    bool getShowAABB();
 private:
     CgSceneGraph* m_scene;
     //CgUnityCube* m_cube;
     // std::vector<glm::vec3> m_intersections;
+
+    bool showAABB;
 
     CgSceneGraphEntity* selected_entity;
     bool entity_selected;
