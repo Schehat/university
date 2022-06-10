@@ -6,12 +6,6 @@ CgSceneGraphEntity::CgSceneGraphEntity()
     setCurrentTransformation(glm::mat4(1.));
     setObjectTransformation(glm::mat4(1.));
     m_aabb = new CgUnityCube(Functions::getId());
-    // Polyline Ray
-    std::vector<glm::vec3> vertices;
-    vertices.clear();
-    vertices.push_back(glm::vec3(0.0, 0.0, 0.0));
-    vertices.push_back(glm::vec3(0.0, 0.0, 0.0));
-    local_ray = new CgRay(Functions::getId(), vertices);
 }
 CgSceneGraphEntity::CgSceneGraphEntity(CgBaseTriangleMesh* object) : m_object(object) {
     setCurrentTransformation(glm::mat4(1.));
@@ -22,7 +16,6 @@ CgSceneGraphEntity::~CgSceneGraphEntity() {
     delete m_parent;
     delete m_aabb;
     delete m_object;
-    delete local_ray;
 }
 
 CgBaseTriangleMesh* CgSceneGraphEntity::getObject() {
@@ -48,8 +41,8 @@ void CgSceneGraphEntity::setAppearance(CgAppearance* appearance) {
 }
 
 
-const CgSceneGraphEntity& CgSceneGraphEntity::getParent() const {
-    return *m_parent;
+CgSceneGraphEntity* CgSceneGraphEntity::getParent() {
+    return m_parent;
 }
 void CgSceneGraphEntity::setParent(CgSceneGraphEntity* parent) {
     m_parent = parent;
@@ -68,7 +61,7 @@ void CgSceneGraphEntity::removeLastChild() {
     m_children.pop_back();
 }
 
-glm::mat4 CgSceneGraphEntity::getObjectTransformation() const
+glm::mat4 CgSceneGraphEntity::getObjectTransformation()
 {
     return m_object_transformation;
 }

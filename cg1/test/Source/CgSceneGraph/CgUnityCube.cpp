@@ -285,6 +285,13 @@ m_id(id)
 CgUnityCube::CgUnityCube(int id, float x_min, float x_max, float y_min, float y_max, float z_min, float z_max):
 m_type(Cg::TriangleMesh),
 m_id(id){
+    min_pos.push_back(x_min);
+    min_pos.push_back(y_min);
+    min_pos.push_back(z_min);
+    max_pos.push_back(x_max);
+    max_pos.push_back(y_max);
+    max_pos.push_back(z_max);
+
     // Vorderseite
     m_vertices.push_back(glm::vec3(x_min, y_min, z_min));  // linke obere ecke
     m_vertices.push_back(glm::vec3(x_min, y_max, z_min));  // linke untere ecke

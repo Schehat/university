@@ -20,8 +20,6 @@ CgSceneControl::CgSceneControl()
     entity_selected=false;
 
     selected_entity = NULL;
-
-    //m_cube = new CgUnityCube(Functions::getId());
 }
 
 
@@ -33,16 +31,12 @@ CgSceneControl::~CgSceneControl()
         delete m_renderer;
     if (selected_entity != NULL)
         delete selected_entity;
-//    if (m_cube != NULL)
-//            delete m_cube;
 }
 
 void CgSceneControl::setRenderer(CgBaseRenderer* r)
 {
     m_renderer=r;
     m_renderer->setSceneControl(this);
-//    if(m_cube!=NULL)
-//            m_renderer->init(m_cube);
 }
 CgBaseRenderer*& CgSceneControl::getRenderer()
 {
@@ -73,6 +67,7 @@ void CgSceneControl::renderObjects()
     if (m_scene!=NULL) {
         m_scene->popMatrix();
         m_scene->pushMatrix(m_scene->getRootNode()->getCurrentTransformation());
+        m_scene->m_intersections.clear();
         m_scene->render(this, m_scene->getRootNode());
     }
 
@@ -84,43 +79,32 @@ void CgSceneControl::renderObjects()
             m_renderer->setUniformValue("mycolor", m_scene->getCoordSystem()->getColorSystem()[i]);
             m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
         }
-        setCurrentTransformation(glm::mat4(1.0));
-        m_renderer->render(selected_entity->getObject());
-        glm::mat4 currentTransformation = selected_entity->getCurrentTransformation() * selected_entity->getObjectTransformation();
-        glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
 
-        CgRay* local_ray = new CgRay(Functions::getId());
+//        setCurrentTransformation(glm::mat4(1.0));
+//        m_renderer->render(selected_entity->getObject());
+//        glm::mat4 currentTransformation = selected_entity->getCurrentTransformation() * selected_entity->getObjectTransformation();
+//        glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
 
-        local_ray->setA(currentTransformation_inverse * m_scene->getRay()->getA());
-        local_ray->setB(currentTransformation_inverse * m_scene->getRay()->getB());
-        local_ray->setDirection(currentTransformation_inverse * m_scene->getRay()->getDirection());
+//        CgRay* local_ray = new CgRay(Functions::getId());
+
+//        local_ray->setA(currentTransformation_inverse * m_scene->getRay()->getA());
+//        local_ray->setB(currentTransformation_inverse * m_scene->getRay()->getB());
+//        local_ray->setDirection(currentTransformation_inverse * m_scene->getRay()->getDirection());
 
         m_renderer->init(local_ray);
         m_renderer->render(local_ray);
+        delete local_ray;
     }
 
     setCurrentTransformation(glm::mat4(1.0));
-//    m_renderer->setUniformValue("mycolor", Functions::getWhite());
-//    if (m_cube != NULL)
-//        m_renderer->render(m_cube);
-
     if (m_scene != NULL &&  m_scene->getRay() != NULL) {
         m_renderer->setUniformValue("mycolor", glm::vec4(100.0, 0.0, 255.0, 1.0));
         m_renderer->render(m_scene->getRay());
     }
 
     getRenderer()->setUniformValue("mycolor", Functions::getRed());
-//    for (unsigned int i = 0; i < m_intersections.size(); ++i) {
-//        glm::vec3 q = m_intersections[i];
-//        std::cout << "Schnittpunkte: " << glm::to_string(m_intersections[i]) << "\n";
-//        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
-//        getRenderer()->init(obj_intersection);
-//        getRenderer()->render(obj_intersection);
-//        delete obj_intersection;
-//    }
     for (unsigned int i = 0; i < m_scene->getIntersections().size(); ++i) {
         glm::vec3 q = m_scene->getIntersections()[i];
-        // std::cout << "Schnittpunkte: " << glm::to_string(m_scene->getIntersections()[i]) << "\n";
         CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
         getRenderer()->init(obj_intersection);
         getRenderer()->render(obj_intersection);
@@ -153,14 +137,12 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
             //  NDC mit Inverse der Proje^ktionsmatrix von m_proj_matrix und durch homogene Koordinate teilen
             // => Kamerakoordinaten
-            setCurrentTransformation(glm::mat4(1.0));
             m_scene->getRay()->setA(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -0.01, 1));
             m_scene->getRay()->setB(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1.0, 1));
 
             // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen
             // => Weltkoordinaten
             // currentTransformation Einheitmatrix setzten und m_scalemat wird so auch berücksichtigt
-            setCurrentTransformation(glm::mat4(1.0));
             m_scene->getRay()->applyTransformationA(glm::inverse(m_lookAt_matrix * m_trackball_rotation
                                                                  * m_current_transformation));
             m_scene->getRay()->applyTransformationB(glm::inverse(m_lookAt_matrix * m_trackball_rotation
@@ -169,7 +151,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             m_scene->getRay()->setDirection(m_scene->getRay()->getB() - m_scene->getRay()->getA());
 
             //pickingIntersection();
-            m_scene->startIntersection(this, m_scene->getRootNode());
+            // m_scene->startIntersection(this, m_scene->getRootNode());
 
             //m_scene->setRenderer(m_renderer);
             m_renderer->init(m_scene->getRay());
@@ -588,11 +570,13 @@ void CgSceneControl::iterateChildrenSetColor(CgSceneGraphEntity* entity,glm::vec
 }
 
 void CgSceneControl::iterateChildrenRestoreOldColor(CgSceneGraphEntity* entity) {
-    for(unsigned int i = 0; i < entity->getChildren().size(); i++) {
-        glm::vec4 old_color = entity->getChildren()[i]->getAppearance().getOldColor();
-        old_color *= 255.0;
-        entity->getChildren()[i]->getAppearance().setObjectColor(old_color);
-        iterateChildrenRestoreOldColor(entity->getChildren()[i]);
+    if (entity != NULL) {
+        for(unsigned int i = 0; i < entity->getChildren().size(); i++) {
+            glm::vec4 old_color = entity->getChildren()[i]->getAppearance().getOldColor();
+            old_color *= 255.0;
+            entity->getChildren()[i]->getAppearance().setObjectColor(old_color);
+            iterateChildrenRestoreOldColor(entity->getChildren()[i]);
+        }
     }
 }
 

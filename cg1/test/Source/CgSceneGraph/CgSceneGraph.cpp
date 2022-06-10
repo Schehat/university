@@ -747,28 +747,25 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
     }
 }
 
-void CgSceneGraph::startIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
-    m_intersections.clear();
-    checkIntersection(scene_control, entity);
-    std::cout << "Anzahl Schnittpunkte: " << m_intersections.size() << "\n";
-}
+//void CgSceneGraph::startIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
+//    m_intersections.clear();
+//    checkIntersection(scene_control, entity);
+//    std::cout << "Anzahl Schnittpunkte: " << m_intersections.size() << "\n";
+//}
 
 void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
-    glm::mat4 currentTransformation = entity->getCurrentTransformation() * entity->getObjectTransformation();
-    glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
+    if (entity != this->getRootNode()) {
+        glm::mat4 currentTransformation_inverse = glm::inverse(m_modelview_matrix_stack.top());
 
-    CgRay* local_ray = new CgRay(Functions::getId());
+        CgRay* local_ray = new CgRay(Functions::getId());
 
-    local_ray->setA(currentTransformation_inverse * m_ray->getA());
-    local_ray->setB(currentTransformation_inverse * m_ray->getB());
-    local_ray->setDirection(currentTransformation_inverse * m_ray->getDirection());
+        local_ray->setA(currentTransformation_inverse * m_ray->getA());
+        local_ray->setB(currentTransformation_inverse * m_ray->getB());
+        local_ray->setDirection(currentTransformation_inverse * m_ray->getDirection());
 
-//    entity->local_ray->setA(currentTransformation_inverse * m_ray->getA());
-//    entity->local_ray->setB(currentTransformation_inverse * m_ray->getB());
-//    entity->local_ray->setDirection(currentTransformation_inverse * m_ray->getDirection());
-
-    pickingIntersection(entity, local_ray);
-    delete local_ray;
+        pickingIntersection(entity, local_ray);
+        delete local_ray;
+    }
 
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
@@ -777,50 +774,59 @@ void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraph
 }
 
 void CgSceneGraph::pickingIntersection(CgSceneGraphEntity* entity, CgRay* local_ray) {
-    bool aabb_intersection = checkAABBIntersection(entity, local_ray);
+    float t;
+    glm::vec3 q;
+    bool aabb_intersection = IntersectRayAABB(entity, local_ray, t, q);
 
-    if (aabb_intersection) {
-        for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
-            glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
-            glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
-            glm::vec3 c = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]+2];
-            CgPlane p {CgPlane(a, b, c)};
-            float t;
-            glm::vec3 q;
-            if (IntersectRayPlane(local_ray, p, t, q))
-            {
-                float u, v, w;
-                Barycentric(a, b, c, q, u, v, w);
-                if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1) {
-                    glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
-                    intersection_point = entity->getObjectTransformation() * entity->getCurrentTransformation() * intersection_point;
-                    std::cout << "Schnittpunkt: " << glm::to_string(intersection_point) << "\n";
-                    m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
-                }
+    for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
+        glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
+        glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
+        glm::vec3 c = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]+2];
+        CgPlane p {CgPlane(a, b, c)};
+        if (IntersectRayPlane(local_ray, p, t, q))
+        {
+            float u, v, w;
+            Barycentric(a, b, c, q, u, v, w);
+            if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1) {
+                glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
+                intersection_point = entity->getObjectTransformation() * entity->getParent()->getCurrentTransformation() * intersection_point;
+                std::cout << "Schnittpunkt: " << glm::to_string(intersection_point) << "\n";
+                m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
             }
         }
     }
 }
 
-bool CgSceneGraph::checkAABBIntersection(CgSceneGraphEntity* entity, CgRay* local_ray) {
-    for (unsigned int i = 0; i < entity->getAABB()->getTriangleIndices().size(); i+=3) {
-        glm::vec3 a = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i]];
-        glm::vec3 b = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i+1]];
-        glm::vec3 c = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i]+2];
-        CgPlane p {CgPlane(a, b, c)};
-        float t;
-        glm::vec3 q;
-        if (IntersectRayPlane(local_ray, p, t, q))
-        {
-            float u, v, w;
-            Barycentric(a, b, c, q, u, v, w);
-            bool next = u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1;
-            if (next)
-                std::cout << "hit\n";
-            return next;
+bool CgSceneGraph::IntersectRayAABB(CgSceneGraphEntity* entity, CgRay* local_ray, float& t, glm::vec3& q) {
+    float t_min = 0.0f;
+    float t_max = INFINITY;
+
+    for (int i = 0; i < 3; ++i) {
+        if (glm::abs(local_ray->getDirection()[i]) < 0.001) {
+            if (local_ray->getA()[i] < entity->getAABB()->min_pos[i] || local_ray->getA()[i] > entity->getAABB()->max_pos[i])
+            return false;
+        } else {
+            float ood = 1.0f / local_ray->getDirection()[i];
+            float t1 = (entity->getAABB()->min_pos[i] - q[i]) * ood;
+            float t2 = (entity->getAABB()->max_pos[i] - q[i]) * ood;
+            if (t1 > t2) {
+                float tmp = t2;
+                t1 = t2;
+                t2 = t1;
+            }
+            if (t1 > t_min)
+                t_min = t1;
+            if (t2 <= t_max)
+                t_max = t2;
+            if (t_min > t_max)
+                return false;
         }
     }
-    return false;
+    q = local_ray->getA() + local_ray->getDirection()*t_min;
+    glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
+    intersection_point = entity->getObjectTransformation() * entity->getCurrentTransformation() * intersection_point;
+    m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
+    return true;
 }
 
 bool CgSceneGraph::IntersectRayPlane(CgRay* local_ray, CgPlane& p, float& t, glm::vec3& q) {

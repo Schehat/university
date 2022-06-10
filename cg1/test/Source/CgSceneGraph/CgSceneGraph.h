@@ -54,14 +54,15 @@ public:
     void Barycentric(glm::vec3& a, glm::vec3& b, glm::vec3& c, glm::vec3& q, float& u, float& v, float& w);
     void setAABBForAllChildren(CgBaseRenderer* renderer, CgSceneGraphEntity*);
     void calculateAABB(CgSceneGraphEntity* entity);
-    bool checkAABBIntersection(CgSceneGraphEntity* entity, CgRay* local_ray);
+    void calculateTransformedAABB(CgSceneGraphEntity* entity);
+    bool IntersectRayAABB(CgSceneGraphEntity* entity, CgRay* local_ray, float& t, glm::vec3& q);
 
     void render(CgSceneControl* scene_control, CgSceneGraphEntity* entity);
+
+    std::vector<glm::vec3> m_intersections;
 private:
     void pushMatrix();
     void applyTransform(glm::mat4 arg);
-
-    std::vector<glm::vec3> m_intersections;
 
     CgSceneGraphEntity* m_root_node;
     std::stack<glm::mat4> m_modelview_matrix_stack;

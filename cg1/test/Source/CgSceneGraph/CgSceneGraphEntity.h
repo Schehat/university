@@ -24,9 +24,9 @@ public:
     CgBaseTriangleMesh* getObject();
     glm::mat4 getCurrentTransformation();
     CgAppearance& getAppearance();
-    const CgSceneGraphEntity& getParent() const;
+    CgSceneGraphEntity* getParent();
     const std::vector<CgSceneGraphEntity*> getChildren() const;
-    glm::mat4 getObjectTransformation() const;
+    glm::mat4 getObjectTransformation();
     CgUnityCube* getAABB();
 
     void setObject(CgBaseTriangleMesh* object);
@@ -39,8 +39,6 @@ public:
 
     void pushChildren(CgSceneGraphEntity* child);
     void removeLastChild();
-
-    CgRay* local_ray;
 private:
     CgUnityCube* m_aabb;
 

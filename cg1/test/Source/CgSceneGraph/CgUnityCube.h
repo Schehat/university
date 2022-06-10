@@ -38,6 +38,8 @@ public:
     const std::vector<glm::vec3>& getFaceColors() const override;
     const std::vector<glm::vec3>& getFaceCentroid() const;
 
+    std::vector<float> min_pos;
+    std::vector<float> max_pos;
 private:
 
     std::vector<glm::vec3> m_vertices;

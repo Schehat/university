@@ -63,8 +63,6 @@ public:
     bool getShowAABB();
 private:
     CgSceneGraph* m_scene;
-    //CgUnityCube* m_cube;
-    // std::vector<glm::vec3> m_intersections;
 
     bool showAABB;
 
