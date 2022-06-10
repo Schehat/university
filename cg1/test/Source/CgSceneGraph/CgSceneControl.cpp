@@ -67,7 +67,6 @@ void CgSceneControl::renderObjects()
     if (m_scene!=NULL) {
         m_scene->popMatrix();
         m_scene->pushMatrix(m_scene->getRootNode()->getCurrentTransformation());
-        m_scene->m_intersections.clear();
         m_scene->render(this, m_scene->getRootNode());
     }
 
@@ -80,16 +79,16 @@ void CgSceneControl::renderObjects()
             m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
         }
 
-//        setCurrentTransformation(glm::mat4(1.0));
-//        m_renderer->render(selected_entity->getObject());
-//        glm::mat4 currentTransformation = selected_entity->getCurrentTransformation() * selected_entity->getObjectTransformation();
-//        glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
+        setCurrentTransformation(glm::mat4(1.0));
+        m_renderer->render(selected_entity->getObject());
+        glm::mat4 currentTransformation = selected_entity->getCurrentTransformation() * selected_entity->getObjectTransformation();
+        glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
 
-//        CgRay* local_ray = new CgRay(Functions::getId());
+        CgRay* local_ray = new CgRay(Functions::getId());
 
-//        local_ray->setA(currentTransformation_inverse * m_scene->getRay()->getA());
-//        local_ray->setB(currentTransformation_inverse * m_scene->getRay()->getB());
-//        local_ray->setDirection(currentTransformation_inverse * m_scene->getRay()->getDirection());
+        local_ray->setA(currentTransformation_inverse * m_scene->getRay()->getA());
+        local_ray->setB(currentTransformation_inverse * m_scene->getRay()->getB());
+        local_ray->setDirection(currentTransformation_inverse * m_scene->getRay()->getDirection());
 
         m_renderer->init(local_ray);
         m_renderer->render(local_ray);
@@ -151,7 +150,7 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
             m_scene->getRay()->setDirection(m_scene->getRay()->getB() - m_scene->getRay()->getA());
 
             //pickingIntersection();
-            // m_scene->startIntersection(this, m_scene->getRootNode());
+            m_scene->startIntersection(this, m_scene->getRootNode());
 
             //m_scene->setRenderer(m_renderer);
             m_renderer->init(m_scene->getRay());

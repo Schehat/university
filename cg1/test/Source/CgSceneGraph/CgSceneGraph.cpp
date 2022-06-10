@@ -53,9 +53,13 @@ CgSceneGraph::CgSceneGraph()
     m_modelview_matrix_stack.push(m_world->getCurrentTransformation());
 
     // Initialize Stuhl
+    glm::mat4 cur_tran_stuhl = glm::mat4(glm::vec4(0.66342, 0, 0, 0),
+                                       glm::vec4(0, 2.88165, 0, 0),
+                                       glm::vec4(0, 0, 0.66342, 0),
+                                       glm::vec4(-4.8, -3.7, 0.85, 1));
 
     m_stuhlbein_ul = new CgSceneGraphEntity(obj_cube);
-    m_stuhlbein_ul->setCurrentTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
+    m_stuhlbein_ul->setObjectTransformation(glm::mat4(glm::vec4(0.66342, 0, 0, 0),
                                                   glm::vec4(0, 2.88165, 0, 0),
                                                   glm::vec4(0, 0, 0.66342, 0),
                                                   glm::vec4(-4.8, -3.7, 0.85, 1)));
@@ -68,7 +72,7 @@ CgSceneGraph::CgSceneGraph()
     m_stuhlbein_ur->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 1.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                  glm::vec4(2.5, 0.0, 0.0, 1.0)));
+                                                  glm::vec4(2.5, 0.0, 0.0, 1.0)) * cur_tran_stuhl);
     m_stuhlbein_ur->getAppearance().setObjectColor(Functions::getWhite());
     m_stuhlbein_ul->pushChildren(m_stuhlbein_ur);
 
@@ -77,7 +81,7 @@ CgSceneGraph::CgSceneGraph()
     m_stuhlbein_ol->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 1.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                  glm::vec4(0.0, 0.0, -3.0, 1.0)));
+                                                  glm::vec4(0.0, 0.0, -3.0, 1.0)) * cur_tran_stuhl);
     m_stuhlbein_ol->getAppearance().setObjectColor(Functions::getWhite());
     m_stuhlbein_ul->pushChildren(m_stuhlbein_ol);
 
@@ -86,35 +90,35 @@ CgSceneGraph::CgSceneGraph()
     m_stuhlbein_or->setObjectTransformation(glm::mat4(glm::vec4(1.0, 0.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 1.0, 0.0, 0.0),
                                                   glm::vec4(0.0, 0.0, 1.0, 0.0),
-                                                  glm::vec4(2.5, 0.0, -3.0, 1.0)));
+                                                  glm::vec4(2.5, 0.0, -3.0, 1.0)) * cur_tran_stuhl);
     m_stuhlbein_or->getAppearance().setObjectColor(glm::vec4(255.0, 255.0, 255.0, 1.0));
     m_stuhlbein_ul->pushChildren(m_stuhlbein_or);
 
     m_stuhlplate = new CgSceneGraphEntity(obj_cube);
     m_stuhlplate->setAppearance(new CgAppearance());
-    m_stuhlplate->setObjectTransformation(glm::mat4(glm::vec4(3.40753, 0, 0, 0),
-                                                  glm::vec4(0, 0.0694426, 0, 0),
-                                                  glm::vec4(0, 0, 3.97438, 0),
-                                                  glm::vec4(1.25, 0.55, -1.5, 1)));
+    m_stuhlplate->setObjectTransformation(glm::mat4(glm::vec4(3.02945, 0, 0, 0),
+                                                  glm::vec4(0, 0.305807, 0, 0),
+                                                  glm::vec4(0, 0, 3.71008, 0),
+                                                  glm::vec4(-3.4561, -2.45694, -0.621776, 1)));
     m_stuhlplate->getAppearance().setObjectColor(Functions::getWhite());
     m_stuhlbein_ul->pushChildren(m_stuhlplate);
 
     m_lehne = new CgSceneGraphEntity(obj_cube);
     m_lehne->setAppearance(new CgAppearance());
-    m_lehne->setObjectTransformation(glm::mat4(glm::vec4(0.397214, 0, 0, 0),
-                                             glm::vec4(0, 1.52438, 0, 0),
-                                             glm::vec4(0, 0, 3.86169, 0),
-                                             glm::vec4(-0.25, 1.3, -1.45, 1)));
+    m_lehne->setObjectTransformation(glm::mat4(glm::vec4(0.26352, 0, 0, 0),
+                                             glm::vec4(0, 4.39273, 0, 0),
+                                             glm::vec4(0, 0, 3.60488, 0),
+                                             glm::vec4(-4.95663, -0.140208, -0.717563, 1)));
     m_lehne->getAppearance().setObjectColor(Functions::getWhite());
     m_stuhlbein_ul->pushChildren(m_lehne);
 
     // initiliaze man
     m_man = new CgSceneGraphEntity(obj_man);
     m_man->setAppearance(new CgAppearance());
-    m_man->setObjectTransformation(glm::mat4(glm::vec4(-0.0349137, 0, -0.265196, 0),
-                                             glm::vec4(0, 0.0659707, 0, 0),
-                                             glm::vec4(0.165278, 0, -0.0217593, 0),
-                                             glm::vec4(3.85, -0.6, -1.55, 1)));
+    m_man->setObjectTransformation(glm::mat4(glm::vec4(-0.0231624, 0, -0.175936, 0),
+                                             glm::vec4(0, 0.190104, 0, 0),
+                                             glm::vec4(0.109649, 0, -0.0144356, 0),
+                                             glm::vec4(-1.94193, -5.7441, -0.645555, 1)));
     m_man->getAppearance().setObjectColor(Functions::getWhite());
     m_stuhlbein_ul->pushChildren(m_man);
 
@@ -728,15 +732,18 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
 
     // render objects of the group
     scene_control->getRenderer()->render(entity->getObject());
-    if (scene_control->getSelectedEntity() == entity && scene_control->getShowAABB() == true) {
+    if (scene_control->getSelectedEntity() == entity) {
+        selected_matrix = m_modelview_matrix_stack.top();
+        if (scene_control->getShowAABB() == true) {
         scene_control->getRenderer()->setUniformValue("mycolor", Functions::getYellow());
         scene_control->getRenderer()->render(entity->getAABB());
+        }
     }
 
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         pushMatrix();
-        // adjust aabb if transformation of entity has changedq
+        // adjust aabb if transformation of entity has changed
         if (m_modelview_matrix_stack.top() != entity->getChildren()[i]->getCurrentTransformation()
                 * entity->getChildren()[i]->getCurrentTransformation()) {
             calculateAABB(entity);
@@ -747,15 +754,15 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
     }
 }
 
-//void CgSceneGraph::startIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
-//    m_intersections.clear();
-//    checkIntersection(scene_control, entity);
-//    std::cout << "Anzahl Schnittpunkte: " << m_intersections.size() << "\n";
-//}
+void CgSceneGraph::startIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
+    m_intersections.clear();
+    checkIntersection(scene_control, entity);
+    std::cout << "Anzahl Schnittpunkte: " << m_intersections.size() << "\n";
+}
 
 void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraphEntity* entity) {
-    if (entity != this->getRootNode()) {
-        glm::mat4 currentTransformation_inverse = glm::inverse(m_modelview_matrix_stack.top());
+        glm::mat4 currentTransformation = entity->getCurrentTransformation() * entity->getObjectTransformation();
+        glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
 
         CgRay* local_ray = new CgRay(Functions::getId());
 
@@ -765,7 +772,6 @@ void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraph
 
         pickingIntersection(entity, local_ray);
         delete local_ray;
-    }
 
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
@@ -776,22 +782,24 @@ void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraph
 void CgSceneGraph::pickingIntersection(CgSceneGraphEntity* entity, CgRay* local_ray) {
     float t;
     glm::vec3 q;
-    bool aabb_intersection = IntersectRayAABB(entity, local_ray, t, q);
+    bool aabb_intersection = true;// IntersectsRayAABB(entity, local_ray, t, q);
 
-    for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
-        glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
-        glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
-        glm::vec3 c = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]+2];
-        CgPlane p {CgPlane(a, b, c)};
-        if (IntersectRayPlane(local_ray, p, t, q))
-        {
-            float u, v, w;
-            Barycentric(a, b, c, q, u, v, w);
-            if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1) {
-                glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
-                intersection_point = entity->getObjectTransformation() * entity->getParent()->getCurrentTransformation() * intersection_point;
-                std::cout << "Schnittpunkt: " << glm::to_string(intersection_point) << "\n";
-                m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
+    if (aabb_intersection) {
+        for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
+            glm::vec3 a = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]];
+            glm::vec3 b = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i+1]];
+            glm::vec3 c = entity->getObject()->getVertices()[entity->getObject()->getTriangleIndices()[i]+2];
+            CgPlane p {CgPlane(a, b, c)};
+            if (IntersectRayPlane(local_ray, p, t, q))
+            {
+                float u, v, w;
+                Barycentric(a, b, c, q, u, v, w);
+                if(u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1) {
+                    glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
+                    intersection_point = entity->getObjectTransformation() * entity->getCurrentTransformation() * intersection_point;
+                    std::cout << "Schnittpunkt: " << glm::to_string(intersection_point) << "\n";
+                    m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
+                }
             }
         }
     }
@@ -824,7 +832,7 @@ bool CgSceneGraph::IntersectRayAABB(CgSceneGraphEntity* entity, CgRay* local_ray
     }
     q = local_ray->getA() + local_ray->getDirection()*t_min;
     glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
-    intersection_point = entity->getObjectTransformation() * entity->getCurrentTransformation() * intersection_point;
+    intersection_point = m_modelview_matrix_stack.top() * intersection_point;
     m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
     return true;
 }
@@ -888,4 +896,22 @@ void CgSceneGraph::calculateAABB(CgSceneGraphEntity* entity) {
             z_max = entity->getObject()->getVertices()[i][2];
     }
     entity->setAABB(x_min, x_max, y_min, y_max, z_min, z_max);
+}
+
+bool CgSceneGraph::IntersectsRayAABB(CgSceneGraphEntity* entity, CgRay* local_ray, float& t, glm::vec3& q) {
+    for (unsigned int i = 0; i < entity->getAABB()->getTriangleIndices().size(); i+=3) {
+        glm::vec3 a = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i]];
+        glm::vec3 b = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i+1]];
+        glm::vec3 c = entity->getAABB()->getVertices()[entity->getAABB()->getTriangleIndices()[i]+2];
+        CgPlane p {CgPlane(a, b, c)};
+        float t;
+        glm::vec3 q;
+        if (IntersectRayPlane(local_ray, p, t, q))
+        {
+            float u, v, w;
+            Barycentric(a, b, c, q, u, v, w);
+            return u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1;
+        }
+    }
+    return false;
 }
