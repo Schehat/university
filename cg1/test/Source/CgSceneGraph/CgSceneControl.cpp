@@ -79,7 +79,7 @@ void CgSceneControl::renderObjects()
             m_renderer->render(m_scene->getCoordSystem()->getCoordSystem()[i]);
         }
 
-        setCurrentTransformation(glm::mat4(1.0));
+        setCurrentTransformation(glm::mat4(1.0f));
         m_renderer->render(selected_entity->getObject());
         glm::mat4 currentTransformation = selected_entity->getCurrentTransformation() * selected_entity->getObjectTransformation();
         glm::mat4 currentTransformation_inverse = glm::inverse(currentTransformation);
@@ -126,8 +126,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
         if (ev->getMouseButton() == 2) {
             // Pixelkoordinaten in NDCs
-            float xNDC = ((float) ev->x() - Functions::getWidth()/2.0) / (Functions::getWidth() / 2.0);
-            float yNDC = ((float) ev->y() - Functions::getHeight()/2.0) / (-Functions::getWidth() / 2.0);
+            float xNDC = (2.0 * ev->x())/(Functions::getWidth()) - 1.0;
+            float yNDC = -(2.0 * ev->y())/(Functions::getHeight()) + 1.0;
 
             if (xNDC > 1) xNDC = 1;
             if (xNDC < -1) xNDC = -1;
@@ -136,8 +136,8 @@ void CgSceneControl::handleEvent(CgBaseEvent* e)
 
             //  NDC mit Inverse der Proje^ktionsmatrix von m_proj_matrix und durch homogene Koordinate teilen
             // => Kamerakoordinaten
-            m_scene->getRay()->setA(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -0.01, 1));
-            m_scene->getRay()->setB(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1.0, 1));
+            m_scene->getRay()->setA(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, -0.01f, 1.0f));
+            m_scene->getRay()->setB(glm::inverse(m_proj_matrix) * glm::vec4(xNDC, yNDC, 1.0f, 1.f));
 
             // Koordinaten mit Inverse von m_lookAt_matrix UND m_trackball_rotation und durch homogene Koordinate teilen
             // => Weltkoordinaten
