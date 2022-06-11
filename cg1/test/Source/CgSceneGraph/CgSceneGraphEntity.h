@@ -28,6 +28,7 @@ public:
     const std::vector<CgSceneGraphEntity*> getChildren() const;
     glm::mat4 getObjectTransformation();
     CgUnityCube* getAABB();
+    CgUnityCube* getAABBAxisAlligned();
 
     void setObject(CgBaseTriangleMesh* object);
     void setCurrentTransformation(glm::mat4 curren_transformation);
@@ -36,10 +37,13 @@ public:
     void setObjectTransformation(const glm::mat4 &object_transformation);
     void setAABB(CgUnityCube*);
     void setAABB(float, float, float, float, float, float);
+    void setAABBAxisAlligned(float, float, float, float, float, float);
 
     void pushChildren(CgSceneGraphEntity* child);
     void removeLastChild();
+
 private:
+    CgUnityCube* m_aabb_axis_allgined;
     CgUnityCube* m_aabb;
 
     CgBaseTriangleMesh* m_object;

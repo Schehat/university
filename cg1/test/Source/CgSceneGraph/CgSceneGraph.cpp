@@ -730,24 +730,50 @@ void CgSceneGraph::render(CgSceneControl* scene_control, CgSceneGraphEntity* ent
     scene_control->setCurrentTransformation(m_modelview_matrix_stack.top()*entity->getObjectTransformation());
     scene_control->getRenderer()->setUniformValue("mycolor", entity->getAppearance().getObjectColor());
 
+    // adjust aabb if transformation of entity has changed
+    if (m_modelview_matrix_stack.top() * entity->getObjectTransformation()
+            != entity->getCurrentTransformation() * entity->getObjectTransformation()) {
+        /*td::vector<glm::vec4> vertices;
+        for (int i = 0; i < entity->getAABB()->getVertices().size(); ++i) {
+            vertices.push_back(entity->getObjectTransformation() * m_modelview_matrix_stack.top()*glm::vec4(entity->getAABB()->getVertices()[i], 1.0));
+            vertices[i] = entity->getObjectTransformation() * m_modelview_matrix_stack.top() * vertices[i];
+        }
+        float x_min = INFINITY, x_max = -INFINITY;
+        float y_min = INFINITY, y_max = -INFINITY;
+        float z_min = INFINITY, z_max = -INFINITY;
+        for (unsigned int i = 0; i < vertices.size(); ++i) {
+            if (vertices[i][0] < x_min)
+                x_min = vertices[i][0];
+            if (vertices[i][0] > x_max)
+                x_max = vertices[i][0];
+            if (vertices[i][1] < y_min)
+                y_min = vertices[i][1];
+            if (vertices[i][1] > y_max)
+                y_max = vertices[i][1];
+            if (vertices[i][2] < z_min)
+                z_min = vertices[i][2];
+            if (vertices[i][2] > z_max)
+                z_max = vertices[i][2];
+        }
+        entity->setAABBAxisAlligned(x_min, x_max, y_min, y_max, z_min, z_max);*/
+        calculateAABB(entity);
+    }
+
     // render objects of the group
     scene_control->getRenderer()->render(entity->getObject());
     if (scene_control->getSelectedEntity() == entity) {
         selected_matrix = m_modelview_matrix_stack.top();
         if (scene_control->getShowAABB() == true) {
         scene_control->getRenderer()->setUniformValue("mycolor", Functions::getYellow());
-        scene_control->getRenderer()->render(entity->getAABB());
+//        scene_control->getRenderer()->init(entity->getAABBAxisAlligned());
+//        scene_control->getRenderer()->render(entity->getAABBAxisAlligned());
+          scene_control->getRenderer()->render(entity->getAABB());
         }
     }
 
     // iterate through children recursive
     for (unsigned int i=0; i < entity->getChildren().size(); ++i) {
         pushMatrix();
-        // adjust aabb if transformation of entity has changed
-        if (m_modelview_matrix_stack.top() != entity->getChildren()[i]->getCurrentTransformation()
-                * entity->getChildren()[i]->getCurrentTransformation()) {
-            calculateAABB(entity);
-        }
         applyTransform(entity->getChildren()[i]->getCurrentTransformation());
         render(scene_control, entity->getChildren()[i]);
         m_modelview_matrix_stack.pop();
@@ -782,7 +808,7 @@ void CgSceneGraph::checkIntersection(CgSceneControl* scene_control, CgSceneGraph
 void CgSceneGraph::pickingIntersection(CgSceneGraphEntity* entity, CgRay* local_ray) {
     float t;
     glm::vec3 q;
-    bool aabb_intersection = true;// IntersectsRayAABB(entity, local_ray, t, q);
+    bool aabb_intersection = IntersectRayAABB(entity, local_ray, t, q);
 
     if (aabb_intersection) {
         for (unsigned int i = 0; i < entity->getObject()->getTriangleIndices().size(); i+=3) {
@@ -815,12 +841,12 @@ bool CgSceneGraph::IntersectRayAABB(CgSceneGraphEntity* entity, CgRay* local_ray
             return false;
         } else {
             float ood = 1.0f / local_ray->getDirection()[i];
-            float t1 = (entity->getAABB()->min_pos[i] - q[i]) * ood;
-            float t2 = (entity->getAABB()->max_pos[i] - q[i]) * ood;
+            float t1 = (entity->getAABB()->min_pos[i] - local_ray->getA()[i]) * ood;
+            float t2 = (entity->getAABB()->max_pos[i] - local_ray->getA()[i]) * ood;
             if (t1 > t2) {
                 float tmp = t2;
-                t1 = t2;
                 t2 = t1;
+                t1 = tmp;
             }
             if (t1 > t_min)
                 t_min = t1;
@@ -832,7 +858,7 @@ bool CgSceneGraph::IntersectRayAABB(CgSceneGraphEntity* entity, CgRay* local_ray
     }
     q = local_ray->getA() + local_ray->getDirection()*t_min;
     glm::vec4 intersection_point = glm::vec4(q[0], q[1], q[2], 1.0);
-    intersection_point = m_modelview_matrix_stack.top() * intersection_point;
+    intersection_point = entity->getObjectTransformation() * m_modelview_matrix_stack.top() * intersection_point;
     m_intersections.push_back(glm::vec3(intersection_point[0], intersection_point[1], intersection_point[2]));
     return true;
 }
