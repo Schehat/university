@@ -8,7 +8,7 @@
 document.getElementById("loggedUser").innerHTML = localStorage.getItem("username");
 
 function logout() {
-    window.location.href = "index.html";
+    window.location.href = "login_register.html";
 }
 
 function submit() {

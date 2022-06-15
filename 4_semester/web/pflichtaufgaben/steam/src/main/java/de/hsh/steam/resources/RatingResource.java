@@ -9,7 +9,6 @@ import de.hsh.steam.entities.Score;
 import de.hsh.steam.entities.Series;
 import de.hsh.steam.entities.User;
 import de.hsh.steam.services.SteamService;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,27 +30,10 @@ import javax.ws.rs.core.Response;
 public class RatingResource {
 
     SteamService steamService = SteamService.getInstance();
-
-    @Path("/search")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getAllRatings(@PathParam("name") String username) {
-        ArrayList<Series> allSeriesOfUser = steamService.getAllSeriesOfUser(username);
-        ArrayList<Rating> allRatingsOfUser = new ArrayList<>();
-        for (Series serie : allSeriesOfUser) {
-            allRatingsOfUser.add(this.steamService.getRating(serie.getTitle(), username));
-        }
-
-        if (allSeriesOfUser == null) {
-            return Response.status(404).build();
-        } else {
-            return Response.ok().entity(allRatingsOfUser).build();
-        }
-    }
-
+    
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response searchSeries(Rating rating) {
         System.out.println("REST searchSeries arrived");
         if (rating == null) {
@@ -118,8 +99,8 @@ public class RatingResource {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addOrModifySeries(Rating rating) {
         System.out.println("REST addOrModifySeries arrived");
         if (rating == null || rating.getScore() == null
