@@ -77,5 +77,5 @@ std::vector<glm::vec3> Functions::Lane_Riesenfeld_Unterteilungs_Algorithmus(std:
     return vertices;
 }
 std::string Functions::getPathtoObj(std::string obj){
-    return "/home/schehat/university/cg1/test/Source/CgData/" + obj;
+    return "/home/schehat/university/4_semester/cg1/test/Source/CgData/" + obj;
 }
