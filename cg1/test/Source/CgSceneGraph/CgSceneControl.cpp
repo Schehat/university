@@ -109,6 +109,15 @@ void CgSceneControl::renderObjects()
         getRenderer()->render(obj_intersection);
         delete obj_intersection;
     }
+
+    getRenderer()->setUniformValue("mycolor", Functions::getGreen());
+    for (unsigned int i = 0; i < m_scene->m_intersections_aabb.size(); ++i) {
+        glm::vec3 q = m_scene->m_intersections_aabb[i];
+        CgUnityCube* obj_intersection = new CgUnityCube(Functions::getId(), q);
+        getRenderer()->init(obj_intersection);
+        getRenderer()->render(obj_intersection);
+        delete obj_intersection;
+    }
     std::cout << "----------------------------------------\n";
 }
 
