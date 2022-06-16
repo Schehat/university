@@ -22,7 +22,7 @@ Controls:
 >   > - y
 >   > - z
 > - Choose effect
->   > - +
+>   > - plus
 >   > - minus
 
 A right click in the scene will created a picking ray. All Intersectopns with the objects will be marked with a red cube. In Addition all AABB-Boxes of the objects will be marked with a green cube.
