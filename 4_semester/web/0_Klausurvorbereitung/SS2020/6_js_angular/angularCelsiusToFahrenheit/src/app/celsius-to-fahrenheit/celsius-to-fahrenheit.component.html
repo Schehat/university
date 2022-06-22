@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <title>title</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <form>
+            Celsius: <input type="number" [(ngModel)]="celsius"/> <br>
+            <input type="button" value="Berechne" (click)="convert()"> <br>
+            Fahrenheit: {{ fahrenheit }}
+        </form>
+    </body>
+</html>

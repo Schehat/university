@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <p>Wetteranfrage an Server: </p>
+    Ort: <input type="string" id="ein" value="Hannover" /> </br>
+    <button type="button" onclick="getWeather()">Wetter ? </button> <br /> <br />
+    <strong> Wetterverlauf: </strong> <br />
+    <span id="result"> </span> <br /><br />
+    <script>
+        function getWeather() {
+            let loc = document.getElementById("ein").value;
+            let queryParam = new URLSearchParams({ location: loc });
+            let url = 'http://localhost:8080/RESTserver_temperature/resources/weather?';
+            fetch(url + queryParam)                                                         // returns promise containing response object (i.e. HTTP response)
+                .then(response => response.json())                                          // to extract JSON body from the response
+                .then(data => {                                                             // extract information from JSON data-object
+                    let erg = "";
+                    data.forEach(w => {
+                        erg = erg + w.location + "  :"
+                            + w.temperature + "<br/>";
+                    });
+                    document.getElementById("result").innerHTML = erg;
+                })
+                .catch(err =>
+                    console.log('Fetch error:', err));
+        }
+    </script>
+</body>
+
+</html>

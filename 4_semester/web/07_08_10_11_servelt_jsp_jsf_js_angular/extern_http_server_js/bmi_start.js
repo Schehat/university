@@ -1,21 +1,17 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
-
 function berechnen() {
     let gewicht = document.getElementById("gewicht").value;
-    let groeße = document.getElementById("groese").value;
-    let queryParam = new URLSearchParams({"gewicht": gewicht, "groese": groeße});
-    let url = "http://localhost:8080/BMIWebApplication/resources/BMIResource?";
+    let groese = document.getElementById("groese").value;
+    let queryParam = new URLSearchParams({"gewicht": gewicht, "groese": groese});
+    let url = "http://localhost:8080/BMIApplication/api/BMIResource?";
     fetch(url + queryParam)
         .then(response => response.json())
         .then(data => {
             localStorage.setItem("bmi", data.bmi);
             localStorage.setItem("ergebnis", data.ergebnis);
+            window.location.href = "bmi_result.html";
         })
-        .catch{ err => console.log("Fetch error", err);
-    window.location.href = "bmi_result.html";
+        .catch(err => {
+            alert("Fetch error", err);
+        })
 }
-
 document.getElementById("berechnen").onclick = berechnen;

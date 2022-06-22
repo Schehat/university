@@ -1,0 +1,21 @@
+
+*{
+  color: cornflowerblue
+}
+
+h3{
+  color: gray;
+}
+form{
+    color:cornflowerblue
+}
+p{
+    color: coral;
+}
+button{
+  color: white;
+  background-color: rgb(27, 139, 231);
+  height: 3em;
+  padding: 1em;
+  margin: 1em;
+}

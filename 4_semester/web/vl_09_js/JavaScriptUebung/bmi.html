@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title> BMI-Berechung mit JS</title>
+    <link rel="stylesheet" type="text/css" href="myCss.css" />
+</head>
+
+<body>
+
+    <h3>Berechne Deinen BMI  !</h3>
+    Gewicht [kg]: <input type="number" id="gewicht" min = 40 max = 140 value="60" /> <br />
+    Größe [m]: <input type="number" id="groesse" value="1.75" step="0.01" /> <br />
+    <button type="button" onclick="buttonClick()">berechne BMI vom Server ...</button>
+    <br /> <br />
+    Antwort vom SERVER:
+    <p id="bmi"> </p>
+    <p id="antwort"> </p>
+    <p id="fehlermeldung"> </p>
+
+
+    <script>
+        function buttonClick() {
+            // lese Eingabedaten und erzeuge ein JSON_Objekt
+            let weight, height;
+            weight = document.getElementById("gewicht").value;
+            weightInt = parseFloat(weight);
+            height = document.getElementById("groesse").value;
+            heightFloat = parseFloat(height);
+
+            let obj = { "weight": weightInt, "height": heightFloat };
+            let myJSON = JSON.stringify(obj);
+
+            // führe REST-Aufruf durch
+            askServer(myJSON);
+        }
+        function askServer(myJSON) {
+            fetch('http://localhost:8080/BMIServer/resources/bmi', {
+                method: 'put',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: myJSON
+            })
+            .then( response => response.json() )
+            .then( data => {
+                var bmi = parseFloat(data.bmi).toFixed(2);
+                document.getElementById("bmi").innerHTML = "BMI: " + bmi;
+                document.getElementById("antwort").innerHTML = "ANTWORT: " + data.answer;
+            })
+            .catch( err => console.log('Fetch error', err) )
+        }
+
+    </script>
+</body>
+
+</html>

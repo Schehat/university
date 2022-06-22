@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title> Temperatur-Converter per REST</title>
+    <link rel="stylesheet" type="text/css" href="myCss.css" />
+</head>
+
+<body>
+
+    <p>Konvertiere nach Fahrenheit: </p>
+    Celsius: <input type="number" id="celsius" value="20" /> </br>
+    <button type="button" onclick="calcFahrenheit()">fahrenheit</button> </br>
+    Fahrenheit: <span id="serverAnswer"> </span>
+
+    <script>
+        function calcFahrenheit() {
+            // lese Eingabe und mache JSON-String daraus
+            let celsius = document.getElementById("celsius").value;
+            let celsiusInt = parseInt(celsius);
+            let obj = { "celsius": celsiusInt };   // JavaScript-Objekt
+            let url = 'http://localhost:8080/RESTserver_temperature/resources/weather';
+
+            fetch(url, {                                                                    // returns promise containing response object (i.e. HTTP respons)
+                method: 'put',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(obj)
+            })
+                .then(response => response.json())                                              // to extract JSON body from the response
+                .then(data => {                                                                 // extract information from JSON data-object
+                    document.getElementById("serverAnswer").innerHTML = data.fahrenheit;
+                })
+                .catch(err => {
+                    console.log('Fetch error:', err);
+                });
+        }
+    </script>
+
+</body>
+
+</html>

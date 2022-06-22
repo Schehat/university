@@ -1,20 +1,21 @@
-# Computergrafik 1
+# 
 
-Created a chess scene with QT and OpenGl.
+Created a chess scene with QT and OpenGL.
 
-Runs on Ubuntu 20.04. The GPU has to support OpenGl 3.3.
+Runs on Ubuntu 20.04. The GPU has to support OpenGL 3.3.
 
 Controls:
 
 > - plus: zoom in
 > - minus: zoom out
-> - left click and move mouse: m scene
+> - left click and move mouse: move scene
 > - q: select objects
 > - w: unselect objects
 > - e: select group
 
 Objects can be transformed when selected
-Controls:
+
+- Controls:
 
 > - First choose transformation mode, only one can be selected:
 >   > - t: translate
@@ -25,10 +26,10 @@ Controls:
 >   > - y
 >   > - z
 > - Choose effect
->   > plus
->   > minus
+>   > - plus
+>   > - minus
 
-A right click in the scene will created a picking ray. All Intersectopns with the objects will be marked with a red cube. In Addition all AABB-Boxes of the objects will be marked with a green cube.
+A right click in the scene will created a picking ray. All Intersections with the objects will be marked with a red cube. In Addition all AABB-Boxes of the objects will be marked with a green cube.
 
 > - a: show AABB-Box of selected object
 
