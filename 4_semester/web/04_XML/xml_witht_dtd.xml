@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE module SYSTEM "extern.dtd">
-<module>
+<module id="id_2">
     <Titel>Modul BIN-203/MDI-203 Webtechnologien</Titel>
     <Veranstaltungsart>Vorlesung mit Übung</Veranstaltungsart>
     <SWS>4 SWS</SWS>

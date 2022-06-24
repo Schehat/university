@@ -1,5 +1,6 @@
 <!ELEMENT module (Titel, Veranstaltungsart, SWS, Credits, Praesensstunden, Selbststudium, Studiensemester, 
                     empfohlene_Voraussetungen*, Stunden-Pruefungsleistungen+, angestrebte_Lernergebnisse+)>
+<!ATTLIST module id ID "id_1">
 <!ELEMENT Titel (#PCDATA)>
 <!ELEMENT Veranstaltungsart (#PCDATA)>
 <!ELEMENT SWS (#PCDATA)>

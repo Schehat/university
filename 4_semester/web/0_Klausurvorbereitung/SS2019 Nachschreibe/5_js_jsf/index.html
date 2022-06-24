@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <title>title</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        Gewicht: <input type="number" id="gewicht"> <br>
+        Größe: <input type="number" id="groese"> <br>
+        BMI: <span id="bmi"></span> <br>
+        <input type="button" value="berechnen" onclick="berechnen()">
+        <input type="button" value="berechnen mit REST" onclick="berechnenREST()">
+        <script>
+            function berechnen() {
+                let gewicht = document.getElementById("gewicht").value;
+                let groese = document.getElementById("groese").value
+                let bmi = gewicht / (groese / 100 * groese / 100);
+                document.getElementById("bmi").innerHTML = bmi;
+            }
+
+            function berechnenREST() {
+                let gewicht = document.getElementById("gewicht").value;
+                let groese = document.getElementById("groese").value;
+                let quereParams = new URLSearchParams({"gewicht": gewicht, "groese": groese});
+                let url = "http://localhost:8080/BMIApplication/api/BMIResource?";
+                fetch(url + quereParams)
+                    .then(response => response.json())
+                    .then(data => document.getElementById("bmi").innerHTML = data.bmi)
+                    .catch(error => alert("Fehler wurden gemacht!"));
+            }
+        </script>
+    </body>
+</html>

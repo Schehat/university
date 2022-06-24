@@ -1,0 +1,5 @@
+<!ELEMENT kalendereintrag (datum, startzeit, dauer, betreff)>
+<!ELEMENT datum (#PCDATA)>
+<!ELEMENT startzeit (#PCDATA)>
+<!ELEMENT dauer (#PCDATA)>
+<!ELEMENT betreff (#PCDATA)>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <title>title</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <form>
+            Menge: <input type="number" id="menge"> <br>
+            Distanz: <input type="number" id="distanz"> <br>
+            Verbrauch pro 100km: <span id="verbrauch"></span> <br>
+            <input type="button" value="berechnen mit REST" onclick="berechnen()">
+            <script>
+                function berechnen() {
+                    let menge = document.getElementById("menge").value;
+                    let distanz = document.getElementById("distanz").value;
+                    let quereParams = new URLSearchParams({"liter": menge, "km": distanz});
+                    let url = "http://localhost:8080/8_js/resources/verbrauch?";
+                    fetch(url + queryParams)
+                            .then(response => response.json())
+                            .then(data => document.getElementById("verbrauch").innerHTML = data.verbrauch)
+                            .catch(error => alert("Fehler wurden gemacht!"));
+                    }
+            </script>
+        </form>
+    </body>
+</html>
