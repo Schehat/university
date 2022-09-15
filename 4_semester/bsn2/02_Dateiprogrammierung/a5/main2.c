@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 int main(void)
 {
     FILE *input = fopen("test_input.txt", "r");
     FILE *output = fopen("test_output.txt", "w");
-    char zeichen[1];
-    fgets(zeichen, 1, input);
-    while (zeichen != EOF)
+    char zeichen[100];
+    while (fgets(zeichen, 100, input) != NULL)
     {
         printf("%d", fputs(zeichen, output));
         if (fputs(zeichen, output) == EOF)
@@ -15,7 +15,6 @@ int main(void)
             printf("%s", "Ein Fehler ist beim Schreiben aufgetreten");
             return -1;
         }
-        fgets(zeichen, 1, input);
     }
     fclose(input);
     fclose(output);

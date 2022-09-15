@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private static double WIDTH = 800.0;
     private static double HEIGHT = 600.0;
-    private static String GAME_TITLE = "CONSTRUCT";
+    private static String GAME_TITLE = "The World's Hardest Game";
     private static String ICON_NAME = "neo.png";
     
     /**
@@ -22,7 +22,7 @@ public class Main extends Application {
 	public void start(Stage stage) {
 		try {
 		    stage = setStage(stage);
-		    stage.setResizable(false);
+		    stage.setResizable(true);
 		    
 		    StartScene.setStage(stage);
 		    StartScene.setLayout();

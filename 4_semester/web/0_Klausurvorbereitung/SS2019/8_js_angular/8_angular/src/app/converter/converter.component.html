@@ -5,12 +5,9 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <form>
-            Menge: <input type="number" [(ngModel)]="menge"> <br>
-            Distanz: <input type="number" [(ngModel)]="distanz"> <br>
-            Verbrauch pro 100km: {{ verbrauch }} <br>
-            <input type="button" value="berechnen" (click)="berechneVerbrauch()">
-        </form>
+        Menge: <input type="number" [(ngModel)]="menge"> <br>
+        Distanz: <input type="number" [(ngModel)]="distanz"> <br>
+        Verbrauch pro 100km: {{ berechneVerbrauch() }} <br>
     </body>
 </html>
 

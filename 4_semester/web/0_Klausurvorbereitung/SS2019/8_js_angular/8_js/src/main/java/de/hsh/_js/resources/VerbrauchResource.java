@@ -6,10 +6,10 @@ package de.hsh._js.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * REST Web Service
@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("verbrauch")
 @Produces(MediaType.APPLICATION_JSON)
-@RequestScoped
+@XmlRootElement
 public class VerbrauchResource {
     @GET
     public Verbrauch getVerbrauch(@QueryParam("liter") double liter, @QueryParam("km") double km) {

@@ -1,9 +1,12 @@
 package de.hsh._js.resources;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author SAbde
  */
+@XmlRootElement
 public class Verbrauch {
     private double verbrauch;
     

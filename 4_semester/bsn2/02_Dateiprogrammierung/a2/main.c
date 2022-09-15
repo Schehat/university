@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 
 int main(void)
 {
@@ -16,10 +17,9 @@ int main(void)
     }
 
     char text[] = "Hallo";
-    int countBytes = 5;
     printf("%s %s\n", "Schreibe in Datei:", text);
-    int writtenBytes = write(fd, text, countBytes);
-    if (writtenBytes != countBytes)
+    int bytesWritten = write(fd, text, strlen(text));
+    if (bytesWritten != strlen(text))
     {
         printf("%s\n", "Schreiben in der Datei ist fehlgeschlagen");
         return -1;
@@ -37,8 +37,8 @@ int main(void)
     }
 
     printf("%s %s\n", "Schreibe in Datei:", text);
-    writtenBytes = write(fd, text, countBytes);
-    if (writtenBytes != countBytes)
+    bytesWritten = write(fd, text, strlen(text));
+    if (bytesWritten != strlen(text))
     {
         printf("%s\n", "Schreiben in der Datei ist fehlgeschlagen");
         return -1;

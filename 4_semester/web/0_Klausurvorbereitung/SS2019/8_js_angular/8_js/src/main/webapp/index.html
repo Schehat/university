@@ -14,7 +14,7 @@
                 function berechnen() {
                     let menge = document.getElementById("menge").value;
                     let distanz = document.getElementById("distanz").value;
-                    let quereParams = new URLSearchParams({"liter": menge, "km": distanz});
+                    let queryParams = new URLSearchParams({"liter": menge, "km": distanz});
                     let url = "http://localhost:8080/8_js/resources/verbrauch?";
                     fetch(url + queryParams)
                             .then(response => response.json())
