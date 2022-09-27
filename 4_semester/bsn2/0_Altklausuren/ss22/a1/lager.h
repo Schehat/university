@@ -1,0 +1,1 @@
+int function2(int i);

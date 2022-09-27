@@ -1,0 +1,11 @@
+!<arch>
+lager.c/        0           0     0     644     45        `
+int function2(int i)
+{
+    return 3 * i;
+}
+ware.c/         0           0     0     644     45        `
+int function1(int i)
+{
+    return 2 * i;
+}

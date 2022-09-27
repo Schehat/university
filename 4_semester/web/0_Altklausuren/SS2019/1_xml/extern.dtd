@@ -1,0 +1,5 @@
+<!ELEMENT person (name, geburtsdatum, strase, stadt)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT geburtsdatum (#PCDATA)>
+<!ELEMENT strase (#PCDATA)>
+<!ELEMENT stadt (#PCDATA)>

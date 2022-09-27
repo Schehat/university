@@ -1,44 +1,62 @@
+# Make file für Uebung 1
+# 2022-09-15
+#
+# 1. Präprozessor (-E):
+# #include, #define auswerten, Kommentare herausausnehmen
+#
+# 2. Kompiler (−S):
+# C−> Assembler, Ergebnis .s
+#
+# 3. Assembler (−c):
+# assembly −> object file, Ergebnis .o
+#
+# 4. Linker:
+# Object−Dateien zusammenbringen und ein ausführbares Programm erstellen
+
 # Bedeutung der Compiler−Optionen
-# −c : kompiliert Quellen ohne Binder
-# −Wall : a l l e Warnungen anzeigen
-# −ansi : ANSI C Standard pruefen
-# −fPIC: positionsunabhaengiger Code, noetig zum Erstellen von shared libraries 
-# −g : Standard Debug−Informationen hinzufuegen
+#
+# −c: kompiliert Quellen ohne Binder
+# −Wall: alle Warnungen anzeigen
+# −ansi: ANSI C Standard prüfen
+# −fPIC: positionsunabhaengiger Code, nötig zum Erstellen von shared libraries
+# −g: Standard Debug−Informationen hinzufuegen
 
-GCC_ARGS = -g -std=c99 -Wall -pedantic-errors -fPIC
+# Compiler−Optionen setzen
+CCOPTS=-Wall -fPIC -g -pedantic -errors
 
-# ar: Werkzeug zum Erstellen von Bibliotheken 
+# ar: Werkzeug zum Erstellen von Bibliotheken
 # r: replace or add
 # c: keine Nachricht auf STDERR schreiben
-# s: object−file index in das Archiv schreiben. Damit die Bibliothek gegliedert ist und einzelne .o-Dateien angesprochen werden können 
-AROPTS = rcs
+# s: object−file index in das Archiv schreiben
 
-default: testprog_s testprog_d
+# Optionen für AR setzen
+AROPTS="rcs"
 
+default: testprogs testprogd
+
+# Object files bauen
 file1.o: file1.c file1.h
-	gcc $(GCC_ARGS) -c $<
+	gcc $(CCOPTS) -c file1.c
 
 file2.o: file2.c file2.h
-	gcc $(GCC_ARGS) -c $<
+	gcc $(CCOPTS) -c file2.c
 
-# statisch verlinkte Bibliothek bauen
-libaddnumber_s.a: file1.o file2.o
-	ar $(AROPTS) libaddnumber_s.a file1.o file2.o
+# Statisch verlinkte Bibliothek bauen
+libuebung1s.a: file1.o file2.o
+	ar $(AROPTS) -o libuebung1s.a file1.o file2.o
 
-# dynamisch verlinkte Bibliothek bauen
-libaddnumber_d.so: file1.o file2.o
-	gcc $(GCC_ARGS) -shared -o libaddnumber_d.so file1.o file2.o
+# Dynamisch verlinkte Bibliothek bauen
+libuebung1d.so: file1.o file2.o
+	gcc $(CCOPTS) -shared -o libuebung1d.so file1.o file2.o
 
-# statische verlinkte test_prog
-testprog_s: testprog.c file1.h file2.h libaddnumber_s.a
-	gcc $(GCC_ARGS) --static -L. testprog.c -o testprog_s -laddnumber_s
+# Statisch verlinkte Version von uebung1 bauen
+testprogs: testprog.c file1.h file2.h libuebung1s.a
+	gcc $(CCOPTS) -static -L. testprog.c -o testprogs -luebung1s
 
-# dynamisch verlinkte test_prog
-testprog_d: testprog.c file1.h file2.h libaddnumber_d.so
-	gcc $(GCC_ARGS) -L. testprog.c -o testprog_d -laddnumber_d
+# Dynamisch verlinkte Version von uebung1 bauen
+testprogd: testprog.c file1.h file2.h libuebung1d.so
+	gcc $(CCOPTS) -o testprogd testprog.c -L. -luebung1d
 
-# testprog.o: testprog.c file1.h file2.o
-# 	gcc $(GCC_ARGS) -c testprog.c
-
+# Alle0 aufräumen
 clean:
-	rm *.o && rm *.a && rm *.so
+	rm -f *.o testprogs testprogd libuebung*

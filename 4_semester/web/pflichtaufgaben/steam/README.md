@@ -48,7 +48,7 @@ ManagedBeans
 - /steam/src/main/webapp/js/login_register.html
 - /steam/src/main/webapp/js/series.html
 
-### aall verwendten JavaScript-Dateien mit den enthaltenen JavaScript-Methoden (Event-Handler).
+### alle verwendten JavaScript-Dateien mit den enthaltenen JavaScript-Methoden (Event-Handler).
 
 - /steam/src/main/webapp/js/login_register.js
 - /steam/src/main/webapp/js/series.js
