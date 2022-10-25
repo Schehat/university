@@ -8,6 +8,5 @@ int main(void)
 
     printf("%s", ctime(&arr[0]));
     printf("%s", ctime(&arr[1]));
-
     return 0;
 }
