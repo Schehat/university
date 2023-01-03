@@ -118,7 +118,7 @@ int main(void) {
     neu5->next = NULL;
 
     if (einfuegen_kopf(&kopf, neu5) != 0) {
-      printf("Fehler beim einfügen\n"); 
+      printf("Fehler beim einfï¿½gen\n"); 
       return -1;
     }
 
@@ -126,7 +126,7 @@ int main(void) {
     neu6->wert = 6;
     neu6->next = NULL;
     if (einfuegen_nach(neu5, neu6) != 0) {
-      printf("Fehler beim einfügen\n"); 
+      printf("Fehler beim einfï¿½gen\n"); 
       return -1;
     }
 
@@ -154,7 +154,7 @@ int main(void) {
     neu4->wert = 4;
     neu4->next = NULL;
     if (einfuegen_kopf(&kopf, neu4) != 0) {
-      printf("Fehler beim einfügen\n"); 
+      printf("Fehler beim einfï¿½gen\n"); 
       return -1;
     }
     	
@@ -176,7 +176,7 @@ int main(void) {
     neu7->wert = 7;
     neu7->next = NULL;
     if (einfuegen_ende(&kopf, neu7) != 0) {
-      printf("Fehler beim einfügen\n"); 
+      printf("Fehler beim einfï¿½gen\n"); 
       return -1;
     }
     	
