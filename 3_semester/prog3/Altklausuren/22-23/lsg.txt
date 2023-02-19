@@ -1,0 +1,32 @@
+Zwischenklausur
+a2
+1. h
+2. c
+3. c
+4. c
+5. c
+6. c
+
+a4
+1. f
+2. f
+3. r
+4. r
+5. f
+6. r
+
+Hauptklausur
+a1
+1012 d[1].c 'b'
+1008 d[1].n 3
+1004 d[0].c 'a'
+1000 d[0].n 1 
+996 v 'A'
+992 dp 1004
+988 d1.c 'b'
+984 d1.n 9
+980 v 3
+
+a6
+1. Deklarationen & Definitionen
+2. Basisklasse physisch im eigenen Speicherbereich
