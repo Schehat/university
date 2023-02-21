@@ -9,7 +9,22 @@ int starts_with(char *str, char *anfang)
 
 void finde_teil_string(char *text, char *suchString, char **first, char **last)
 {
-    int lenText = 0;
+    while (starts_with(text, suchString) == 0)
+    {
+        text++;
+    }
+    *first = text;
+
+    while (*text != '\0')
+    {
+        if (starts_with(text, suchString))
+        {
+            *last = text;
+        }
+        text++;
+    }
+
+    /* int lenText = 0;
     char *ptr = text;
     while (*ptr != '\0')
     {
@@ -39,7 +54,7 @@ void finde_teil_string(char *text, char *suchString, char **first, char **last)
     {
         if (starts_with(text + i, suchString))
             *last = text + i;
-    }
+    } */
 }
 
 int main(void)

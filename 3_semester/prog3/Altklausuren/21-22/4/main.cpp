@@ -27,6 +27,7 @@ public:
     }
 
     Ort(string *name, int laenge, int breite) : name{new string{*name}}, laenge{laenge}, breite{breite} {}
+    Ort(int laenge, int breite) : laenge{laenge}, breite{breite} {}
 
     Ort(const Ort &other)
     {
@@ -47,4 +48,6 @@ int main(void)
 
     Ort o3{o1};
     cout << (o1 == o3);
+
+    Ort o4{20, 20};
 }

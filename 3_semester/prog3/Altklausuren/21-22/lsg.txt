@@ -1,0 +1,22 @@
+a2
+1012 d[1].c 'b'
+1008 d[1].n 3
+1004 d[0].c 'a'
+1000 d[0].n 1 
+996 v 'A'
+992 dp 1000
+988 d1.c 'b'
+984 d1.n 9
+980 v 1
+
+a5
+- Methodendeklarationen - r
+- Methodenprototypen - f
+- Attributdefinitionen - r
+
+- Ovberklassen - r
+- Exceptionsdeklarationen - f
+- Attributdefinitionen - f
+
+a6
+- Kein Fehler, aber ggf. unerwartetes Verhalten

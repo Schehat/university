@@ -1,11 +1,11 @@
 Zwischenklausur
 a2
 1. h
-2. c
+2. h
 3. c
-4. c
+4. h
 5. c
-6. c
+6. h
 
 a4
 1. f
@@ -22,11 +22,14 @@ a1
 1004 d[0].c 'a'
 1000 d[0].n 1 
 996 v 'A'
-992 dp 1004
+992 dp 1000
 988 d1.c 'b'
 984 d1.n 9
-980 v 3
+980 v 1
 
 a6
 1. Deklarationen & Definitionen
 2. Basisklasse physisch im eigenen Speicherbereich
+
+a7
+1088
