@@ -131,9 +131,12 @@ public class Zahlentheorie {
             if (c % ggt.get(0) != 0)
                 throw new IllegalArgumentException("Es gibt keine ganzzahligen Lösungen");
 
+            // Faktor der auf x und y drauf multipliziert wird
+            long factor = c / ggt.get(0);
+
             ArrayList<Long> res = new ArrayList<>();
-            res.add(ggt.get(1));
-            res.add(ggt.get(2));
+            res.add(ggt.get(1) * factor);
+            res.add(ggt.get(2) * factor);
 
             return res;
         } catch (IllegalArgumentException e) {
