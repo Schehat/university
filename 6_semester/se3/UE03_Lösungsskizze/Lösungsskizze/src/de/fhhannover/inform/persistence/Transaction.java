@@ -108,6 +108,7 @@ public class Transaction {
             }
       }
    }
+
    private class Relation
    {
       private Persistent object;

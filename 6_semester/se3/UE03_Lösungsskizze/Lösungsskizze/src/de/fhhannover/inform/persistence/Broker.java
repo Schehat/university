@@ -35,8 +35,7 @@ package de.fhhannover.inform.persistence;
 public abstract class Broker {
 
 /**
- *  abstrakte Methode (Hook-Methode)
- *  wird in der abgeleiteten Klasse implementiert
+ *  public Methode
  *  holt das Objekt aus Cache oeder erzeugt den korrekten Broker
  *  ruft Hook-Methode auf und legt Objekt in den Cache
  */
@@ -53,6 +52,11 @@ public abstract class Broker {
         return obj;
       }
     }
+
+/**
+ *  abstrakte Methode (Hook-Methode)
+ *  wird in der abgeleiteten Klasse implementiert
+ */
     abstract Persistent readFromPermanent(String anOid) throws Exception; //Hook-Methode zum holen des Objekts
 
 
