@@ -1,0 +1,26 @@
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 1.1//EN" "http://java.sun.com/j2ee/dtds/ejb-jar_1_1.dtd">
+<ejb-jar>
+  <description>A jar containing one example stateless session EJB</description> 
+  <display-name>Hello Bean example</display-name>
+  <enterprise-beans>
+    <session>
+      <description>An example illustrating a stateless session EJB that can say hello to you</description>
+      <display-name>Hello</display-name>
+      <ejb-name>helloSessionBean</ejb-name>
+      <home>HelloHome</home>
+      <remote>Hello</remote>
+      <ejb-class>HelloBean</ejb-class>
+      <session-type>Stateless</session-type>
+      <transaction-type>Container</transaction-type>
+    </session>
+  </enterprise-beans>
+  <assembly-descriptor>
+    <container-transaction>
+      <method>
+        <ejb-name>helloSessionBean</ejb-name>
+        <method-name>*</method-name>
+      </method>
+      <trans-attribute>Supports</trans-attribute>
+    </container-transaction>
+  </assembly-descriptor>
+</ejb-jar>
